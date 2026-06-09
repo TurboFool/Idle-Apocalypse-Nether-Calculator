@@ -1,0 +1,1744 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Idle Apocalypse - Nether Costs Calculator</title>
+    <!-- Premium Fantasy & Modern Typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Base Variables & Theme */
+        :root {
+            --bg-color: #0d0a12;
+            --panel-bg: #14101e;
+            --panel-border: rgba(168, 85, 247, 0.2);
+            --text-color: #f3f1f7;
+            --text-muted: #bdaecf;
+            
+            /* Resource Colors & Glows */
+            --color-orb: #d8b4fe;
+            --glow-orb: rgba(168, 85, 247, 0.4);
+            
+            --color-flame: #ea580c;
+            --glow-flame: rgba(234, 88, 12, 0.4);
+            
+            --color-crystal: #06b6d4;
+            --glow-crystal: rgba(6, 182, 212, 0.4);
+            
+            --color-star: #eab308;
+            --glow-star: rgba(234, 179, 8, 0.4);
+
+            --accent-purple: #8b5cf6;
+        }
+
+        /* Reset & Base Styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.5;
+            padding-bottom: 40px;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4, .font-fantasy {
+            font-family: 'Cinzel', serif;
+            letter-spacing: 0.05em;
+        }
+
+        .mono-num {
+            font-family: 'Space Mono', monospace;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #09070c;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #2b1f3c;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #473263;
+        }
+
+        /* Containers */
+        .header {
+            border-bottom: 2px solid rgba(139, 92, 246, 0.2);
+            background-color: rgba(20, 16, 30, 0.95);
+            backdrop-filter: blur(8px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 12px 16px;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .brand-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-logo {
+            width: 42px;
+            height: 42px;
+            border-radius: 8px;
+            box-shadow: 0 0 12px var(--glow-orb);
+            animation: pulse-glow 3s infinite ease-in-out;
+        }
+
+        .brand-text h1 {
+            font-size: 1.25rem;
+            font-weight: 900;
+            color: #fff;
+            text-shadow: 0 0 10px rgba(168, 85, 247, 0.5);
+        }
+
+        .brand-text p {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .actions-toolbar {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .btn {
+            background: #2b1f3c;
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            color: var(--text-color);
+            padding: 8px 14px;
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .btn:hover {
+            background: #3c2a55;
+            border-color: var(--accent-purple);
+            transform: translateY(-1px);
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+        }
+
+        .btn-danger {
+            border-color: rgba(220, 38, 38, 0.4);
+        }
+        .btn-danger:hover {
+            background: rgba(220, 38, 38, 0.2);
+            border-color: #dc2626;
+        }
+
+        .main-layout {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Panels layout */
+        @media (min-width: 950px) {
+            .main-layout {
+                display: grid;
+                grid-template-columns: 460px 1fr;
+                align-items: start;
+            }
+            .sticky-panel {
+                position: sticky;
+                top: 90px;
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
+                max-height: calc(100vh - 120px);
+                overflow-y: auto;
+                padding-right: 4px;
+            }
+        }
+
+        /* Common Panel Styling */
+        .panel {
+            background-color: var(--panel-bg);
+            border: 1px solid var(--panel-border);
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .panel-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            border-bottom: 1px solid rgba(139, 92, 246, 0.1);
+            padding-bottom: 8px;
+        }
+
+        .panel-title {
+            font-size: 0.9rem;
+            color: #fff;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Collapsible Modifiers CSS */
+        .collapsible-trigger {
+            background: none;
+            border: none;
+            color: var(--accent-purple);
+            cursor: pointer;
+            font-size: 0.75rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .collapsible-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+
+        .collapsible-content.expanded {
+            max-height: 500px;
+            margin-top: 12px;
+            border-top: 1px dashed rgba(168, 85, 247, 0.15);
+            padding-top: 12px;
+        }
+
+        .modifiers-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .modifier-box {
+            background: rgba(13, 10, 18, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.1);
+            border-radius: 8px;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .modifier-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .modifier-value {
+            color: #fff;
+            font-weight: bold;
+        }
+
+        .modifier-desc {
+            font-size: 0.65rem;
+            color: #a78bfa;
+            font-style: italic;
+        }
+
+        /* Toggle Button styling */
+        .toggle-btn {
+            background: #1e152d;
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            color: var(--text-color);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            font-weight: 700;
+            text-align: center;
+            transition: all 0.2s;
+        }
+
+        .toggle-btn.active {
+            background: var(--accent-purple);
+            color: #fff;
+            box-shadow: 0 0 8px rgba(139, 92, 246, 0.4);
+            border-color: #a78bfa;
+        }
+
+        /* Range slider styling */
+        .range-slider-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .range-slider {
+            flex: 1;
+            height: 6px;
+            -webkit-appearance: none;
+            background: #1e152d;
+            border-radius: 3px;
+            outline: none;
+        }
+
+        .range-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--accent-purple);
+            cursor: pointer;
+            box-shadow: 0 0 6px rgba(139, 92, 246, 0.6);
+            border: 2px solid #fff;
+        }
+
+        /* Inventory Panel Grid */
+        .inventory-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .inventory-card {
+            background: rgba(13, 10, 18, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 96px;
+            position: relative;
+            transition: box-shadow 0.3s;
+        }
+
+        /* Card color codes */
+        .inv-orb { border-color: rgba(168, 85, 247, 0.25); }
+        .inv-orb:focus-within, .inv-orb:hover { box-shadow: 0 0 10px var(--glow-orb); border-color: var(--color-orb); }
+
+        .inv-flame { border-color: rgba(234, 88, 12, 0.25); }
+        .inv-flame:focus-within, .inv-flame:hover { box-shadow: 0 0 10px var(--glow-flame); border-color: var(--color-flame); }
+
+        .inv-crystal { border-color: rgba(6, 182, 212, 0.25); }
+        .inv-crystal:focus-within, .inv-crystal:hover { box-shadow: 0 0 10px var(--glow-crystal); border-color: var(--color-crystal); }
+
+        .inv-star { border-color: rgba(234, 179, 8, 0.25); }
+        .inv-star:focus-within, .inv-star:hover { box-shadow: 0 0 10px var(--glow-star); border-color: var(--color-star); }
+
+        .creature-drop-card {
+            background: rgba(13, 10, 18, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 10px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.3s ease;
+        }
+        .creature-drop-card:hover {
+            transform: translateY(-2px);
+        }
+        .drop-card-netherling { border-color: rgba(234, 88, 12, 0.25); }
+        .drop-card-netherling:hover { box-shadow: 0 0 10px var(--glow-flame); border-color: var(--color-flame); }
+        .drop-card-demon { border-color: rgba(6, 182, 212, 0.25); }
+        .drop-card-demon:hover { box-shadow: 0 0 10px var(--glow-crystal); border-color: var(--color-crystal); }
+        .drop-card-mountain { border-color: rgba(234, 179, 8, 0.25); }
+        .drop-card-mountain:hover { box-shadow: 0 0 10px var(--glow-star); border-color: var(--color-star); }
+
+        .card-header-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--text-muted);
+        }
+
+        .resource-icon {
+            width: 20px;
+            height: 20px;
+            object-fit: contain;
+        }
+
+        .card-controls {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 6px;
+            margin-top: 8px;
+        }
+
+        .card-btn {
+            background: rgba(139, 92, 246, 0.15);
+            border: 1px solid rgba(168, 85, 247, 0.15);
+            color: #fff;
+            font-size: 0.65rem;
+            font-weight: 800;
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.15s;
+        }
+
+        .card-btn:hover {
+            background: var(--accent-purple);
+            box-shadow: 0 0 8px rgba(139, 92, 246, 0.3);
+        }
+
+        .inv-input {
+            flex: 1;
+            width: 100%;
+            background: transparent;
+            border: none;
+            color: #fff;
+            text-align: center;
+            font-size: 1.15rem;
+            font-weight: 800;
+            outline: none;
+        }
+
+        /* Remove arrows from number input */
+        .inv-input::-webkit-outer-spin-button,
+        .inv-input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        .inv-input[type=number] {
+            -moz-appearance: textfield;
+        }
+
+        /* Calculator Results Card */
+        .results-panel {
+            background: linear-gradient(135deg, #1b132a, #0e0915);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            box-shadow: 0 0 15px rgba(139, 92, 246, 0.15);
+        }
+
+        .results-section-title {
+            font-size: 0.75rem;
+            font-weight: 800;
+            color: #a78bfa;
+            letter-spacing: 0.05rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .summons-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .summon-item {
+            background: rgba(13, 10, 18, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 8px;
+            padding: 8px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+        }
+
+        .summon-creature-icon {
+            width: 32px;
+            height: 32px;
+            object-fit: contain;
+        }
+
+        .summon-count {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: #fff;
+        }
+
+        .summon-name {
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: var(--text-muted);
+        }
+
+        .deficits-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .deficit-item {
+            background: rgba(13, 10, 18, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 8px 4px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .deficit-item.deficit-active {
+            background: rgba(220, 38, 38, 0.05);
+        }
+        .deficit-item.deficit-active.def-orb { border-color: rgba(168, 85, 247, 0.4); }
+        .deficit-item.deficit-active.def-flame { border-color: rgba(234, 88, 12, 0.4); }
+        .deficit-item.deficit-active.def-crystal { border-color: rgba(6, 182, 212, 0.4); }
+        .deficit-item.deficit-active.def-star { border-color: rgba(234, 179, 8, 0.4); }
+
+        .deficit-val {
+            font-size: 0.95rem;
+            font-weight: 800;
+            color: var(--text-muted);
+        }
+        .deficit-active .deficit-val {
+            color: #fff;
+            animation: text-glow 1.5s infinite alternate ease-in-out;
+        }
+        .deficit-active.def-orb .deficit-val { text-shadow: 0 0 6px var(--color-orb); }
+        .deficit-active.def-flame .deficit-val { text-shadow: 0 0 6px var(--color-flame); }
+        .deficit-active.def-crystal .deficit-val { text-shadow: 0 0 6px var(--color-crystal); }
+        .deficit-active.def-star .deficit-val { text-shadow: 0 0 6px var(--color-star); }
+
+        .deficit-label {
+            font-size: 0.6rem;
+            font-weight: 700;
+            color: var(--text-muted);
+        }
+
+        /* Narrative Explanation Log */
+        .explanation-box {
+            background: rgba(9, 7, 12, 0.8);
+            border: 1px dashed rgba(168, 85, 247, 0.2);
+            border-radius: 8px;
+            padding: 10px;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            max-height: 140px;
+            overflow-y: auto;
+        }
+
+        .explanation-step {
+            margin-bottom: 6px;
+            padding-left: 10px;
+            border-left: 2px solid var(--accent-purple);
+        }
+        .explanation-step:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Right Column Checklist Panel */
+        .checklist-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 16px;
+            background: rgba(13, 10, 18, 0.4);
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid rgba(168, 85, 247, 0.1);
+        }
+
+        .filter-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .filter-tab {
+            background: #191426;
+            border: 1px solid rgba(168, 85, 247, 0.15);
+            color: var(--text-muted);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .filter-tab.active {
+            background: var(--accent-purple);
+            color: #fff;
+            border-color: #a78bfa;
+            box-shadow: 0 0 8px rgba(139, 92, 246, 0.3);
+        }
+
+        .search-row {
+            display: flex;
+            gap: 8px;
+        }
+
+        .search-input {
+            flex: 1;
+            background: #0d0a12;
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 6px;
+            padding: 8px 12px;
+            color: #fff;
+            font-size: 0.8rem;
+            font-family: inherit;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .search-input:focus {
+            border-color: var(--accent-purple);
+            box-shadow: 0 0 8px rgba(139, 92, 246, 0.2);
+        }
+
+        .checkbox-container {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            cursor: pointer;
+            user-select: none;
+            color: var(--text-muted);
+        }
+
+        .checkbox-container input {
+            display: none;
+        }
+
+        .checkbox-custom {
+            width: 16px;
+            height: 16px;
+            border: 1px solid rgba(168, 85, 247, 0.4);
+            border-radius: 4px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: #0d0a12;
+            transition: all 0.2s;
+        }
+
+        .checkbox-container input:checked + .checkbox-custom {
+            background: var(--accent-purple);
+            border-color: #a78bfa;
+            box-shadow: 0 0 6px rgba(139, 92, 246, 0.4);
+        }
+
+        .checkbox-container input:checked + .checkbox-custom::after {
+            content: "\2713";
+            color: #fff;
+            font-size: 0.65rem;
+            font-weight: bold;
+        }
+
+        /* Goals Checklist List */
+        .goals-list {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+        }
+
+        @media (min-width: 600px) {
+            .goals-list {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        @media (min-width: 1200px) {
+            .goals-list {
+                grid-template-columns: 1fr 1fr 1fr;
+            }
+        }
+
+        .goal-card {
+            background: rgba(13, 10, 18, 0.7);
+            border: 1px solid rgba(168, 85, 247, 0.15);
+            border-radius: 10px;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 12px;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .goal-card:hover {
+            border-color: rgba(168, 85, 247, 0.4);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            transform: translateY(-1px);
+        }
+
+        .goal-card.completed {
+            opacity: 0.5;
+            border-color: rgba(255,255,255,0.05);
+            background: rgba(9, 7, 12, 0.4);
+        }
+
+        .goal-info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .goal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 8px;
+        }
+
+        .goal-category {
+            font-size: 0.6rem;
+            font-weight: 800;
+            color: #a78bfa;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .goal-name {
+            font-size: 0.85rem;
+            font-weight: 800;
+            color: #fff;
+            margin-top: 2px;
+        }
+
+        .goal-card.completed .goal-name {
+            text-decoration: line-through;
+            color: var(--text-muted);
+        }
+
+        /* Displays cost inline */
+        .goal-costs-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .goal-cost-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 0.7rem;
+            font-weight: 800;
+            padding: 2px 6px;
+            border-radius: 4px;
+            background: rgba(13, 10, 18, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .cost-badge-orb { border-color: rgba(168, 85, 247, 0.2); color: var(--color-orb); }
+        .cost-badge-flame { border-color: rgba(234, 88, 12, 0.2); color: #f97316; }
+        .cost-badge-crystal { border-color: rgba(6, 182, 212, 0.2); color: var(--color-crystal); }
+        .cost-badge-star { border-color: rgba(234, 179, 8, 0.2); color: var(--color-star); }
+
+        .goal-actions {
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding-top: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+        }
+
+        .goal-btn-target {
+            background: rgba(139, 92, 246, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.25);
+            color: var(--text-muted);
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.15s;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            user-select: none;
+        }
+        .goal-btn-target:hover {
+            background: rgba(139, 92, 246, 0.2);
+            color: #fff;
+        }
+        .goal-btn-target.active {
+            background: rgba(139, 92, 246, 0.4);
+            border-color: #a78bfa;
+            color: #fff;
+            box-shadow: 0 0 6px rgba(139, 92, 246, 0.3);
+        }
+
+        .goal-btn-done {
+            background: none;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-muted);
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.15s;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            user-select: none;
+        }
+        .goal-btn-done:hover {
+            border-color: rgba(16, 162, 65, 0.4);
+            background: rgba(16, 162, 65, 0.05);
+            color: #10a241;
+        }
+        .goal-card.completed .goal-btn-done {
+            background: rgba(16, 162, 65, 0.2);
+            border-color: #10a241;
+            color: #fff;
+        }
+
+        /* Unlocked level badges on goal cards */
+        .level-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 0.55rem;
+            font-weight: 800;
+            background: rgba(139, 92, 246, 0.15);
+            border: 1px solid var(--accent-purple);
+            color: #a78bfa;
+            padding: 2px 6px;
+            border-radius: 10px;
+        }
+
+        /* Notifications / Toast styling */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 1000;
+            background: #14101e;
+            border: 1px solid var(--accent-purple);
+            border-radius: 8px;
+            padding: 12px 20px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
+            color: #fff;
+            font-size: 0.8rem;
+            font-weight: bold;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .toast.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Keyframe animations */
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 10px rgba(168, 85, 247, 0.3); }
+            50% { box-shadow: 0 0 18px rgba(168, 85, 247, 0.6); }
+        }
+
+        @keyframes text-glow {
+            0% { opacity: 0.95; }
+            100% { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sticky Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="brand-container">
+                <!-- SVG Nether Orb Glowing Logo -->
+                <svg class="brand-logo" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <radialGradient id="logoGlow" cx="50%" cy="50%" r="50%">
+                            <stop offset="0%" stop-color="#f3e8ff" />
+                            <stop offset="35%" stop-color="#c084fc" />
+                            <stop offset="85%" stop-color="#7e22ce" />
+                            <stop offset="100%" stop-color="#3b0764" />
+                        </radialGradient>
+                    </defs>
+                    <circle cx="12" cy="12" r="10" fill="url(#logoGlow)" />
+                    <path d="M7 8C7.5 6.5 9 5.5 11 5.5" stroke="white" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+                </svg>
+                <div class="brand-text">
+                    <h1>NETHER ARCHIVE</h1>
+                    <p>Costs Calculator for Idle Apocalypse</p>
+                </div>
+            </div>
+
+            <!-- Toolbar Actions -->
+            <div class="actions-toolbar">
+                <button class="btn" onclick="exportData()" title="Download progress as JSON backup file">
+                    <!-- Export SVG -->
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                    Export
+                </button>
+                <button class="btn" onclick="triggerImport()" title="Upload a JSON backup file to restore progress">
+                    <!-- Import SVG -->
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    Import
+                </button>
+                <input type="file" id="importFile" style="display: none;" accept=".json" onchange="importData(event)">
+                <button class="btn btn-danger" onclick="resetState()" title="Clear all local data and reset to defaults">
+                    <!-- Reset SVG -->
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><polyline points="3 3 3 8 8 8"/></svg>
+                    Reset
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-layout">
+        
+        <!-- Left Panel: Inventory, Modifiers & Calculator Output -->
+        <div class="sticky-panel">
+            
+            <!-- Upgrades & Modifiers Panel -->
+            <div class="panel">
+                <div class="panel-header">
+                    <span class="panel-title">
+                        <!-- Settings Icon SVG -->
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                        Upgrades & Modifiers
+                    </span>
+                    <button class="collapsible-trigger" id="modifiersToggle" onclick="toggleModifiers()">
+                        Collapse <span>&#9650;</span>
+                    </button>
+                </div>
+                <div class="collapsible-content expanded" id="modifiersPanel">
+                    <div class="modifiers-grid">
+                        
+                        <!-- Nether Pie Modifier -->
+                        <div class="modifier-box">
+                            <div class="modifier-label">
+                                <span>Nether Pie</span>
+                                <span class="modifier-value">Lvl <span id="pieLevelVal">0</span></span>
+                            </div>
+                            <div class="range-slider-container">
+                                <input type="range" class="range-slider" min="0" max="3" step="1" id="pieLevelInput" value="0" oninput="updatePieLevel(this.value)">
+                            </div>
+                            <span class="modifier-desc">+1 drop to Nether creatures per level.</span>
+                        </div>
+
+                        <!-- Bounty Modifier -->
+                        <div class="modifier-box">
+                            <div class="modifier-label">
+                                <span>Bounty Upgrade</span>
+                            </div>
+                            <button class="toggle-btn" id="bountyToggle" onclick="toggleBounty()">
+                                Disabled
+                            </button>
+                            <span class="modifier-desc">+1 drop yield to all creatures.</span>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Creature Drop Yields Panel -->
+            <div class="panel">
+                <div class="panel-header">
+                    <span class="panel-title" style="color: #a78bfa; text-shadow: 0 0 8px rgba(168, 85, 247, 0.35);">
+                        <!-- Lightning Bolt SVG -->
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                        Creature Drop Yields
+                    </span>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;" id="dropRatesContainer">
+                    <!-- JS generated drop rate cards -->
+                </div>
+            </div>
+
+            <!-- Inventory Panel -->
+            <div class="panel">
+                <div class="panel-header">
+                    <span class="panel-title">
+                        <!-- Inventory Chest SVG -->
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="M3.3 7 12 12l8.7-5"/><path d="M12 22V12"/></svg>
+                        On-Hand Resources
+                    </span>
+                </div>
+                <div class="inventory-grid" id="inventoryContainer">
+                    <!-- JS generated cards here -->
+                </div>
+            </div>
+
+            <!-- Calculator Summary Panel -->
+            <div class="panel results-panel">
+                <div class="panel-header">
+                    <span class="panel-title" style="color: #c084fc; text-shadow: 0 0 8px rgba(168, 85, 247, 0.45);">
+                        <!-- Portal / Sparkles SVG -->
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                        Nether Requirements
+                    </span>
+                </div>
+                <div id="calculatorSummary">
+                    <!-- Dynamic calculation outputs will render here -->
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Right Panel: Checklist / Goals Catalog -->
+        <div class="checklist-panel">
+            <div class="panel">
+                <div class="panel-header">
+                    <span class="panel-title">
+                        <!-- Checklist SVG -->
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 11-2 2-2-2M9 17l-2 2-2-2M13 6h8M13 12h8M13 18h8"/></svg>
+                        Target Goals Checklist
+                    </span>
+                </div>
+
+                <!-- Filters & Search Toolbar -->
+                <div class="checklist-controls">
+                    <div class="filter-row" id="categoryTabs">
+                        <button class="filter-tab active" onclick="setCategoryFilter('All')">All</button>
+                        <button class="filter-tab" onclick="setCategoryFilter('Creatures')">Creatures</button>
+                        <button class="filter-tab" onclick="setCategoryFilter('Scrolls')">Scrolls</button>
+                        <button class="filter-tab" onclick="setCategoryFilter('DDD')">DDD</button>
+                        <button class="filter-tab" onclick="setCategoryFilter('Lesley')">Lesley</button>
+                    </div>
+                    <div class="search-row">
+                        <input type="text" class="search-input" id="searchBar" placeholder="Search targets by name..." oninput="handleSearch(this.value)">
+                        <label class="checkbox-container">
+                            <input type="checkbox" id="hideCompletedCheck" onchange="toggleHideCompleted(this.checked)">
+                            <span class="checkbox-custom"></span>
+                            Hide Completed
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Goals Checklist Grid -->
+                <div class="goals-list" id="goalsListContainer">
+                    <!-- JS generated checklist targets -->
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Toast Notification Banner -->
+    <div class="toast" id="toastNotification">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        <span id="toastMessage">State saved successfully!</span>
+    </div>
+
+    <!-- JS Core Engine -->
+    <script>
+        // --- 1. Base64 Icons Database ---
+        const ICONS = {
+            orb: "data:image/webp;base64,UklGRhIBAABXRUJQVlA4TAUBAAAvF8FPEE+gJgAIxqZ/EjncLjlcFFEMSRKzAOsPdXUMmSE91TSSAt2Hf1W0BBn0GJj/AMD+z4Fj6TwzFEKlS6x9DzBqJEnIWcACFrCAhbWwFtbCWhjDnbkjfDcR/Z+A9cE8dv3iPCnhYw0r8U6lEj7wst6woGBBQidQCQOeo80FCZ07BSzY8LY29BQULDh3SkguSAQTyppQm4l3xkQbavMFA+rYgBMoHRvwhbsazp0KnpNQ1oSehKSskyVB0pAU1LEFG74woawzpoIJG+qDDV8YsOC0aUHBggkbehomfGHAgoLLOm2iZU0YmxMWlHXuRIm3jtXmdeyMiXq+vT49Y/Kes35xYgQA",
+            flame: "data:image/webp;base64,UklGRuwAAABXRUJQVlA4TN8AAAAvF8FPECdAmG00f5Tx7HUcB6OmbQMm5Y+yINappm0DppM/zf4lMP8B8L+qPAuBUdtGgpbCUCiFUlj+sKLO3r2riP5PwPlJQ0VP9MLzuz2R4TuGip7ojbZNjn6BnmVDQS/3SYITzVxIBm5NtHeimRvN0AwlB3ZMlFBDIrglSAzPcsdEHRUceKFgxtHeaWBGcKKECjo6sIGiZJYFtyZq2DYJEkEiSKghmWXBtslQ0FDLRNF+KvsOzQgSw7aJEsGBZJa3HO2daOZdQ0FHz7MdExXcEiTZ8+mOiRrqWXJ+tzsCAA==",
+            crystal: "data:image/webp;base64,UklGRvwAAABXRUJQVlA4TPAAAAAvK8FPED9AJAAh+j/DFFmyQ3dDUQRCEP1T+RolhNjjqaaRFOhe/wXGkEGPgfkPAPZfrPR0iCZnXQOQYtutI4WCKYiCKZiCKIiC+W9OKZnPUhXR/wl4fsnA5185FwvcrfO4wP1y4BTuYE/gwXlc4sJEuZh4cOJWmHgxUQoTp2a7NTBREt8qnLgdTKzW7yQG7s9Ow6J1YeHBn5B4cH6WWK2JhRdFJfFg4cJonZA9mCiaKCqJBwsTqzVxVqZyWwvl7cRqTXxenoslbiyUtzcW3tbEi4WzssKFGwt7NgYuLBQNPDg1+4kH67OntXBWdv+VEzI=",
+            star: "data:image/webp;base64,UklGRgoBAABXRUJQVlA4TP4AAAAvK8FPED9AJmDh1L+APm6XMquhqJEUBv+u+BJMIKJXMgEL638qJoYKLvMfAuE/NZO6woRygAZHkeRGkiiIgiiIgig0haEg/p+K3vOpiOj/BMSXFIy/8kKW8PY2UNAjWFDQI+slTTDhQDKQDCQDE97UFg4s2DBhQ9Kw4MCFlzS6sGFaF5KCDRfGR9/FBAemda0PnBcLXs0EExZs61plfWBbCyaU9S62VsGCY5X1gW0tKLhvew0LSLwNCX1gWxPui8N6IfM2LNiQtDVhwYbx0XcxwYQNFxb0LGyYUPCSNlBwrYIFBQkVHHhJW2tAQhOuNeBaL2nvSwRJ/Oxbmfe6Bg==",
+            netherling: "data:image/webp;base64,UklGRq4EAABXRUJQVlA4TKIEAAAvn8FnEB/BNpKtNkdIQ9RNGeRWXipAqXevDbaRJDUaCIH8AyENfC3e1tJaVpEktRqiJaTgFh8UAviGl+POf2zPWgAEAQt/o9RuvoDEXg+Qe0T6ja5U23pyrjAADAxiaBBABNZFBBBA7n8IPlmOTAABpMQGQQhFQds2UsIf9n2tdgAiYgJwOJDiscGVDx4JqqQbZFyUvP5MwJ0v1wULUHCCObcZiDlXcm3bddvYiYCXz81rAB6m/zbPOgClMCNF9H8CaLu2njWSOrb6OjCQQCwRyna//1sufWR+SnXliej/BPzFiZkpnMOJmYk3ZiZmJt6YL0+XZ6ZwZvrb5nBi/njijenjmYmZiZl/Pj6u9g03VjZWdtZwYw83drbLKzsbKzsrOxt7uLGGOytbuLOG++WVLdzZWNnCKTzOlnhj5RSeeecUnjlx5p0zp8tn3jlx5sQ7Z06cPz6F/+KdE2dOnDnxzonz5RPn8MSZdzaqcZytc2YJbywf3y5/sXBn4c4Xt3Dhi4W/wxsLXyx8sfDFnYU7NxZuLNxZuIULd5bwzoknK8fXMhtLePt2Djz17du8U53ja4nauX1b/33eHGfLrCz8Pgw8tx/49TnZOM7W+eLPW+Gb422Nhd+Hxt7AhV+fk5XjbJU7f+4OjrMldhZ+X/gDB79uneNtL/687fzieFvl9q/blz+x1/rzKjzZOM7WWPjz5i9WjrNVntd44h842Ju49KFn++sqPNn4/zk8/jb1gYMnjl568HkP3PrUr6tyfO3Gzvc7Ehv3Kxzc2Ju4cLDns8IshYPPKVTnOFvn/Xewcrxt6A8cXDi4cXDpjE89OuPRGw889ZOd73ccHG9rDG6d+czP9l5htn/r51SOs1Xefyc7x9cytXAw46z14Dq+9eDWa/tf+IGHrsbxtcTG9zsyK9nEhZkffb+hM3/oXvTCwV8cb+u8/w6OsyVWThzceukeXzpL4cKscAqzpXuNNxae7Bxn67zvXjxYOd4W3Hqw19t7X7h0jy/8ha+j8GTj+Fpm5f+DzvG1xOsW/okZbxxcejDze/u1fXDp43Kd91/meFtlY8ZbX9gbuHD00odeOHpt752sHGdrvP9+sXF8LVO/cTDjHg8undXT3a/xwnLiOFviz19h5nhb5cSMs/Mbr5e39aXrRVWOszXedzvVOM7W2fo6vvW1fePg0oMb77f07fLCxMrxtczK9z0aF74evl8/feZvf9ud422JlfddYWbjOFtn4caFG7NgjzdmPLiOD176H3xeYuf4Wmbjz53H2xIzt4+v7YMbM96Y8WAveOmNF97+sYWqHF87mcI776/CFG4cX3vzCJ/hd/j8+JsHz/AXj/CbZ/jNk0f4zYMnD548mHmGE08mZibemJnCv5iZwpkpXDlzfO1gYw9XNlZ2NvZwC1c2VrZwD7fL++WVjZWNnS1cw42VjZ2NnY2V/W9bwxPvHF+bqJlPPrhyCa98cuXCNfzgcvnKR3jhk4/wwvXyJbxy4YNLeA0v4QeXy1c++AwvnHgPj6/94cSFKxfKevJBff66+BrWGpYfXPjkyoXrxx9cuIZjDz6phWv4Edaf8Lga",
+            demon: "data:image/webp;base64,UklGRu4EAABXRUJQVlA4TOIEAAAvn8FnEAfBJrKtVueWaIg9gwEqLGMDA7So4Odgg2lsW43uw+cWQFML/aukUZvVKookqRmSADyAEOTiAhso4Btfef5j3fMP4OMHBu3C6MU8YY7lXsb3CSUlQkBIxQMBQSDaqLYMPiQInG9lsyUAAkKujgAICH0HCtqSJNttIxu0iF3iHNEyQciUL0v//3dWNAa6LJ6Oz8xE9H8C/sgDHjDklAMTAz9jYmBioGOuHqsnhpwYm005MM0DHcM8MTAxMLGbt6uFXLBiwYoTplww5MTAXL1iYMGKgYmBBUNOrHJgYpEDqxyrJxY5MLFikQe5nS3QseIv+Tf+RJcDHQM7BvrqgR0dAx07BjqGucv/YUfHQMdAx46OsbpjyI6BHQtSYjvbhL9xlhd081z9go5XdAzsmLJjR8dc3bGjY0fHjoGOgYmOiY6Bjik7Broc+AvPWLF97YAFZ3nZ7Cif5C+yyyH7q7/LLnf5wXx5869IE7avDUhXXDa/H33FdrYDVpzR7i5ruXnNXgvZ39z344wF29kmvOD+NuNXbG8r6Kvf5Wf5JGtHeZTT3M214+ZHWdPfrjNWbGereMX97gnb2Qac0PEud/OUj/JJ7ubbC3k0fzBPWdPfngnb2y64v13xEdvbKi74LN/NR9nllLWUw1zT/5HtBlnTj+bbm/GMBdvZEmfc3/gRK7azJb6ekzzKvnntKI9yyi5rustayNogp2w34xkL/j0Ht8Pdzbv5yTxlTR/NNf1oruma7vLrq9i+9hkn/PuOAQtSl0+ynb22fd+83Shr29/ejDRhO9uE+98TVmyHO8qjbHeXB/m4+TTX3t40H+WjOZ1xwva2Bfe3Kz5he1vBCx5ll+/mo/wsp9zNUz6aj3Kaa2ke8tE85S4vSBXb2RJn3N9mPOOE7WsH1E7y3dxlTe9yypp9yA/mmr2bh9zNr/KCVLB9bcDEBfe3GdvbDlhxRq2ba/pd1vR89S4P8ihrIX+Rtdz8LF/xEdvbJtzvFnzCdrYBKy54l+3SvL/7J3l7en/1izzjGSdsZ5vwivvbBZ+wYnvbgtvTt+fyaG73TX6Wc/Nd/iZrKYeszXjGgu1rB6w44/43YfvagHa63fbtHuSQ/5VPcpg/mId8Mg/zefV2twn3vwO2t1WkZ3l7aX6Su+zyaO5yvLvbW2Q6Y8V2toL73ycs2L52QLqgpt9lu24ecpdT7h/eNNd4wHa2QJpxf3M8YHtbxQXt7Lenj2/uw5sb5ifZ7oJUsZ2t4Iz72xWpYDvbhAu+Pt1lu7vssuZyvvkuv74ZB6zYvnbAihf8+46Cjnf5JI+yne5yfvhdTnkxv2J7W2DiFfe3GQ9YsJ1tQketyymPcsqafvrwp7xsngacsH3tgAX3O25vG/CAC9rpLmsua/8/tzcjVWxfO2PI+9mMIRdsX/uKT/JZDtnNAxNdfsSUA10OdEw5MNEx0THxgC4P6BiYGPgZE0P+hIkhJ4Zc8Te2rz1hwUmuWLBiYMGQU65YsGKRQ87VY/WKBSsWDEy5ygUrFgxMDEysGJtN+Rf+xPY1R/qN3/GGL/hDDnQMTAz5hrn6C97kRMeQE19WTzkw8YYpv8gp3zBXf8Ebupz4C7vcvvYHHRNfMJGYvuMNyX49PWQKmfiGiY4vmBjmN0x8kbVAR0oM+SbTH7ldDQ==",
+            mountain: "data:image/webp;base64,UklGRjwFAABXRUJQVlA4TC8FAAAvn8FnEDfBNJLtNqeM1X8T6kJI1AnZ3DSn1wajSJIU1a5/PyfjDDC9manYRpLkZKxP6UP5pBUuRQDYWsPMf2zHGiEAQhBRNnTVaF4hgLI/0v64smAqe9twuroMlWkIQAmsvQQQoPua1CRalkQAAeqyAUKopR0ESIDioG0jQYr5w97Zubt/AhExAf2rdy8VauomYxmzWJezOyKFjIMJB9qRUpmHRA6PIqTUyhhJdiEq2UXmEJrodc1UKretThs4LCfUoZRanbmnB0RE9yERGQcvb3rlaxs32rJtx22jioD0PJIUSHRR9L1oUv7/j9x1CGXi03VE/ydAkiRJjq2gXjcFFInY1bv/Wd3qq3VE//NdTpgxyVlOmDHhDTMmzJjwhvn0dHrGJGdML5vlhLl7whum7hkTZkyY8b17XC3JjoaOhg1NdmyyY0M/3bCho2FDw4aOTXY0uaGhyw1NbqcbutzQ0dDlJMfZEt7Q8JB3fOIh73jgjk/c8Th9xyceuOOBT9zxwL37If+PTzxwxwN3PPCJB+6nH7jLB+74REdyjLM13LHKBWv3cvqCFWesOOOCRa64YMVyesUFKy5YccEZK85YsGLBijNWLHLFGas844EbGsbXMjpW/LN7cXjXh81h87J4GR7OutdhsXk4IzWMryWkGa+7B8bZMhpW/FvWZv16xWbYLzy866y1Yq8fpA0d42wNF7zeKj4w3uZY8U851MKzfjAs9gsP74sfasXm4V3ThoZxNsMZr7sV42wJG1b8W571ZTPrZjjMutjvsNjr4pfXMN624PU24xvG2wwL/ir3a4ZNzU3N/ZoPNrXLsPngWVfc0DHO5ljxeiv4hoZxNkP6WdaaxV5rs86La2Fz2Mxa8w82K27o+HGOgnE6P3gYNkPN/Zqv94vD5qyboWYYX7thw493JHT8cqztNTe1JGfdL+tZ97pYkRrG2Rpefysaxt1+lV8v/EltX9QO+/1mv2GzeHnWtGHDeFvB623GFeNtjgv2C4vDcNaai5o1a2d9edbFYUEyjLMZVrzeKm7YML6WUftT1pqah6G2fz1r59WLsw4LkmN8LaFjweutYrwto2HFX+V+DjXn1ZufqO0/UcuLa3854xvG2xpedwVXjLMlNCz4p6xl/d/lqVXcsGGcreGM19uCKxrG2wr287fnuX69J1/vyX6zXHFDx/haRsOK11/D+FrCL+/br/nr81z3q6fH3RpefxnjbYb0t9zv8vDy8Mv7eIraLNOGhnE2x+vvEzrG1zLSgprvup9fr9iv2K/YL+t+BRPG2RJSxeutYsZ4m2FB7fI7mw+edVFrhofN8LAZHmrNflVekAzjbI4Vr7cZyTHO1rDgr3KzeJl1MWwOteJQKw61Wn95nNAwvpbRcMGPdzhW/FvWLmddHGrWHGoONYfNcNbz6fG2hIYzXm8VMzrG2RpW1Iqzbg77ww/n1Slhw/haRsfrrmC8LWHGgr/Ks27OOtTCYTgMh+Ew63nxPwwrkmF8bcMkX29JdoyvPXCVN/khb90fuOImv+EqP3CTH7jhKj9wxQ1X3HDFjJuccMOEGRPeMGOSP2HGJGdMsuGO8bUVHZts6GjY0LHJLhs6GrrcZD+9nW7oaOjY0GWTHQ0dGzo2dDRsL2vygU+Mrx1IO95xwgFHecA7DjjiP044nj7gJI94x0kecTh9lAccccL/HORRnnA8fcAJ7/KIBz7l+No7HjjigCMS0x0npP7n6YNMg0w84Yh3HHDEofuEIw6yNuEdacRBnmR6l+NqAA=="
+        };
+
+        // --- 2. Master Targets Data ---
+        const TARGETS_DATA = [
+            // Creatures
+            { id: "netherling_lvl_1", name: "Netherling Lvl 1 (Unlock)", category: "Creatures", cost: { orbs: 5, flames: 0, crystals: 0, stars: 0 } },
+            { id: "netherling_lvl_2", name: "Netherling Lvl 2 Upgrade", category: "Creatures", cost: { orbs: 0, flames: 0, crystals: 10, stars: 0 } },
+            { id: "netherling_lvl_3", name: "Netherling Lvl 3 Upgrade", category: "Creatures", cost: { orbs: 0, flames: 60, crystals: 0, stars: 3 } },
+            { id: "nether_demon_lvl_1", name: "Nether Demon Lvl 1 (Unlock)", category: "Creatures", cost: { orbs: 10, flames: 40, crystals: 0, stars: 0 } },
+            { id: "nether_demon_lvl_2", name: "Nether Demon Lvl 2 Upgrade", category: "Creatures", cost: { orbs: 0, flames: 0, crystals: 0, stars: 4 } },
+            { id: "nether_demon_lvl_3", name: "Nether Demon Lvl 3 Upgrade", category: "Creatures", cost: { orbs: 0, flames: 0, crystals: 12, stars: 6 } },
+            { id: "mountain_lvl_1", name: "Mountain Lvl 1 (Unlock)", category: "Creatures", cost: { orbs: 15, flames: 0, crystals: 10, stars: 0 } },
+            { id: "mountain_lvl_2", name: "Mountain Lvl 2 Upgrade", category: "Creatures", cost: { orbs: 0, flames: 50, crystals: 20, stars: 0 } },
+
+            // Scrolls
+            { id: "scroll_nature", name: "Scroll of Nature", category: "Scrolls", cost: { orbs: 0, flames: 0, crystals: 15, stars: 0 }, description: "Creatures drop +1 unique resources." },
+            { id: "scroll_plenty", name: "Scroll of Plenty", category: "Scrolls", cost: { orbs: 0, flames: 50, crystals: 10, stars: 0 }, description: "Producer floors produce +1 resources." },
+            { id: "scroll_industry", name: "Scroll of Industry", category: "Scrolls", cost: { orbs: 0, flames: 75, crystals: 15, stars: 0 }, description: "Converter floors produce +1 resources." },
+            { id: "scroll_might", name: "Scroll of Might", category: "Scrolls", cost: { orbs: 0, flames: 50, crystals: 0, stars: 0 }, description: "Creatures do +1000% Damage." },
+            { id: "scroll_dark", name: "Dark Scroll", category: "Scrolls", cost: { orbs: 0, flames: 0, crystals: 15, stars: 1 }, description: "Creatures drop +1000% Dark Energy." },
+            { id: "scroll_magic", name: "Magic Scroll", category: "Scrolls", cost: { orbs: 0, flames: 75, crystals: 0, stars: 0 }, description: "Spells cool down 10% Faster." },
+            { id: "scroll_unending", name: "Unending Scroll", category: "Scrolls", cost: { orbs: 0, flames: 0, crystals: 0, stars: 4 }, description: "Idols last 1s longer during the Apocalypse." },
+            { id: "scroll_growth", name: "Scroll of Growth", category: "Scrolls", cost: { orbs: 0, flames: 25, crystals: 0, stars: 6 }, description: "Idols gain +1% damage each second." },
+            { id: "scroll_dead", name: "Scroll of the Dead", category: "Scrolls", cost: { orbs: 0, flames: 25, crystals: 0, stars: 0 }, description: "Mummies drop +1 Time Orb." },
+            { id: "scroll_troll", name: "Scroll of the Troll", category: "Scrolls", cost: { orbs: 0, flames: 20, crystals: 5, stars: 0 }, description: "Trolls drop +1 space ore." },
+            { id: "scroll_scales", name: "Scroll of Scales", category: "Scrolls", cost: { orbs: 0, flames: 0, crystals: 10, stars: 2 }, description: "Dragons drop +1 Star Crystal." },
+            { id: "scroll_time", name: "Scroll of Time", category: "Scrolls", cost: { orbs: 0, flames: 35, crystals: 0, stars: 0 }, description: "Time Creatures spawn 10% Faster." },
+            { id: "scroll_nether", name: "Nether Scroll", category: "Scrolls", cost: { orbs: 0, flames: 50, crystals: 10, stars: 0 }, description: "Nether Creatures spawn 10% Faster." },
+
+            // DDD
+            { id: "ddd_lvl_7", name: "DDD Lvl 7 Upgrade", category: "DDD", cost: { orbs: 0, flames: 150, crystals: 25, stars: 0 } },
+            { id: "ddd_lvl_8", name: "DDD Lvl 8 Upgrade", category: "DDD", cost: { orbs: 0, flames: 0, crystals: 50, stars: 25 } },
+            { id: "ddd_lvl_10", name: "DDD Lvl 10 Upgrade", category: "DDD", cost: { orbs: 0, flames: 0, crystals: 0, stars: 50 } },
+
+            // Lesley Shop
+            { id: "lesley_flames_100", name: "Lesley: 100 Flames Trade", category: "Lesley", cost: { orbs: 0, flames: 100, crystals: 0, stars: 0 } },
+            { id: "lesley_crystals_25", name: "Lesley: 25 Crystals Trade", category: "Lesley", cost: { orbs: 0, flames: 0, crystals: 25, stars: 0 } },
+            { id: "lesley_stars_5", name: "Lesley: 5 Stars Trade", category: "Lesley", cost: { orbs: 0, flames: 0, crystals: 0, stars: 5 } },
+            { id: "lesley_flames_200", name: "Lesley: 200 Flames Trade", category: "Lesley", cost: { orbs: 0, flames: 200, crystals: 0, stars: 0 } },
+            { id: "lesley_crystals_50", name: "Lesley: 50 Crystals Trade", category: "Lesley", cost: { orbs: 0, flames: 0, crystals: 50, stars: 0 } },
+            { id: "lesley_stars_10", name: "Lesley: 10 Stars Trade", category: "Lesley", cost: { orbs: 0, flames: 0, crystals: 0, stars: 10 } },
+            { id: "lesley_flames_300", name: "Lesley: 300 Flames Trade", category: "Lesley", cost: { orbs: 0, flames: 300, crystals: 0, stars: 0 } },
+            { id: "lesley_crystals_75", name: "Lesley: 75 Crystals Trade", category: "Lesley", cost: { orbs: 0, flames: 0, crystals: 75, stars: 0 } },
+            { id: "lesley_stars_25", name: "Lesley: 25 Stars Trade", category: "Lesley", cost: { orbs: 0, flames: 0, crystals: 0, stars: 25 } },
+            { id: "lesley_flames_500", name: "Lesley: 500 Flames Trade", category: "Lesley", cost: { orbs: 0, flames: 500, crystals: 0, stars: 0 } },
+            { id: "lesley_crystals_100", name: "Lesley: 100 Crystals Trade", category: "Lesley", cost: { orbs: 0, flames: 0, crystals: 100, stars: 0 } },
+            { id: "lesley_stars_50", name: "Lesley: 50 Stars Trade", category: "Lesley", cost: { orbs: 0, flames: 0, crystals: 0, stars: 50 } }
+        ];
+
+        // --- 3. Default Creature Stats ---
+        const CREATURES_DATA = {
+            netherling: {
+                name: "Netherling",
+                orbCost: 1,
+                flameCost: 0,
+                crystalCost: 0,
+                starCost: 0,
+                dropType: "flames",
+                baseDrops: { 1: 3, 2: 5, 3: 7 },
+                icon: ICONS.netherling
+            },
+            demon: {
+                name: "Nether Demon",
+                orbCost: 3,
+                flameCost: 10,
+                crystalCost: 0,
+                starCost: 0,
+                dropType: "crystals",
+                baseDrops: { 1: 2, 2: 3, 3: 4 },
+                icon: ICONS.demon
+            },
+            mountain: {
+                name: "Nether Mountain",
+                orbCost: 0,
+                flameCost: 0,
+                crystalCost: 12,
+                starCost: 0,
+                dropType: "stars",
+                baseDrops: { 1: 1, 2: 2 },
+                icon: ICONS.mountain
+            }
+        };
+
+        // --- 4. Application State Store ---
+        let state = {
+            onHand: { orbs: 0, flames: 0, crystals: 0, stars: 0 },
+            completedGoals: {},   // Maps goal ID -> boolean (Progress)
+            selectedGoals: {},    // Maps goal ID -> boolean (Current target calculator)
+            pieLevel: 0,          // Modifiers: Pie Level (0-3)
+            bountyEnabled: false, // Modifiers: Bounty (+1)
+            hideCompleted: false, // UI Filters
+            activeCategory: "All",
+            searchQuery: "",
+            modifiersExpanded: true
+        };
+
+        // --- 5. Application Persistence Engine ---
+        const STORAGE_KEY = "idle_apoc_nether_costs_state_v2";
+
+        function saveStateToLocalStorage() {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+            } catch (e) {
+                console.error("Failed to save state to localStorage", e);
+            }
+        }
+
+        function loadStateFromLocalStorage() {
+            try {
+                const raw = localStorage.getItem(STORAGE_KEY);
+                if (raw) {
+                    const parsed = JSON.parse(raw);
+                    state = { ...state, ...parsed };
+                }
+            } catch (e) {
+                console.error("Failed to load state from localStorage", e);
+            }
+        }
+
+        function resetState() {
+            if (confirm("Are you sure you want to clear your current progress and reset everything?")) {
+                state.onHand = { orbs: 0, flames: 0, crystals: 0, stars: 0 };
+                state.completedGoals = {};
+                state.selectedGoals = {};
+                state.pieLevel = 0;
+                state.bountyEnabled = false;
+                state.hideCompleted = false;
+                state.activeCategory = "All";
+                state.searchQuery = "";
+                
+                saveStateToLocalStorage();
+                renderAll();
+                showToast("All progress reset to defaults.");
+            }
+        }
+
+        // Backup Data
+        function exportData() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state));
+            const downloadAnchor = document.createElement('a');
+            downloadAnchor.setAttribute("href", dataStr);
+            downloadAnchor.setAttribute("download", "nether_costs_backup.json");
+            document.body.appendChild(downloadAnchor);
+            downloadAnchor.click();
+            downloadAnchor.remove();
+            showToast("Backup file downloaded.");
+        }
+
+        function triggerImport() {
+            document.getElementById("importFile").click();
+        }
+
+        function importData(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const parsed = JSON.parse(e.target.result);
+                    if (parsed.onHand) {
+                        state = { ...state, ...parsed };
+                        saveStateToLocalStorage();
+                        renderAll();
+                        showToast("Progress successfully imported!");
+                    } else {
+                        alert("Invalid backup file format.");
+                    }
+                } catch (err) {
+                    alert("Failed to parse JSON file.");
+                }
+            };
+            reader.readAsText(file);
+            event.target.value = "";
+        }
+
+        // --- 6. Core Calculations (Summon Cascade Math) ---
+        
+        // Dynamically compute creature stats: level and drop rate
+        function getCreatureStats(creatureKey) {
+            const creature = CREATURES_DATA[creatureKey];
+            
+            // Sync level based on checklist completions
+            let level = 1;
+            if (creatureKey === "netherling") {
+                if (state.completedGoals["netherling_lvl_3"]) level = 3;
+                else if (state.completedGoals["netherling_lvl_2"]) level = 2;
+            } else if (creatureKey === "demon") {
+                if (state.completedGoals["nether_demon_lvl_3"]) level = 3;
+                else if (state.completedGoals["nether_demon_lvl_2"]) level = 2;
+            } else if (creatureKey === "mountain") {
+                if (state.completedGoals["mountain_lvl_2"]) level = 2;
+            }
+            
+            const baseDrop = creature.baseDrops[level];
+            const pieBonus = state.pieLevel;
+            const bountyBonus = state.bountyEnabled ? 1 : 0;
+            
+            return {
+                level: level,
+                drop: baseDrop + pieBonus + bountyBonus
+            };
+        }
+
+        function getCreatureDrop(creatureKey) {
+            return getCreatureStats(creatureKey).drop;
+        }
+
+        function calculateCosts() {
+            let targetOrbs = 0;
+            let targetFlames = 0;
+            let targetCrystals = 0;
+            let targetStars = 0;
+
+            TARGETS_DATA.forEach(goal => {
+                if (state.selectedGoals[goal.id] && !state.completedGoals[goal.id]) {
+                    targetOrbs += goal.cost.orbs;
+                    targetFlames += goal.cost.flames;
+                    targetCrystals += goal.cost.crystals;
+                    targetStars += goal.cost.stars;
+                }
+            });
+
+            const drops = {
+                netherling: getCreatureDrop("netherling"),
+                demon: getCreatureDrop("demon"),
+                mountain: getCreatureDrop("mountain")
+            };
+
+            const explanation = [];
+
+            // A. Star deficits -> Summon Mountains
+            const initialStarDeficit = Math.max(0, targetStars - state.onHand.stars);
+            let mountainsToSummon = 0;
+            let starSurplus = 0;
+            let mountainCrystalsCost = 0;
+            
+            if (initialStarDeficit > 0) {
+                mountainsToSummon = Math.ceil(initialStarDeficit / drops.mountain);
+                const starYield = mountainsToSummon * drops.mountain;
+                starSurplus = starYield - initialStarDeficit;
+                mountainCrystalsCost = mountainsToSummon * CREATURES_DATA.mountain.crystalCost;
+                
+                explanation.push(`Need <strong>${targetStars} Stars</strong>. On-hand: <strong>${state.onHand.stars}</strong>. Deficit: <strong>${initialStarDeficit}</strong>.<br>
+                    Summon <strong>${mountainsToSummon} Mountain(s)</strong> (drops +${drops.mountain} each) yielding <strong>+${starYield} Stars</strong> (Surplus: +${starSurplus}).<br>
+                    Mountain summons require <strong>${mountainCrystalsCost} Crystals</strong>.`);
+            } else if (targetStars > 0) {
+                explanation.push(`Need <strong>${targetStars} Stars</strong>. On-hand: <strong>${state.onHand.stars}</strong>. Covered completely.`);
+            }
+
+            // B. Crystal deficits -> Summon Demons
+            const totalCrystalsNeeded = targetCrystals + mountainCrystalsCost;
+            const initialCrystalDeficit = Math.max(0, totalCrystalsNeeded - state.onHand.crystals);
+            let demonsToSummon = 0;
+            let crystalSurplus = 0;
+            let demonFlamesCost = 0;
+            let demonOrbsCost = 0;
+
+            if (initialCrystalDeficit > 0) {
+                demonsToSummon = Math.ceil(initialCrystalDeficit / drops.demon);
+                const crystalYield = demonsToSummon * drops.demon;
+                crystalSurplus = crystalYield - initialCrystalDeficit;
+                demonFlamesCost = demonsToSummon * CREATURES_DATA.demon.flameCost;
+                demonOrbsCost = demonsToSummon * CREATURES_DATA.demon.orbCost;
+
+                explanation.push(`Need <strong>${totalCrystalsNeeded} Crystals</strong> (${targetCrystals} goals + ${mountainCrystalsCost} summons). On-hand: <strong>${state.onHand.crystals}</strong>. Deficit: <strong>${initialCrystalDeficit}</strong>.<br>
+                    Summon <strong>${demonsToSummon} Demon(s)</strong> (drops +${drops.demon} each) yielding <strong>+${crystalYield} Crystals</strong> (Surplus: +${crystalSurplus}).<br>
+                    Demon summons require <strong>${demonFlamesCost} Flames</strong> and <strong>${demonOrbsCost} Orbs</strong>.`);
+            } else if (totalCrystalsNeeded > 0) {
+                explanation.push(`Need <strong>${totalCrystalsNeeded} Crystals</strong> (${targetCrystals} goals + ${mountainCrystalsCost} summons). On-hand: <strong>${state.onHand.crystals}</strong>. Covered completely.`);
+            }
+
+            // C. Flame deficits -> Summon Netherlings
+            const totalFlamesNeeded = targetFlames + demonFlamesCost;
+            const initialFlameDeficit = Math.max(0, totalFlamesNeeded - state.onHand.flames);
+            let netherlingsToSummon = 0;
+            let flameSurplus = 0;
+            let netherlingOrbsCost = 0;
+
+            if (initialFlameDeficit > 0) {
+                netherlingsToSummon = Math.ceil(initialFlameDeficit / drops.netherling);
+                const flameYield = netherlingsToSummon * drops.netherling;
+                flameSurplus = flameYield - initialFlameDeficit;
+                netherlingOrbsCost = netherlingsToSummon * CREATURES_DATA.netherling.orbCost;
+
+                explanation.push(`Need <strong>${totalFlamesNeeded} Flames</strong> (${targetFlames} goals + ${demonFlamesCost} summons). On-hand: <strong>${state.onHand.flames}</strong>. Deficit: <strong>${initialFlameDeficit}</strong>.<br>
+                    Summon <strong>${netherlingsToSummon} Netherling(s)</strong> (drops +${drops.netherling} each) yielding <strong>+${flameYield} Flames</strong> (Surplus: +${flameSurplus}).<br>
+                    Netherling summons require <strong>${netherlingOrbsCost} Orbs</strong>.`);
+            } else if (totalFlamesNeeded > 0) {
+                explanation.push(`Need <strong>${totalFlamesNeeded} Flames</strong> (${targetFlames} goals + ${demonFlamesCost} summons). On-hand: <strong>${state.onHand.flames}</strong>. Covered completely.`);
+            }
+
+            // D. Orb deficits
+            const totalOrbsNeeded = targetOrbs + demonOrbsCost + netherlingOrbsCost;
+            const initialOrbDeficit = Math.max(0, totalOrbsNeeded - state.onHand.orbs);
+            
+            if (totalOrbsNeeded > 0) {
+                explanation.push(`Need <strong>${totalOrbsNeeded} Orbs</strong> (${targetOrbs} goals + ${demonOrbsCost + netherlingOrbsCost} summons). On-hand: <strong>${state.onHand.orbs}</strong>.<br>
+                    ${initialOrbDeficit > 0 ? `Deficit: <strong>${initialOrbDeficit} Orbs</strong> required.` : `Covered completely.`}`);
+            }
+
+            return {
+                baseCosts: { orbs: targetOrbs, flames: targetFlames, crystals: targetCrystals, stars: targetStars },
+                summons: { netherling: netherlingsToSummon, demon: demonsToSummon, mountain: mountainsToSummon },
+                deficits: { orbs: initialOrbDeficit, flames: initialFlameDeficit, crystals: initialCrystalDeficit, stars: initialStarDeficit },
+                totalNeeded: { orbs: totalOrbsNeeded, flames: totalFlamesNeeded, crystals: totalCrystalsNeeded, stars: targetStars },
+                explanation
+            };
+        }
+
+        // --- 7. DOM Rendering Layouts ---
+
+        // Render Inventory on main panel
+        function renderInventory() {
+            const container = document.getElementById("inventoryContainer");
+            const keys = [
+                { key: 'orbs', label: 'Nether Orbs', icon: ICONS.orb, class: 'inv-orb' },
+                { key: 'flames', label: 'Nether Flames', icon: ICONS.flame, class: 'inv-flame' },
+                { key: 'crystals', label: 'Nether Crystals', icon: ICONS.crystal, class: 'inv-crystal' },
+                { key: 'stars', label: 'Nether Stars', icon: ICONS.star, class: 'inv-star' }
+            ];
+
+            container.innerHTML = keys.map(item => `
+                <div class="inventory-card ${item.class}">
+                    <div class="card-header-row">
+                        <span>${item.label}</span>
+                        <img class="resource-icon" src="${item.icon}" alt="${item.label}">
+                    </div>
+                    <div class="card-controls">
+                        <button class="card-btn" onclick="updateInventory('${item.key}', -10)" title="-10">-10</button>
+                        <button class="card-btn" onclick="updateInventory('${item.key}', -1)" title="-1">-1</button>
+                        <input type="number" class="inv-input mono-num" value="${state.onHand[item.key]}" 
+                            onchange="setInventory('${item.key}', this.value)" min="0">
+                        <button class="card-btn" onclick="updateInventory('${item.key}', 1)" title="+1">+1</button>
+                        <button class="card-btn" onclick="updateInventory('${item.key}', 10)" title="+10">+10</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Render Collapsible Modifiers Panel (and Creature Drop Rates)
+        function renderUpgradesPanel() {
+            document.getElementById("pieLevelVal").innerText = state.pieLevel;
+            document.getElementById("pieLevelInput").value = state.pieLevel;
+            
+            const btn = document.getElementById("bountyToggle");
+            if (state.bountyEnabled) {
+                btn.classList.add("active");
+                btn.innerText = "Enabled (+1)";
+            } else {
+                btn.classList.remove("active");
+                btn.innerText = "Disabled";
+            }
+
+            // Render Dynamic Creature Drop Rates inside settings
+            const ratesContainer = document.getElementById("dropRatesContainer");
+            const creatures = [
+                { key: 'netherling', label: 'Netherling', icon: ICONS.netherling, unit: 'Flames', color: 'var(--color-flame)', class: 'drop-card-netherling' },
+                { key: 'demon', label: 'Nether Demon', icon: ICONS.demon, unit: 'Crystals', color: 'var(--color-crystal)', class: 'drop-card-demon' },
+                { key: 'mountain', label: 'Mountain', icon: ICONS.mountain, unit: 'Stars', color: 'var(--color-star)', class: 'drop-card-mountain' }
+            ];
+
+            ratesContainer.innerHTML = creatures.map(c => {
+                const stats = getCreatureStats(c.key);
+                return `
+                    <div class="creature-drop-card ${c.class}">
+                        <img src="${c.icon}" style="width: 24px; height: 24px; object-fit: contain;" alt="${c.label}">
+                        <span style="font-size: 0.65rem; font-weight: 700; color: var(--text-muted);">${c.label} (Lvl ${stats.level})</span>
+                        <span style="font-size: 0.85rem; font-weight: 800; color: ${c.color};" class="mono-num">${stats.drop} ${c.unit}</span>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Render Calculator calculations output
+        function renderCalculatorSummary() {
+            const container = document.getElementById("calculatorSummary");
+            const results = calculateCosts();
+
+            const activeTargetsCount = Object.keys(state.selectedGoals).filter(k => state.selectedGoals[k] && !state.completedGoals[k]).length;
+            
+            if (activeTargetsCount === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 24px; color: var(--text-muted); font-size: 0.8rem;">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 8px; opacity: 0.5;"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+                        <p>No active targets selected.</p>
+                        <p style="font-size: 0.7rem; margin-top: 4px;">Select one or multiple goals in the checklist below to calculate summoning costs.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = `
+                <!-- Creature Summons Grid -->
+                <div class="results-section-title">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                    Summons Needed
+                </div>
+                <div class="summons-grid">
+                    <div class="summon-item">
+                        <img class="summon-creature-icon" src="${CREATURES_DATA.netherling.icon}" alt="Netherling">
+                        <span class="summon-count mono-num">${results.summons.netherling}</span>
+                        <span class="summon-name">Netherlings</span>
+                        <span style="font-size:0.55rem; color:#a78bfa; font-weight:700;">(+${getCreatureDrop("netherling")} drops)</span>
+                    </div>
+                    <div class="summon-item">
+                        <img class="summon-creature-icon" src="${CREATURES_DATA.demon.icon}" alt="Nether Demon">
+                        <span class="summon-count mono-num">${results.summons.demon}</span>
+                        <span class="summon-name">Demons</span>
+                        <span style="font-size:0.55rem; color:#a78bfa; font-weight:700;">(+${getCreatureDrop("demon")} drops)</span>
+                    </div>
+                    <div class="summon-item">
+                        <img class="summon-creature-icon" src="${CREATURES_DATA.mountain.icon}" alt="Nether Mountain">
+                        <span class="summon-count mono-num">${results.summons.mountain}</span>
+                        <span class="summon-name">Mountains</span>
+                        <span style="font-size:0.55rem; color:#a78bfa; font-weight:700;">(+${getCreatureDrop("mountain")} drops)</span>
+                    </div>
+                </div>
+
+                <!-- Deficits / Resource Grid -->
+                <div class="results-section-title">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11.5 21a9.5 9.5 0 1 0 0-19 9.5 9.5 0 0 0 0 19z"/><path d="M12.5 7v6h4"/></svg>
+                    Additional Resource Deficit
+                </div>
+                <div class="deficits-grid">
+                    <div class="deficit-item ${results.deficits.orbs > 0 ? 'deficit-active def-orb' : ''}">
+                        <span class="deficit-val mono-num">${results.deficits.orbs}</span>
+                        <span class="deficit-label">Orbs</span>
+                    </div>
+                    <div class="deficit-item ${results.deficits.flames > 0 ? 'deficit-active def-flame' : ''}">
+                        <span class="deficit-val mono-num">${results.deficits.flames}</span>
+                        <span class="deficit-label">Flames</span>
+                    </div>
+                    <div class="deficit-item ${results.deficits.crystals > 0 ? 'deficit-active def-crystal' : ''}">
+                        <span class="deficit-val mono-num">${results.deficits.crystals}</span>
+                        <span class="deficit-label">Crystals</span>
+                    </div>
+                    <div class="deficit-item ${results.deficits.stars > 0 ? 'deficit-active def-star' : ''}">
+                        <span class="deficit-val mono-num">${results.deficits.stars}</span>
+                        <span class="deficit-label">Stars</span>
+                    </div>
+                </div>
+
+                <!-- Cascade Math Log -->
+                <div class="results-section-title">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+                    Cascading Calculation Log
+                </div>
+                <div class="explanation-box">
+                    ${results.explanation.map(step => `<div class="explanation-step">${step}</div>`).join('')}
+                </div>
+            `;
+        }
+
+        // Render Goals Checklist Grid
+        function renderGoalsList() {
+            const container = document.getElementById("goalsListContainer");
+            
+            const filtered = TARGETS_DATA.filter(goal => {
+                if (state.activeCategory !== "All" && goal.category !== state.activeCategory) {
+                    return false;
+                }
+                if (state.searchQuery && !goal.name.toLowerCase().includes(state.searchQuery.toLowerCase())) {
+                    return false;
+                }
+                if (state.hideCompleted && state.completedGoals[goal.id]) {
+                    return false;
+                }
+                return true;
+            });
+
+            if (filtered.length === 0) {
+                container.innerHTML = `
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: var(--text-muted);">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="opacity: 0.4; margin-bottom: 8px;"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                        <p>No matching goals found.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = filtered.map(goal => {
+                const isCompleted = !!state.completedGoals[goal.id];
+                const isSelected = !!state.selectedGoals[goal.id];
+                
+                let costsHtml = "";
+                if (goal.cost.orbs > 0) costsHtml += `<span class="goal-cost-badge cost-badge-orb"><img class="resource-icon" src="${ICONS.orb}"> ${goal.cost.orbs}</span>`;
+                if (goal.cost.flames > 0) costsHtml += `<span class="goal-cost-badge cost-badge-flame"><img class="resource-icon" src="${ICONS.flame}"> ${goal.cost.flames}</span>`;
+                if (goal.cost.crystals > 0) costsHtml += `<span class="goal-cost-badge cost-badge-crystal"><img class="resource-icon" src="${ICONS.crystal}"> ${goal.cost.crystals}</span>`;
+                if (goal.cost.stars > 0) costsHtml += `<span class="goal-cost-badge cost-badge-star"><img class="resource-icon" src="${ICONS.star}"> ${goal.cost.stars}</span>`;
+
+                let levelBadge = "";
+                if (goal.id === "netherling_lvl_2") levelBadge = `<span class="level-badge">Netherling Lvl 2</span>`;
+                else if (goal.id === "netherling_lvl_3") levelBadge = `<span class="level-badge">Netherling Lvl 3</span>`;
+                else if (goal.id === "nether_demon_lvl_2") levelBadge = `<span class="level-badge">Demon Lvl 2</span>`;
+                else if (goal.id === "nether_demon_lvl_3") levelBadge = `<span class="level-badge">Demon Lvl 3</span>`;
+                else if (goal.id === "mountain_lvl_2") levelBadge = `<span class="level-badge">Mountain Lvl 2</span>`;
+
+                return `
+                    <div class="goal-card ${isCompleted ? 'completed' : ''}">
+                        ${levelBadge}
+                        <div class="goal-info">
+                            <span class="goal-category">${goal.category}</span>
+                            <span class="goal-name">${goal.name}</span>
+                            ${goal.description ? `<span class="goal-desc" style="font-size: 0.65rem; color: var(--text-muted); font-style: italic; margin-top: 2px; line-height: 1.25;">${goal.description}</span>` : ''}
+                        </div>
+                        <div class="goal-costs-row">
+                            ${costsHtml || '<span style="font-size:0.65rem; color:gray;">Free/None</span>'}
+                        </div>
+                        <div class="goal-actions">
+                            <button class="goal-btn-target ${isSelected && !isCompleted ? 'active' : ''}" 
+                                onclick="toggleGoalSelected('${goal.id}')" ${isCompleted ? 'disabled' : ''}>
+                                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>
+                                Target
+                            </button>
+                            <button class="goal-btn-done" onclick="toggleGoalCompleted('${goal.id}')">
+                                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                                Achieved
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderAll() {
+            renderInventory();
+            renderUpgradesPanel();
+            renderCalculatorSummary();
+            renderGoalsList();
+        }
+
+        // --- 8. Event Action Handlers ---
+
+        function updateInventory(key, delta) {
+            state.onHand[key] = Math.max(0, state.onHand[key] + delta);
+            saveStateToLocalStorage();
+            renderInventory();
+            renderCalculatorSummary();
+        }
+
+        function setInventory(key, val) {
+            state.onHand[key] = Math.max(0, parseInt(val) || 0);
+            saveStateToLocalStorage();
+            renderInventory();
+            renderCalculatorSummary();
+        }
+
+        function updatePieLevel(val) {
+            state.pieLevel = parseInt(val) || 0;
+            document.getElementById("pieLevelVal").innerText = state.pieLevel;
+            saveStateToLocalStorage();
+            renderUpgradesPanel();
+            renderCalculatorSummary();
+        }
+
+        function toggleBounty() {
+            state.bountyEnabled = !state.bountyEnabled;
+            saveStateToLocalStorage();
+            renderUpgradesPanel();
+            renderCalculatorSummary();
+        }
+
+        function toggleModifiers() {
+            const panel = document.getElementById("modifiersPanel");
+            const btn = document.getElementById("modifiersToggle");
+            
+            state.modifiersExpanded = !state.modifiersExpanded;
+            saveStateToLocalStorage();
+
+            if (state.modifiersExpanded) {
+                panel.classList.add("expanded");
+                btn.innerHTML = "Collapse <span>&#9650;</span>";
+            } else {
+                panel.classList.remove("expanded");
+                btn.innerHTML = "Expand <span>&#9660;</span>";
+            }
+        }
+
+        function setCategoryFilter(category) {
+            state.activeCategory = category;
+            
+            const tabs = document.querySelectorAll("#categoryTabs .filter-tab");
+            tabs.forEach(tab => {
+                if (tab.innerText === category) {
+                    tab.classList.add("active");
+                } else {
+                    tab.classList.remove("active");
+                }
+            });
+
+            saveStateToLocalStorage();
+            renderGoalsList();
+        }
+
+        function handleSearch(val) {
+            state.searchQuery = val.trim();
+            saveStateToLocalStorage();
+            renderGoalsList();
+        }
+
+        function toggleHideCompleted(checked) {
+            state.hideCompleted = checked;
+            saveStateToLocalStorage();
+            renderGoalsList();
+        }
+
+        function toggleGoalSelected(id) {
+            state.selectedGoals[id] = !state.selectedGoals[id];
+            saveStateToLocalStorage();
+            renderGoalsList();
+            renderCalculatorSummary();
+        }
+
+        function toggleGoalCompleted(id) {
+            state.completedGoals[id] = !state.completedGoals[id];
+            
+            if (state.completedGoals[id]) {
+                state.selectedGoals[id] = false;
+            }
+
+            saveStateToLocalStorage();
+            renderGoalsList();
+            renderCalculatorSummary();
+            renderUpgradesPanel(); // Always refresh drops panel on any checklist achievements
+        }
+
+        // Action Toast Notification Banner
+        let toastTimeout;
+        function showToast(message) {
+            const toast = document.getElementById("toastNotification");
+            document.getElementById("toastMessage").innerHTML = message;
+            
+            toast.classList.add("visible");
+            clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => {
+                toast.classList.remove("visible");
+            }, 3000);
+        }
+
+        // --- 9. Initializer ---
+        window.addEventListener("DOMContentLoaded", () => {
+            loadStateFromLocalStorage();
+            
+            const panel = document.getElementById("modifiersPanel");
+            const btn = document.getElementById("modifiersToggle");
+            if (state.modifiersExpanded) {
+                panel.classList.add("expanded");
+                btn.innerHTML = "Collapse <span>&#9650;</span>";
+            } else {
+                panel.classList.remove("expanded");
+                btn.innerHTML = "Expand <span>&#9660;</span>";
+            }
+
+            document.getElementById("hideCompletedCheck").checked = state.hideCompleted;
+            
+            renderAll();
+        });
+    </script>
+</body>
+</html>

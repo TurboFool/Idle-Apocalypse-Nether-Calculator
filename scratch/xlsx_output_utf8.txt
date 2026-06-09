@@ -1,0 +1,47 @@
+﻿================ Targets ================
+A1: Category | B1: Name | C1: Level | D1: Nether Flames | E1: Nether Crystals | F1: Nether Stars | G1: Orbs | 
+A2: Nether Creatures | B2: Netherling | C2: 1.0 | G2: 5.0 | 
+A3: Nether Creatures | B3: Netherling | C3: 2.0 | E3: 10.0 | 
+A4: Nether Creatures | B4: Netherling | C4: 3.0 | D4: 60.0 | F4: 3.0 | 
+A5: Nether Creatures | B5: Nether Demon | C5: 1.0 | D5: 40.0 | G5: 10.0 | 
+A6: Nether Creatures | B6: Nether Demon | C6: 2.0 | F6: 4.0 | 
+A7: Nether Creatures | B7: Nether Demon | C7: 3.0 | E7: 12.0 | F7: 6.0 | 
+A8: Nether Creatures | B8: Mountain | C8: 1.0 | E8: 10.0 | G8: 15.0 | 
+A9: Nether Creatures | B9: Mountain | C9: 2.0 | D9: 50.0 | E9: 20.0 | 
+A10: Scrolls | B10: Nature | E10: 15.0 | 
+A11: Scrolls | B11: Plenty | D11: 50.0 | E11: 10.0 | 
+A12: Scrolls | B12: Industry | D12: 75.0 | E12: 15.0 | 
+A13: Scrolls | B13: Might | D13: 50.0 | 
+A14: Scrolls | B14: Dark | E14: 15.0 | F14: 1.0 | 
+A15: Scrolls | B15: Magic | D15: 75.0 | 
+A16: Scrolls | B16: Unending | F16: 4.0 | 
+A17: Scrolls | B17: Growth | D17: 25.0 | F17: 6.0 | 
+A18: Scrolls | B18: Dead | D18: 25.0 | 
+A19: Scrolls | B19: Troll | D19: 20.0 | E19: 5.0 | 
+A20: Scrolls | B20: Scales | E20: 10.0 | F20: 2.0 | 
+A21: Scrolls | B21: Time | D21: 35.0 | 
+A22: Scrolls | B22: Nether | D22: 50.0 | E22: 10.0 | 
+A23: Doomsday Device | C23: 7.0 | D23: 150.0 | E23: 25.0 | 
+A24: Doomsday Device | C24: 8.0 | E24: 50.0 | F24: 25.0 | 
+A25: Doomsday Device | C25: 10.0 | F25: 50.0 | 
+A26: Lesley Shop | B26: 100 Flames | C26:  | D26: 100.0 | 
+A27: Lesley Shop | B27: 25 Crystals | C27:  | E27: 25.0 | 
+A28: Lesley Shop | B28: 5 Stars | C28:  | F28: 5.0 | 
+A29: Lesley Shop | B29: 200 Flames | D29: 200.0 | 
+A30: Lesley Shop | B30: 50 Crystals | E30: 50.0 | 
+A31: Lesley Shop | B31: 10 Stars | F31: 10.0 | 
+A32: Lesley Shop | B32: 300 Flames | D32: 300.0 | 
+A33: Lesley Shop | B33: 75 Crystals | E33: 75.0 | 
+A34: Lesley Shop | B34: 25 Stars | F34: 25.0 | 
+A35: Lesley Shop | B35: 500 Flames | D35: 500.0 | 
+A36: Lesley Shop | B36: 100 Crystals | E36: 100.0 | 
+A37: Lesley Shop | B37: 50 Stars | F37: 50.0 | 
+================ Nether Creatures ================
+A1: Creatures | B1: Orb Cost | C1: Nether Flame Cost | D1: Nether Crystal Cost | E1: Nether Star Cost | F1: Drop | G1: Lvl 1 Drop Amount | H1: Lvl 2 Drop Amount | I1: Lvl 3 Drop Amount | J1: Additional Requirement | 
+A2: Netherling | B2: 1.0 | C2: 0.0 | D2: 0.0 | E2: 0.0 | F2: Nether Flame | G2: 3.0 | H2: 5.0 | I2: 7.0 | 
+A3: Nether Demon | B3: 3.0 | C3: 10.0 | D3: 0.0 | E3: 0.0 | F3: Nether Crystal | G3: 2.0 | H3: 3.0 | I3: 4.0 | J3: Stage 650+ | 
+A4: Nether Mountain | B4: 0.0 | C4: 12.0 | D4: 0.0 | E4: 0.0 | F4: Nether Star | G4: 1.0 | H4: 2.0 | I4: N/A | J4: Stage 850+ | 
+================ Variable Upgrades ================
+A1: Name | B1: Effect | C1: Lowest level | D1: Highest level | E1: On/Off Checkbox | 
+A2: Nether Pie | B2: Increases drops for all Nether creatures by +1 per applied level | C2: 0.0 | D2: 3.0 | E2: No | 
+A3: Bounty | B3: Increases all creature drops by +1 | E3: Yes | 
