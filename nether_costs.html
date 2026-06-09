@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -114,6 +114,25 @@
             font-weight: 900;
             color: #fff;
             text-shadow: 0 0 10px rgba(168, 85, 247, 0.5);
+            display: flex;
+            align-items: center;
+        }
+
+        .version-tag {
+            font-size: 0.65rem;
+            font-weight: 700;
+            background: rgba(168, 85, 247, 0.15);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            color: #d8b4fe;
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-left: 8px;
+            text-shadow: none;
+            letter-spacing: 0;
+            font-family: 'Space Mono', monospace;
+            display: inline-flex;
+            align-items: center;
+            line-height: 1;
         }
 
         .brand-text p {
@@ -969,7 +988,7 @@
                     <path d="M7 8C7.5 6.5 9 5.5 11 5.5" stroke="white" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
                 </svg>
                 <div class="brand-text">
-                    <h1>NETHER PLANNER</h1>
+                    <h1>NETHER PLANNER <span class="version-tag" id="app-version"></span></h1>
                     <p>Costs Calculator for Idle Apocalypse</p>
                 </div>
             </div>
@@ -1135,6 +1154,8 @@
 
     <!-- JS Core Engine -->
     <script>
+        const APP_VERSION = "v1.0.0-beta.1";
+
         // --- 1. Base64 Icons Database ---
         const ICONS = {
             orb: "data:image/webp;base64,UklGRhIBAABXRUJQVlA4TAUBAAAvF8FPEE+gJgAIxqZ/EjncLjlcFFEMSRKzAOsPdXUMmSE91TSSAt2Hf1W0BBn0GJj/AMD+z4Fj6TwzFEKlS6x9DzBqJEnIWcACFrCAhbWwFtbCWhjDnbkjfDcR/Z+A9cE8dv3iPCnhYw0r8U6lEj7wst6woGBBQidQCQOeo80FCZ07BSzY8LY29BQULDh3SkguSAQTyppQm4l3xkQbavMFA+rYgBMoHRvwhbsazp0KnpNQ1oSehKSskyVB0pAU1LEFG74woawzpoIJG+qDDV8YsOC0aUHBggkbehomfGHAgoLLOm2iZU0YmxMWlHXuRIm3jtXmdeyMiXq+vT49Y/Kes35xYgQA",
@@ -1838,6 +1859,9 @@
         // --- 9. Initializer ---
         window.addEventListener("DOMContentLoaded", () => {
             loadStateFromLocalStorage();
+            
+            // Set App Version in UI
+            document.getElementById("app-version").textContent = APP_VERSION;
             
             const panel = document.getElementById("modifiersPanel");
             const btn = document.getElementById("modifiersToggle");
