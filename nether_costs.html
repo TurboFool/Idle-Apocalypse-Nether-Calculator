@@ -341,9 +341,41 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            min-height: 96px;
+            min-height: 125px;
             position: relative;
             transition: box-shadow 0.3s;
+        }
+
+        .card-shortcuts {
+            display: flex;
+            gap: 6px;
+            margin-top: 8px;
+            justify-content: center;
+        }
+
+        .shortcut-btn {
+            background: rgba(168, 85, 247, 0.08);
+            border: 1px solid rgba(168, 85, 247, 0.15);
+            color: var(--text-muted);
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 4px 6px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            flex: 1;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 2px;
+            user-select: none;
+        }
+
+        .shortcut-btn:hover {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: var(--accent-purple);
+            color: #fff;
+            box-shadow: 0 0 8px rgba(168, 85, 247, 0.35);
         }
 
         /* Card color codes */
@@ -1417,8 +1449,56 @@
                         <button class="card-btn" onclick="updateInventory('${item.key}', 1)" title="+1">+1</button>
                         <button class="card-btn" onclick="updateInventory('${item.key}', 10)" title="+10">+10</button>
                     </div>
+                    ${renderShortcuts(item.key)}
                 </div>
             `).join('');
+        }
+
+        // Render Quick Action Buttons for summoning costs and creature drops
+        function renderShortcuts(key) {
+            if (key === 'orbs') {
+                return `
+                    <div class="card-shortcuts">
+                        <button class="shortcut-btn" onclick="updateInventory('orbs', -3)" title="Summon Demon (-3 Orbs)">
+                            -3 (Demon)
+                        </button>
+                    </div>
+                `;
+            } else if (key === 'flames') {
+                const drop = getCreatureDrop('netherling');
+                return `
+                    <div class="card-shortcuts">
+                        <button class="shortcut-btn" onclick="updateInventory('flames', ${drop})" title="Netherling Drop (+${drop} Flames)">
+                            +${drop} (Netherling)
+                        </button>
+                        <button class="shortcut-btn" onclick="updateInventory('flames', -10)" title="Summon Demon (-10 Flames)">
+                            -10 (Demon)
+                        </button>
+                    </div>
+                `;
+            } else if (key === 'crystals') {
+                const drop = getCreatureDrop('demon');
+                return `
+                    <div class="card-shortcuts">
+                        <button class="shortcut-btn" onclick="updateInventory('crystals', ${drop})" title="Nether Demon Drop (+${drop} Crystals)">
+                            +${drop} (Demon)
+                        </button>
+                        <button class="shortcut-btn" onclick="updateInventory('crystals', -12)" title="Summon Mountain (-12 Crystals)">
+                            -12 (Mountain)
+                        </button>
+                    </div>
+                `;
+            } else if (key === 'stars') {
+                const drop = getCreatureDrop('mountain');
+                return `
+                    <div class="card-shortcuts">
+                        <button class="shortcut-btn" onclick="updateInventory('stars', ${drop})" title="Nether Mountain Drop (+${drop} Stars)">
+                            +${drop} (Mountain)
+                        </button>
+                    </div>
+                `;
+            }
+            return '';
         }
 
         // Render Collapsible Modifiers Panel (and Creature Drop Rates)
@@ -1635,6 +1715,7 @@
             saveStateToLocalStorage();
             renderUpgradesPanel();
             renderCalculatorSummary();
+            renderInventory(); // Refresh shortcut drop rate labels
         }
 
         function toggleBounty() {
@@ -1642,6 +1723,7 @@
             saveStateToLocalStorage();
             renderUpgradesPanel();
             renderCalculatorSummary();
+            renderInventory(); // Refresh shortcut drop rate labels
         }
 
         function toggleModifiers() {
@@ -1706,6 +1788,7 @@
             renderGoalsList();
             renderCalculatorSummary();
             renderUpgradesPanel(); // Always refresh drops panel on any checklist achievements
+            renderInventory(); // Refresh shortcut drop rate labels
         }
 
         // Action Toast Notification Banner
