@@ -329,8 +329,14 @@
         /* Inventory Panel Grid */
         .inventory-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1fr;
             gap: 12px;
+        }
+
+        @media (min-width: 480px) {
+            .inventory-grid {
+                grid-template-columns: 1fr 1fr;
+            }
         }
 
         .inventory-card {
@@ -915,6 +921,31 @@
         @keyframes text-glow {
             0% { opacity: 0.95; }
             100% { opacity: 1; }
+        }
+
+        /* Mobile specific enhancements for readability and finger-friendly tap targets */
+        @media (max-width: 480px) {
+            .goal-btn-target, .goal-btn-done {
+                padding: 10px 16px;
+                font-size: 0.8rem;
+                min-height: 40px;
+            }
+            .goal-actions {
+                gap: 12px;
+            }
+            .card-btn {
+                width: 36px;
+                height: 36px;
+                font-size: 0.75rem;
+            }
+            .shortcut-btn {
+                padding: 8px 10px;
+                font-size: 0.75rem;
+                min-height: 36px;
+            }
+            .inv-input {
+                font-size: 1.3rem;
+            }
         }
     </style>
 </head>
