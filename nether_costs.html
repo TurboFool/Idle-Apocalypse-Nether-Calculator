@@ -445,6 +445,14 @@
             gap: 6px;
             transition: all 0.3s ease;
         }
+        .creature-title-label {
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            display: block;
+            min-height: 2.4rem;
+            line-height: 1.2;
+        }
         .creature-drop-card:hover {
             transform: translateY(-2px);
         }
@@ -1748,7 +1756,7 @@
                 return `
                     <div class="creature-drop-card ${c.class}">
                         <img src="${c.icon}" style="width: 24px; height: 24px; object-fit: contain;" alt="${c.label}">
-                        <span style="font-size: 0.65rem; font-weight: 700; color: var(--text-muted);">${c.label}<br>(Lvl ${stats.level})</span>
+                        <span class="creature-title-label">${c.label}<br>(Lvl ${stats.level})</span>
                         <span style="font-size: 0.85rem; font-weight: 800; color: ${c.color};" class="mono-num">${stats.drop} ${c.unit}</span>
                         <div class="creature-actions">
                             <button class="creature-btn btn-minus" onclick="summonCreature('${c.key}', -1)" title="${minusTooltip}">-</button>
