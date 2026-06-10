@@ -366,41 +366,58 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            min-height: 125px;
+            min-height: 95px;
             position: relative;
             transition: box-shadow 0.3s;
         }
 
-        .card-shortcuts {
+        .creature-actions {
             display: flex;
             gap: 6px;
-            margin-top: 8px;
+            margin-top: 6px;
+            width: 100%;
             justify-content: center;
         }
 
-        .shortcut-btn {
-            background: rgba(168, 85, 247, 0.08);
-            border: 1px solid rgba(168, 85, 247, 0.15);
-            color: var(--text-muted);
-            font-size: 0.65rem;
-            font-weight: 700;
-            padding: 4px 6px;
-            border-radius: 5px;
+        .creature-btn {
+            background: rgba(139, 92, 246, 0.15);
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            color: #fff;
+            font-size: 0.75rem;
+            font-weight: 800;
+            padding: 4px 0;
+            height: 28px;
+            border-radius: 6px;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.15s;
             flex: 1;
-            display: inline-flex;
+            display: flex;
             align-items: center;
             justify-content: center;
-            gap: 2px;
             user-select: none;
         }
 
-        .shortcut-btn:hover {
-            background: rgba(168, 85, 247, 0.2);
-            border-color: var(--accent-purple);
+        .creature-btn:hover {
+            background: var(--accent-purple);
+            border-color: #a78bfa;
+            box-shadow: 0 0 8px rgba(139, 92, 246, 0.4);
+        }
+
+        .creature-btn:active {
+            transform: scale(0.95);
+        }
+
+        .creature-btn.btn-minus {
+            background: rgba(220, 38, 38, 0.1);
+            border-color: rgba(220, 38, 38, 0.2);
+            color: #ef4444;
+        }
+
+        .creature-btn.btn-minus:hover {
+            background: #dc2626;
+            border-color: #f87171;
             color: #fff;
-            box-shadow: 0 0 8px rgba(168, 85, 247, 0.35);
+            box-shadow: 0 0 8px rgba(220, 38, 38, 0.4);
         }
 
         /* Card color codes */
@@ -957,14 +974,129 @@
                 height: 36px;
                 font-size: 0.75rem;
             }
-            .shortcut-btn {
-                padding: 8px 10px;
-                font-size: 0.75rem;
-                min-height: 36px;
+            .creature-btn {
+                height: 36px;
+                font-size: 0.85rem;
             }
             .inv-input {
                 font-size: 1.3rem;
             }
+        }
+
+        /* Modal Backdrop */
+        .modal-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(13, 10, 18, 0.8);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .modal-backdrop.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* Modal Box */
+        .modal-content {
+            background: #14101e;
+            border: 1px solid var(--panel-border);
+            box-shadow: 0 0 25px rgba(139, 92, 246, 0.3);
+            border-radius: 12px;
+            width: 90%;
+            max-width: 520px;
+            padding: 24px;
+            position: relative;
+            transform: translateY(20px);
+            transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            max-height: 85vh;
+            overflow-y: auto;
+        }
+
+        .modal-backdrop.visible .modal-content {
+            transform: translateY(0);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 14px;
+            right: 18px;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.5rem;
+            line-height: 1;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .modal-close:hover {
+            color: #fff;
+        }
+
+        .modal-title {
+            font-size: 1.1rem;
+            color: #fff;
+            margin-bottom: 20px;
+            border-bottom: 1px solid rgba(139, 92, 246, 0.2);
+            padding-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Instructions Styling */
+        .instr-section {
+            margin-bottom: 18px;
+        }
+        .instr-section:last-child {
+            margin-bottom: 0;
+        }
+        .instr-section h4 {
+            color: #a78bfa;
+            font-size: 0.8rem;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 800;
+        }
+        .instr-section p, .instr-section li {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+            margin-bottom: 6px;
+        }
+        .instr-section ul {
+            padding-left: 16px;
+            margin-bottom: 6px;
+        }
+        .badge-inline {
+            background: rgba(139, 92, 246, 0.2);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            color: #fff;
+            padding: 1px 5px;
+            border-radius: 4px;
+            font-size: 0.65rem;
+            font-weight: 800;
+            font-family: inherit;
+            display: inline-block;
+        }
+        .instr-key {
+            font-family: 'Space Mono', monospace;
+            color: #fff;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1px 5px;
+            border-radius: 4px;
+            font-size: 0.65rem;
         }
     </style>
 </head>
@@ -995,6 +1127,11 @@
 
             <!-- Toolbar Actions -->
             <div class="actions-toolbar">
+                <button class="btn" onclick="openInstructions()" title="Show instructions on how to use Nether Planner">
+                    <!-- Info Icon SVG -->
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                    Instructions
+                </button>
                 <button class="btn" onclick="exportData()" title="Download progress as JSON backup file">
                     <!-- Export SVG -->
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
@@ -1146,6 +1283,64 @@
 
     </div>
 
+    <!-- General Instructions Popup Modal -->
+    <div class="modal-backdrop" id="instructionsModal" onclick="closeInstructionsOnBackdrop(event)">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeInstructions()">&times;</button>
+            <h3 class="modal-title">
+                <!-- Info Icon SVG -->
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                HOW TO USE & UNDERSTAND
+            </h3>
+            
+            <div class="instr-section">
+                <h4>1. Modifiers & Drop Yields</h4>
+                <p>Adjust <strong>Nether Pie</strong> level and <strong>Bounty</strong> upgrade to automatically recalculate creature drop yields.</p>
+            </div>
+
+            <div class="instr-section">
+                <h4>2. Summon & Undo Controls</h4>
+                <p>Under each creature tile in the yield rates section:</p>
+                <div style="display: flex; gap: 10px; margin: 8px 0; background: rgba(13, 10, 18, 0.4); padding: 8px; border-radius: 6px; border: 1px solid rgba(168, 85, 247, 0.15);">
+                    <div style="flex: 1; text-align: center; border-right: 1px solid rgba(255, 255, 255, 0.05); padding-right: 8px;">
+                        <span class="badge-inline" style="background: var(--accent-purple); border-color: #a78bfa;">+ (Summon)</span>
+                        <p style="margin-top: 4px; font-size: 0.65rem; color: #fff;">Deducts Cost &amp; Adds Drop Yield</p>
+                    </div>
+                    <div style="flex: 1; text-align: center; padding-left: 8px;">
+                        <span class="badge-inline" style="background: rgba(220, 38, 38, 0.2); border-color: #ef4444; color: #ef4444;">- (Undo)</span>
+                        <p style="margin-top: 4px; font-size: 0.65rem; color: #fff;">Refunds Cost &amp; Deducts Drop Yield</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="instr-section">
+                <h4>3. On-Hand Resources</h4>
+                <p>Track your current inventory. Edit counts directly or use the quick buttons:</p>
+                <p style="margin-top: 4px; padding-left: 4px; font-size: 0.7rem; color: var(--text-muted);">
+                    <span class="badge-inline">-10</span> &nbsp; <span class="badge-inline">-1</span> &nbsp; 
+                    <span class="instr-key">Value Input</span> &nbsp; 
+                    <span class="badge-inline">+1</span> &nbsp; <span class="badge-inline">+10</span>
+                </p>
+            </div>
+
+            <div class="instr-section">
+                <h4>4. Target Goals Checklist</h4>
+                <p>Filter/search goals, select <span class="badge-inline">Target</span> to calculate requirements, and mark <span class="badge-inline">Achieved</span> to clear them.</p>
+            </div>
+
+            <div class="instr-section">
+                <h4>5. Nether Requirements & Cascade Math</h4>
+                <p>Calculates total goals cost minus inventory, then solves deficits from top to bottom:</p>
+                <ul style="font-size: 0.7rem; color: var(--text-muted); list-style-type: none; padding-left: 4px;">
+                    <li style="margin-bottom: 2px;">🌟 <strong>Stars</strong> deficit &rarr; Summons <strong>Mountains</strong>.</li>
+                    <li style="margin-bottom: 2px;">💎 <strong>Crystals</strong> deficit (incl. Mountains cost) &rarr; Summons <strong>Demons</strong>.</li>
+                    <li style="margin-bottom: 2px;">🔥 <strong>Flames</strong> deficit (incl. Demons cost) &rarr; Summons <strong>Netherlings</strong>.</li>
+                    <li style="margin-bottom: 2px;">🔮 <strong>Orbs</strong> deficit (incl. Demons &amp; Netherlings cost) &rarr; Final cost required.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
     <!-- Toast Notification Banner -->
     <div class="toast" id="toastNotification">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
@@ -1154,7 +1349,7 @@
 
     <!-- JS Core Engine -->
     <script>
-        const APP_VERSION = "v1.0.0-beta.1";
+        const APP_VERSION = "v1.0.0-beta.2";
 
         // --- 1. Base64 Icons Database ---
         const ICONS = {
@@ -1501,56 +1696,8 @@
                         <button class="card-btn" onclick="updateInventory('${item.key}', 1)" title="+1">+1</button>
                         <button class="card-btn" onclick="updateInventory('${item.key}', 10)" title="+10">+10</button>
                     </div>
-                    ${renderShortcuts(item.key)}
                 </div>
             `).join('');
-        }
-
-        // Render Quick Action Buttons for summoning costs and creature drops
-        function renderShortcuts(key) {
-            if (key === 'orbs') {
-                return `
-                    <div class="card-shortcuts">
-                        <button class="shortcut-btn" onclick="updateInventory('orbs', -3)" title="Summon Demon (-3 Orbs)">
-                            -3 (Demon)
-                        </button>
-                    </div>
-                `;
-            } else if (key === 'flames') {
-                const drop = getCreatureDrop('netherling');
-                return `
-                    <div class="card-shortcuts">
-                        <button class="shortcut-btn" onclick="updateInventory('flames', ${drop})" title="Netherling Drop (+${drop} Flames)">
-                            +${drop} (Netherling)
-                        </button>
-                        <button class="shortcut-btn" onclick="updateInventory('flames', -10)" title="Summon Demon (-10 Flames)">
-                            -10 (Demon)
-                        </button>
-                    </div>
-                `;
-            } else if (key === 'crystals') {
-                const drop = getCreatureDrop('demon');
-                return `
-                    <div class="card-shortcuts">
-                        <button class="shortcut-btn" onclick="updateInventory('crystals', ${drop})" title="Nether Demon Drop (+${drop} Crystals)">
-                            +${drop} (Demon)
-                        </button>
-                        <button class="shortcut-btn" onclick="updateInventory('crystals', -12)" title="Summon Mountain (-12 Crystals)">
-                            -12 (Mountain)
-                        </button>
-                    </div>
-                `;
-            } else if (key === 'stars') {
-                const drop = getCreatureDrop('mountain');
-                return `
-                    <div class="card-shortcuts">
-                        <button class="shortcut-btn" onclick="updateInventory('stars', ${drop})" title="Nether Mountain Drop (+${drop} Stars)">
-                            +${drop} (Mountain)
-                        </button>
-                    </div>
-                `;
-            }
-            return '';
         }
 
         // Render Collapsible Modifiers Panel (and Creature Drop Rates)
@@ -1577,11 +1724,36 @@
 
             ratesContainer.innerHTML = creatures.map(c => {
                 const stats = getCreatureStats(c.key);
+                const creature = CREATURES_DATA[c.key];
+                
+                // Formulate tooltip descriptions dynamically based on current stats and costs
+                let plusTooltip = "Summon " + creature.name;
+                let minusTooltip = "Undo " + creature.name + " Summon";
+                
+                let costParts = [];
+                if (creature.orbCost) costParts.push(`-${creature.orbCost} Orb${creature.orbCost > 1 ? 's' : ''}`);
+                if (creature.flameCost) costParts.push(`-${creature.flameCost} Flame${creature.flameCost > 1 ? 's' : ''}`);
+                if (creature.crystalCost) costParts.push(`-${creature.crystalCost} Crystal${creature.crystalCost > 1 ? 's' : ''}`);
+                if (creature.starCost) costParts.push(`-${creature.starCost} Star${creature.starCost > 1 ? 's' : ''}`);
+                
+                let undoCostParts = [];
+                if (creature.orbCost) undoCostParts.push(`+${creature.orbCost} Orb${creature.orbCost > 1 ? 's' : ''}`);
+                if (creature.flameCost) undoCostParts.push(`+${creature.flameCost} Flame${creature.flameCost > 1 ? 's' : ''}`);
+                if (creature.crystalCost) undoCostParts.push(`+${creature.crystalCost} Crystal${creature.crystalCost > 1 ? 's' : ''}`);
+                if (creature.starCost) undoCostParts.push(`+${creature.starCost} Star${creature.starCost > 1 ? 's' : ''}`);
+
+                plusTooltip += ` (${costParts.join(', ') || 'Free'}, +${stats.drop} ${c.unit})`;
+                minusTooltip += ` (${undoCostParts.join(', ') || 'Free'}, -${stats.drop} ${c.unit})`;
+
                 return `
                     <div class="creature-drop-card ${c.class}">
                         <img src="${c.icon}" style="width: 24px; height: 24px; object-fit: contain;" alt="${c.label}">
                         <span style="font-size: 0.65rem; font-weight: 700; color: var(--text-muted);">${c.label} (Lvl ${stats.level})</span>
                         <span style="font-size: 0.85rem; font-weight: 800; color: ${c.color};" class="mono-num">${stats.drop} ${c.unit}</span>
+                        <div class="creature-actions">
+                            <button class="creature-btn btn-minus" onclick="summonCreature('${c.key}', -1)" title="${minusTooltip}">-</button>
+                            <button class="creature-btn btn-plus" onclick="summonCreature('${c.key}', 1)" title="${plusTooltip}">+</button>
+                        </div>
                     </div>
                 `;
             }).join('');
@@ -1761,6 +1933,29 @@
             renderCalculatorSummary();
         }
 
+        function summonCreature(key, multiplier) {
+            const creature = CREATURES_DATA[key];
+            const dropAmount = getCreatureDrop(key);
+            
+            // Calculate new values safely capping at 0
+            const newOrbs = Math.max(0, state.onHand.orbs - (creature.orbCost * multiplier));
+            const newFlames = Math.max(0, state.onHand.flames - (creature.flameCost * multiplier) + (creature.dropType === 'flames' ? dropAmount * multiplier : 0));
+            const newCrystals = Math.max(0, state.onHand.crystals - (creature.crystalCost * multiplier) + (creature.dropType === 'crystals' ? dropAmount * multiplier : 0));
+            const newStars = Math.max(0, state.onHand.stars - (creature.starCost * multiplier) + (creature.dropType === 'stars' ? dropAmount * multiplier : 0));
+            
+            state.onHand.orbs = newOrbs;
+            state.onHand.flames = newFlames;
+            state.onHand.crystals = newCrystals;
+            state.onHand.stars = newStars;
+            
+            saveStateToLocalStorage();
+            renderInventory();
+            renderCalculatorSummary();
+            
+            const actionText = multiplier > 0 ? "Summoned" : "Undid summon of";
+            showToast(`${actionText} ${creature.name}!`);
+        }
+
         function updatePieLevel(val) {
             state.pieLevel = parseInt(val) || 0;
             document.getElementById("pieLevelVal").innerText = state.pieLevel;
@@ -1854,6 +2049,21 @@
             toastTimeout = setTimeout(() => {
                 toast.classList.remove("visible");
             }, 3000);
+        }
+
+        // General Instructions Modal Controls
+        function openInstructions() {
+            document.getElementById("instructionsModal").classList.add("visible");
+        }
+
+        function closeInstructions() {
+            document.getElementById("instructionsModal").classList.remove("visible");
+        }
+
+        function closeInstructionsOnBackdrop(event) {
+            if (event.target === document.getElementById("instructionsModal")) {
+                closeInstructions();
+            }
         }
 
         // --- 9. Initializer ---
