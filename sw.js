@@ -39,8 +39,16 @@ self.addEventListener('fetch', (event) => {
   // Only handle GET requests
   if (event.request.method !== 'GET') return;
 
+  const url = new URL(event.request.url);
+  
+  // Normalize clean URLs: if it requests '/nether_costs' (no extension), search cache for 'nether_costs.html'
+  let requestToCheck = event.request;
+  if (url.pathname.endsWith('/nether_costs') || url.pathname.endsWith('/nether_costs/')) {
+    requestToCheck = new Request('./nether_costs.html');
+  }
+
   event.respondWith(
-    caches.match(event.request).then((cachedResponse) => {
+    caches.match(requestToCheck).then((cachedResponse) => {
       if (cachedResponse) {
         return cachedResponse;
       }

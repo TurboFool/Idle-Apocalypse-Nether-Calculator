@@ -2,7 +2,7 @@
   "name": "Idle Apocalypse Nether Costs Calculator",
   "short_name": "Nether Calc",
   "description": "Calculates cascading summoning costs of Nether Creatures in Idle Apocalypse.",
-  "start_url": "./nether_costs.html",
+  "start_url": "./nether_costs",
   "display": "standalone",
   "background_color": "#0d0a12",
   "theme_color": "#0d0a12",
