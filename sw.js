@@ -1,18 +1,47 @@
-const CACHE_NAME = 'nether-calc-cache-v1';
+const CACHE_NAME = 'nether-calc-cache-v2';
 const ASSETS_TO_CACHE = [
   './nether_costs.html',
+  './nether_costs',
   './manifest.json',
   './assets/icon-192.png',
   './assets/icon-512.png'
 ];
 
+// Helper to cache an asset, resolving redirects to prevent cache.put from throwing
+async function cacheAsset(cache, url) {
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`Bad response status: ${response.status}`);
+    }
+    
+    let responseToCache = response;
+    // If the response is redirected, we must construct a new Response object
+    // without the redirected flag, because Cache.put() rejects redirected responses.
+    if (response.redirected) {
+      const body = await response.blob();
+      responseToCache = new Response(body, {
+        status: response.status,
+        statusText: response.statusText,
+        headers: response.headers
+      });
+    }
+    
+    await cache.put(url, responseToCache);
+  } catch (err) {
+    console.warn(`[Service Worker] Failed to cache ${url}:`, err);
+  }
+}
+
 // Install Event: Pre-cache static assets
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME)
-      .then((cache) => {
+      .then(async (cache) => {
         console.log('[Service Worker] Pre-caching static assets');
-        return cache.addAll(ASSETS_TO_CACHE);
+        for (const url of ASSETS_TO_CACHE) {
+          await cacheAsset(cache, url);
+        }
       })
       .then(() => self.skipWaiting())
   );
@@ -41,30 +70,52 @@ self.addEventListener('fetch', (event) => {
 
   const url = new URL(event.request.url);
   
-  // Normalize clean URLs: if it requests '/nether_costs' (no extension), search cache for 'nether_costs.html'
-  let requestToCheck = event.request;
+  // Create a list of candidate cache keys to check in order
+  let cacheKeys = [event.request];
+  
   if (url.pathname.endsWith('/nether_costs') || url.pathname.endsWith('/nether_costs/')) {
-    requestToCheck = new Request('./nether_costs.html');
+    // If they request the clean URL, search for both the clean URL and the .html version in cache
+    cacheKeys = [
+      new URL('/nether_costs', url.origin).href,
+      new URL('/nether_costs.html', url.origin).href,
+      event.request
+    ];
+  } else if (url.pathname.endsWith('/nether_costs.html')) {
+    // If they request the .html version, search for both the .html version and the clean URL in cache
+    cacheKeys = [
+      new URL('/nether_costs.html', url.origin).href,
+      new URL('/nether_costs', url.origin).href,
+      event.request
+    ];
   }
 
   event.respondWith(
-    caches.match(requestToCheck).then((cachedResponse) => {
+    matchCacheKeys(cacheKeys).then((cachedResponse) => {
       if (cachedResponse) {
         return cachedResponse;
       }
 
       return fetch(event.request).then((networkResponse) => {
-        // If request is valid, dynamically add it to the cache (e.g. Google Fonts)
-        if (networkResponse && networkResponse.status === 200) {
+        // If request is valid and HTTP/HTTPS, dynamically add it to the cache (e.g. Google Fonts)
+        if (networkResponse && networkResponse.status === 200 && event.request.url.startsWith('http')) {
           const responseToCache = networkResponse.clone();
           caches.open(CACHE_NAME).then((cache) => {
-            cache.put(event.request, responseToCache);
+            cache.put(event.request, responseToCache).catch(err => {
+              console.warn('[Service Worker] Dynamic cache put failed:', err);
+            });
           });
         }
         return networkResponse;
-      }).catch(() => {
-        console.log('[Service Worker] Network request failed, resource offline');
       });
     })
   );
 });
+
+// Helper to check multiple cache keys sequentially
+async function matchCacheKeys(keys) {
+  for (const key of keys) {
+    const response = await caches.match(key);
+    if (response) return response;
+  }
+  return null;
+}
