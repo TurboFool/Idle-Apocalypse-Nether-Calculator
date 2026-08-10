@@ -52,7 +52,7 @@ Idle Apocalypse Nether Costs/
 ```
 
 ### Single-File Application Architecture
-- **HTML Document**: Structured into Header (Sticky navbar), Left Panel (Modifiers, Drop Yields, Inventory, Calculator Summary), Right Panel (Goals Checklist Grid), and Floating Modals/Toasts.
+- **HTML Document**: Structured into Header (Sticky navbar), Left Panel (Modifiers, Inventory, Calculator Summary with unified Creature Summons & Yields), Right Panel (Goals Checklist Grid), and Floating Modals/Toasts.
 - **Embedded CSS**: Defined inside `<style>` tags in `<head>`. Uses CSS variables for color themes and glows.
 - **Embedded Base64 Assets**: Stored in JavaScript object `ICONS` as WebP Data URIs (`data:image/webp;base64,...`).
 - **State Store (`state`)**: A single global JavaScript object holding all reactive state:
@@ -134,7 +134,7 @@ $$\text{Drop Yield}(c) = \text{BaseDrop}(c, \text{Level}) + \text{PieLevel} + (\
    - `Import`: Loads state from a JSON backup file.
    - `Reset`: Clears state with user confirmation.
 2. **Creature Action Buttons (`+` / `-`)**:
-   - Located inside each creature card in **Creature Drop Yields**.
+   - Located inside each creature card in **Creature Summons & Yields** (unified inside Nether Requirements).
    - `+` (Summon): Deducts creature costs and adds drop yields to on-hand inventory.
    - `-` (Undo): Refunds creature costs and deducts drop yields from on-hand inventory.
    - Dynamic `title` tooltips list exact costs and yields based on current modifier state.
