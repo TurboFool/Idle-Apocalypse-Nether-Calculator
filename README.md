@@ -72,5 +72,6 @@ For security-conscious users, the repository includes verification scripts in th
 │   ├── test_math.js         # JScript runner verifying cascade math calculations
 │   └── verify_base64.ps1    # Security verification script
 ├── nether_costs.html        # The self-contained, fully-compiled application
+├── PROJECT_MASTER.md        # Master technical specification & developer guide
 └── README.md                # Project documentation
 ```
