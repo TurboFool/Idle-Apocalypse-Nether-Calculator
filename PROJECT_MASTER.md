@@ -144,42 +144,47 @@ $$\text{Drop Yield}(c) = \text{BaseDrop}(c, \text{Level}) + \text{PieLevel} + (\
 
 ## 🔖 5. Versioning & Git Conventions
 
-### Versioning Format
-Follow Semantic Versioning with pre-release tags: `vX.Y.Z-beta.N` (e.g. `v1.0.0-beta.2`).
+### Versioning Format & Lifecycle
+Follow Semantic Versioning (`MAJOR.MINOR.PATCH`):
+- **Pre-Releases**: `vX.Y.Z-beta.N` (e.g., `v1.0.0-beta.2`) used on feature/dev iterations during testing phases.
+- **Production Releases**: Clean `vX.Y.Z` (e.g., `v1.0.0`) used for official, non-beta production releases merged to `main`.
 
 ### Embedded Version Single Source of Truth
 The version string is declared in JavaScript at the top of the `<script>` tag in `nether_costs.html`:
 ```javascript
-const APP_VERSION = "v1.0.0-beta.2";
+const APP_VERSION = "v1.0.0";
 ```
 On page load (`DOMContentLoaded`), this value is assigned to the header element `<span id="app-version">`.
 
 ### Git Branching Model
-- **`main`**: Stable production release branch. Always tagged with release tags.
-- **`dev`**: Active feature development and testing branch.
+- **`main`**: Stable production release branch. Holds official non-beta releases tagged with clean semantic tags (e.g. `v1.0.0`).
+- **`dev`**: Active feature development and pre-release testing branch (`-beta.N` tags).
 
-### Release Workflow
-When releasing a new version:
-1. Update `const APP_VERSION = "vX.Y.Z-beta.N";` inside `nether_costs.html`.
-2. Commit changes on `dev`:
+### Release Workflow & Documentation Standards
+Whenever preparing a new version release:
+1. **Version Promotion**:
+   - For pre-releases: set `const APP_VERSION = "vX.Y.Z-beta.N";`
+   - For official production releases: promote to `const APP_VERSION = "vX.Y.Z";` (removing pre-release suffixes).
+2. **Commit and Push to Dev**:
    ```bash
    git checkout dev
-   git add nether_costs.html
-   git commit -m "Increment version to vX.Y.Z-beta.N and describe changes"
+   git add nether_costs.html PROJECT_MASTER.md
+   git commit -m "Promote version to vX.Y.Z"
    git push origin dev
    ```
-3. Merge `dev` into `main`:
+3. **Merge to Main**:
    ```bash
    git checkout main
    git merge dev
    git push origin main
    ```
-4. Create and push Git release tag:
+4. **Create & Push Release Tag**:
    ```bash
-   git tag -a vX.Y.Z-beta.N -m "Release vX.Y.Z-beta.N"
-   git push origin vX.Y.Z-beta.N
+   git tag -a vX.Y.Z -m "Release vX.Y.Z"
+   git push origin vX.Y.Z
    ```
-5. Generate release notes summarizing added features, bug fixes, and layout enhancements.
+5. **Release Notes Documentation**:
+   - Generate a Markdown release notes document (`release_notes_vX.Y.Z.md`) detailing new features, architectural improvements, and bug fixes for GitHub release publishing.
 
 ---
 
