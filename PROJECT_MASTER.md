@@ -128,9 +128,9 @@ $$\text{Drop Yield}(c) = \text{BaseDrop}(c, \text{Level}) + \text{PieLevel} + (\
 - **Body Text**: `'Plus Jakarta Sans', sans-serif` (Modern sans-serif)
 - **Numbers / Digits**: `'Space Mono', monospace` (Clean, aligned numbers)
 
-### Control Features
+### Control Features & Modern Web Architecture
 1. **Header Toolbar**:
-   - `Instructions`: Opens the glassmorphic overlay modal (`#instructionsModal`).
+   - `Instructions`: Opens the native semantic modal dialog (`<dialog id="instructionsModal">`) using `.showModal()` with `::backdrop` styling and native `Esc`/backdrop-click dismissal.
    - `Export`: Downloads current state as `nether_costs_backup.json`.
    - `Import`: Loads state from a JSON backup file.
    - `Reset`: Clears state with user confirmation.
@@ -138,8 +138,16 @@ $$\text{Drop Yield}(c) = \text{BaseDrop}(c, \text{Level}) + \text{PieLevel} + (\
    - Located inside each creature card in **Creature Summons & Yields** (unified inside Nether Requirements).
    - `+` (Summon): Deducts creature costs and adds drop yields to on-hand inventory.
    - `-` (Undo): Refunds creature costs and deducts drop yields from on-hand inventory.
-   - Dynamic `title` tooltips list exact costs and yields based on current modifier state.
+   - Dynamic `title` tooltips and descriptive `aria-label`s list exact costs and yields based on current modifier state.
    - `.creature-title-label` specifies `min-height: 2.4rem` and `<br>` after creature name to keep cards and buttons aligned across desktop and mobile screens.
+3. **Modern CSS & Accessibility (A11y)**:
+   - **`color-scheme: dark`**: Informs UA inputs, native scrollbars, and browser UI of the dark fantasy theme.
+   - **Standard Scrollbars**: `scrollbar-color: #2b1f3c #09070c;` and `scrollbar-width: thin;` with `@supports not (scrollbar-color: auto)` fallback for legacy WebKit.
+   - **Typography Layout**: `text-wrap: balance;` on headings (`h1-h4`) and `text-wrap: pretty;` on instructional body copy.
+   - **Reduced Motion**: `@media (prefers-reduced-motion: reduce)` dampens glow animations and transition durations.
+   - **Keyboard Navigation**: Glowing `:focus-visible` ring across all interactive buttons, inputs, and tabs.
+   - **Screen Reader Announcements**: `#toastNotification` configured with `role="status"` and `aria-live="polite"`.
+   - **Mobile Inputs**: On-hand inventory numeric fields specify `type="number"`, `inputmode="numeric"`, `step="1"`, `min="0"`, and `pattern="[0-9]*"`.
 
 ---
 
