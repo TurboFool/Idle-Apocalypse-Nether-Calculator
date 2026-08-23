@@ -290,9 +290,12 @@
 
         .collapsible-content.expanded {
             max-height: 500px;
-            margin-top: 12px;
-            border-top: 1px dashed rgba(168, 85, 247, 0.15);
-            padding-top: 12px;
+        }
+
+        .panel:has(.collapsible-content:not(.expanded)) .panel-header {
+            margin-bottom: 0;
+            border-bottom: none;
+            padding-bottom: 0;
         }
 
         .modifiers-grid {
