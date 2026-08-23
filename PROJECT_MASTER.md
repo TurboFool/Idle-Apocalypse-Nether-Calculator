@@ -30,6 +30,7 @@ This calculator automates the entire cascade math, tracks on-hand inventory, fac
 ### File & Directory Structure
 ```text
 Idle Apocalypse Nether Costs/
+├── GEMINI.md                 # Antigravity agent & project guidelines configuration
 ├── nether_costs.html         # Single-file application (HTML + CSS + JS + Base64 WebP Assets)
 ├── README.md                 # Public repository README
 ├── PROJECT_MASTER.md         # Master technical specification & developer guide (this document)
@@ -213,6 +214,12 @@ If game icon WebP images in `assets/` are replaced or updated:
 | `renderGoalsList()` | Re-renders Target Goals Checklist grid with filter/search state. |
 | `openInstructions()` / `closeInstructions()` | Controls display state of `#instructionsModal`. |
 | `showToast(msg)` | Displays temporary action feedback banner at bottom right. |
+
+### Antigravity Agent & Modern Web Standards
+- Project rules and AI coding agent guidelines are defined in `GEMINI.md`.
+- Always consult `modern-web-guidance` (`npx.cmd -y modern-web-guidance@latest search "<query>"`) prior to web UI implementations.
+- Changes must be targeted to the `dev` branch only, unless explicit release merge to `main` is requested.
+- `PROJECT_MASTER.md` must be updated on all functional, mathematical, and UI changes.
 
 ---
 
