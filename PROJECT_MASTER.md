@@ -159,11 +159,18 @@ $$\text{Drop Yield}(c) = \text{BaseDrop}(c, \text{Level}) + \text{PieLevel} + (\
    - `-` (Undo): Refunds creature costs and deducts drop yields from on-hand inventory.
    - Dynamic `title` tooltips and descriptive `aria-label`s list exact costs and yields based on current modifier state.
    - `.creature-title-label` specifies `min-height: 2.4rem` and `<br>` after creature name to keep cards and buttons aligned across desktop and mobile screens.
-3. **Custom Goals & Controls**:
+3. **Upgrades & Modifiers Panel**:
+   - **Nether Pie & Bounty**: Sliders and toggles to dynamically adjust creature drop rates.
+   - **Creature Upgrade Levels**: Segmented pill selectors (`[1][2][3]` for Netherlings & Demons, `[1][2]` for Mountains) with real-time base drop badges (e.g. `Base: +5 Flames`).
+   - **Bidirectional Goal Synchronization**:
+     - Adjusting levels in the panel automatically marks prerequisite checklist goals (`netherling_lvl_1`, `netherling_lvl_2`, `netherling_lvl_3`, etc.) as Achieved and clears active targets on them. Lowering levels unachieves higher tiers.
+     - Conversely, checking/unchecking goals in the checklist automatically reflects on the segmented pill selectors in real time.
+4. **Custom Goals & Controls**:
    - **Quick Target**: Collapsible card above checklist for immediate calculations without saving. Features Target toggle, Clear button, and "Save as Goal..." shortcut (which cleanly untargets and clears Quick Target to prevent double-counting).
    - **Saved Custom Goals**: Reusable user-defined goals filtered under `"Custom"` category tab. Supports creating via "+ Add Custom Goal" button or saving transient inputs. Includes individual editing and deletion with confirmation.
    - **Dual Cost & Creature Badges**: Goal cards display non-zero resource badges (Orbs, Flames, Crystals, Stars) and non-zero creature badges (Netherlings, Demons, Mountains).
-4. **Modern CSS & Accessibility (A11y)**:
+   - **Responsive Search & Filter Toolbar**: Full-width search input with wrapped `.search-actions` ("+ Add Custom Goal" and "Hide Completed" side-by-side) on mobile viewports (<600px) with `white-space: nowrap;` to prevent layout overflow.
+5. **Modern CSS & Accessibility (A11y)**:
    - **`color-scheme: dark`**: Informs UA inputs, native scrollbars, and browser UI of the dark fantasy theme.
    - **Standard Scrollbars**: `scrollbar-color: #2b1f3c #09070c;` and `scrollbar-width: thin;` with `@supports not (scrollbar-color: auto)` fallback for legacy WebKit.
    - **Typography Layout**: `text-wrap: balance;` on headings (`h1-h4`) and `text-wrap: pretty;` on instructional body copy.
@@ -178,13 +185,13 @@ $$\text{Drop Yield}(c) = \text{BaseDrop}(c, \text{Level}) + \text{PieLevel} + (\
 
 ### Versioning Format & Lifecycle
 Follow Semantic Versioning (`MAJOR.MINOR.PATCH`):
-- **Pre-Releases**: `vX.Y.Z-beta.N` (e.g., `v1.1.0-beta.1`) used on feature/dev iterations during testing phases.
+- **Pre-Releases**: `vX.Y.Z-beta.N` (e.g., `v1.1.1-beta.1`) used on feature/dev iterations during testing phases.
 - **Production Releases**: Clean `vX.Y.Z` (e.g., `v1.1.0`) used for official, non-beta production releases merged to `main`.
 
 ### Embedded Version Single Source of Truth
 The version string is declared in JavaScript at the top of the `<script>` tag in `nether_costs.html`:
 ```javascript
-const APP_VERSION = "v1.1.0";
+const APP_VERSION = "v1.1.1-beta.1";
 ```
 On page load (`DOMContentLoaded`), this value is assigned to the header element `<span id="app-version">`.
 

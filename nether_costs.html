@@ -289,7 +289,7 @@
         }
 
         .collapsible-content.expanded {
-            max-height: 500px;
+            max-height: 800px;
         }
 
         .panel:has(.collapsible-content:not(.expanded)) .panel-header {
@@ -302,6 +302,106 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 16px;
+        }
+
+        .creature-levels-section {
+            margin-top: 14px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(168, 85, 247, 0.15);
+        }
+
+        .section-subtitle {
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .creature-levels-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .creature-level-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(13, 10, 18, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.15);
+            border-radius: 6px;
+            padding: 6px 10px;
+            transition: border-color 0.2s;
+        }
+
+        .creature-level-row:hover {
+            border-color: rgba(168, 85, 247, 0.35);
+        }
+
+        .creature-level-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .creature-level-icon {
+            width: 22px;
+            height: 22px;
+            image-rendering: pixelated;
+        }
+
+        .creature-level-meta {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.2;
+        }
+
+        .creature-level-name {
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .level-base-badge {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .level-pill-group {
+            display: inline-flex;
+            background: #0d0a12;
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            padding: 2px;
+            gap: 2px;
+        }
+
+        .level-pill-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-family: inherit;
+            font-size: 0.72rem;
+            font-weight: 700;
+            padding: 3px 9px;
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            line-height: 1;
+        }
+
+        .level-pill-btn:hover {
+            color: #fff;
+            background: rgba(168, 85, 247, 0.15);
+        }
+
+        .level-pill-btn.active {
+            background: var(--accent-purple);
+            color: #fff;
+            box-shadow: 0 0 8px rgba(168, 85, 247, 0.6);
         }
 
         .modifier-box {
@@ -729,6 +829,13 @@
         .search-row {
             display: flex;
             gap: 8px;
+            align-items: center;
+        }
+
+        .search-actions {
+            display: flex;
+            gap: 8px;
+            align-items: center;
         }
 
         .search-input {
@@ -758,6 +865,8 @@
             cursor: pointer;
             user-select: none;
             color: var(--text-muted);
+            white-space: nowrap;
+            flex-shrink: 0;
         }
 
         .checkbox-container input {
@@ -1057,6 +1166,21 @@
             grid-template-columns: repeat(3, 1fr);
         }
         @media (max-width: 600px) {
+            .search-row {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 8px;
+            }
+            .search-input {
+                width: 100%;
+                box-sizing: border-box;
+            }
+            .search-actions {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                width: 100%;
+            }
             .transient-inputs-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
@@ -1628,6 +1752,56 @@
 
                     </div>
 
+                    <div class="creature-levels-section">
+                        <div class="section-subtitle">Creature Upgrade Levels</div>
+                        <div class="creature-levels-list">
+                            <!-- Netherling -->
+                            <div class="creature-level-row">
+                                <div class="creature-level-info">
+                                    <img class="creature-level-icon" id="iconLevelNetherling" alt="Netherling">
+                                    <div class="creature-level-meta">
+                                        <span class="creature-level-name">Netherling</span>
+                                        <span class="level-base-badge" id="netherlingBaseDropBadge">Base: +3 Flames</span>
+                                    </div>
+                                </div>
+                                <div class="level-pill-group" role="group" aria-label="Netherling level selector">
+                                    <button type="button" class="level-pill-btn active" id="btnNetherlingLvl1" onclick="setCreatureLevel('netherling', 1)" aria-label="Netherling Level 1" aria-pressed="true">1</button>
+                                    <button type="button" class="level-pill-btn" id="btnNetherlingLvl2" onclick="setCreatureLevel('netherling', 2)" aria-label="Netherling Level 2" aria-pressed="false">2</button>
+                                    <button type="button" class="level-pill-btn" id="btnNetherlingLvl3" onclick="setCreatureLevel('netherling', 3)" aria-label="Netherling Level 3" aria-pressed="false">3</button>
+                                </div>
+                            </div>
+                            <!-- Nether Demon -->
+                            <div class="creature-level-row">
+                                <div class="creature-level-info">
+                                    <img class="creature-level-icon" id="iconLevelDemon" alt="Nether Demon">
+                                    <div class="creature-level-meta">
+                                        <span class="creature-level-name">Nether Demon</span>
+                                        <span class="level-base-badge" id="demonBaseDropBadge">Base: +2 Crystals</span>
+                                    </div>
+                                </div>
+                                <div class="level-pill-group" role="group" aria-label="Nether Demon level selector">
+                                    <button type="button" class="level-pill-btn active" id="btnDemonLvl1" onclick="setCreatureLevel('demon', 1)" aria-label="Nether Demon Level 1" aria-pressed="true">1</button>
+                                    <button type="button" class="level-pill-btn" id="btnDemonLvl2" onclick="setCreatureLevel('demon', 2)" aria-label="Nether Demon Level 2" aria-pressed="false">2</button>
+                                    <button type="button" class="level-pill-btn" id="btnDemonLvl3" onclick="setCreatureLevel('demon', 3)" aria-label="Nether Demon Level 3" aria-pressed="false">3</button>
+                                </div>
+                            </div>
+                            <!-- Nether Mountain -->
+                            <div class="creature-level-row">
+                                <div class="creature-level-info">
+                                    <img class="creature-level-icon" id="iconLevelMountain" alt="Nether Mountain">
+                                    <div class="creature-level-meta">
+                                        <span class="creature-level-name">Nether Mountain</span>
+                                        <span class="level-base-badge" id="mountainBaseDropBadge">Base: +1 Star</span>
+                                    </div>
+                                </div>
+                                <div class="level-pill-group" role="group" aria-label="Nether Mountain level selector">
+                                    <button type="button" class="level-pill-btn active" id="btnMountainLvl1" onclick="setCreatureLevel('mountain', 1)" aria-label="Nether Mountain Level 1" aria-pressed="true">1</button>
+                                    <button type="button" class="level-pill-btn" id="btnMountainLvl2" onclick="setCreatureLevel('mountain', 2)" aria-label="Nether Mountain Level 2" aria-pressed="false">2</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
 
@@ -1756,15 +1930,17 @@
                     </div>
                     <div class="search-row">
                         <input type="search" class="search-input" id="searchBar" placeholder="Search targets by name..." aria-label="Search targets by name" oninput="handleSearch(this.value)">
-                        <button class="btn-action-custom" id="addCustomGoalBtn" onclick="openCustomGoalModal()" title="Create a new reusable custom goal" type="button">
-                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="vertical-align: middle;"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                            Add Custom Goal
-                        </button>
-                        <label class="checkbox-container">
-                            <input type="checkbox" id="hideCompletedCheck" onchange="toggleHideCompleted(this.checked)">
-                            <span class="checkbox-custom"></span>
-                            Hide Completed
-                        </label>
+                        <div class="search-actions">
+                            <button class="btn-action-custom" id="addCustomGoalBtn" onclick="openCustomGoalModal()" title="Create a new reusable custom goal" type="button">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="vertical-align: middle;"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                                Add Custom Goal
+                            </button>
+                            <label class="checkbox-container">
+                                <input type="checkbox" id="hideCompletedCheck" onchange="toggleHideCompleted(this.checked)">
+                                <span class="checkbox-custom"></span>
+                                Hide Completed
+                            </label>
+                        </div>
                     </div>
                 </div>
 
@@ -1852,8 +2028,8 @@
         </h3>
         
         <div class="instr-section">
-            <h4>1. Modifiers &amp; Drop Yields</h4>
-            <p>Set your current <strong>Nether Pie</strong> level (0&ndash;3) and toggle <strong>Bounty</strong> (+1 drop yield) to dynamically calculate each creature's drop rates.</p>
+            <h4>1. Modifiers &amp; Creature Levels</h4>
+            <p>Configure your <strong>Nether Pie</strong> level (0&ndash;3), toggle <strong>Bounty</strong> (+1 drop yield), and select your <strong>Creature Upgrade Levels</strong> (1&ndash;3 for Netherling &amp; Demon, 1&ndash;2 for Mountain). Creature levels sync bidirectionally with checklist goals and dynamically update drop yields.</p>
         </div>
 
         <div class="instr-section">
@@ -1927,7 +2103,7 @@
 
     <!-- JS Core Engine -->
     <script>
-        const APP_VERSION = "v1.1.0";
+        const APP_VERSION = "v1.1.1-beta.1";
 
         // --- 1. Base64 Icons Database ---
         const ICONS = {
@@ -2416,11 +2592,61 @@
                 btn.innerText = "Disabled";
                 btn.setAttribute("aria-pressed", "false");
             }
+
+            // Update Creature Upgrade Levels
+            const netherlingStats = getCreatureStats("netherling");
+            const demonStats = getCreatureStats("demon");
+            const mountainStats = getCreatureStats("mountain");
+
+            // Netherling Pills
+            [1, 2, 3].forEach(lvl => {
+                const pill = document.getElementById(`btnNetherlingLvl${lvl}`);
+                if (pill) {
+                    const isActive = netherlingStats.level === lvl;
+                    pill.classList.toggle("active", isActive);
+                    pill.setAttribute("aria-pressed", isActive ? "true" : "false");
+                }
+            });
+            const netherlingBadge = document.getElementById("netherlingBaseDropBadge");
+            if (netherlingBadge) {
+                netherlingBadge.innerText = `Base: +${CREATURES_DATA.netherling.baseDrops[netherlingStats.level]} Flames`;
+            }
+
+            // Demon Pills
+            [1, 2, 3].forEach(lvl => {
+                const pill = document.getElementById(`btnDemonLvl${lvl}`);
+                if (pill) {
+                    const isActive = demonStats.level === lvl;
+                    pill.classList.toggle("active", isActive);
+                    pill.setAttribute("aria-pressed", isActive ? "true" : "false");
+                }
+            });
+            const demonBadge = document.getElementById("demonBaseDropBadge");
+            if (demonBadge) {
+                demonBadge.innerText = `Base: +${CREATURES_DATA.demon.baseDrops[demonStats.level]} Crystals`;
+            }
+
+            // Mountain Pills
+            [1, 2].forEach(lvl => {
+                const pill = document.getElementById(`btnMountainLvl${lvl}`);
+                if (pill) {
+                    const isActive = mountainStats.level === lvl;
+                    pill.classList.toggle("active", isActive);
+                    pill.setAttribute("aria-pressed", isActive ? "true" : "false");
+                }
+            });
+            const mountainBadge = document.getElementById("mountainBaseDropBadge");
+            if (mountainBadge) {
+                mountainBadge.innerText = `Base: +${CREATURES_DATA.mountain.baseDrops[mountainStats.level]} Star${CREATURES_DATA.mountain.baseDrops[mountainStats.level] > 1 ? 's' : ''}`;
+            }
         }
 
         // Initialize dynamic icon sources for transient and modal elements
         function initIconSources() {
             const iconMap = {
+                iconLevelNetherling: ICONS.netherling,
+                iconLevelDemon: ICONS.demon,
+                iconLevelMountain: ICONS.mountain,
                 iconTransientOrb: ICONS.orb,
                 iconTransientFlame: ICONS.flame,
                 iconTransientCrystal: ICONS.crystal,
@@ -3031,11 +3257,96 @@
             renderCalculatorSummary();
         }
 
+        function setCreatureLevel(creatureKey, level) {
+            level = parseInt(level) || 1;
+            if (creatureKey === "netherling") {
+                if (level === 1) {
+                    state.completedGoals["netherling_lvl_2"] = false;
+                    state.completedGoals["netherling_lvl_3"] = false;
+                } else if (level === 2) {
+                    state.completedGoals["netherling_lvl_1"] = true;
+                    state.completedGoals["netherling_lvl_2"] = true;
+                    state.completedGoals["netherling_lvl_3"] = false;
+                    delete state.selectedGoals["netherling_lvl_1"];
+                    delete state.selectedGoals["netherling_lvl_2"];
+                } else if (level === 3) {
+                    state.completedGoals["netherling_lvl_1"] = true;
+                    state.completedGoals["netherling_lvl_2"] = true;
+                    state.completedGoals["netherling_lvl_3"] = true;
+                    delete state.selectedGoals["netherling_lvl_1"];
+                    delete state.selectedGoals["netherling_lvl_2"];
+                    delete state.selectedGoals["netherling_lvl_3"];
+                }
+                showToast(`Netherling set to Level ${level} (+${CREATURES_DATA.netherling.baseDrops[level]} Flames base)`);
+            } else if (creatureKey === "demon") {
+                if (level === 1) {
+                    state.completedGoals["nether_demon_lvl_2"] = false;
+                    state.completedGoals["nether_demon_lvl_3"] = false;
+                } else if (level === 2) {
+                    state.completedGoals["nether_demon_lvl_1"] = true;
+                    state.completedGoals["nether_demon_lvl_2"] = true;
+                    state.completedGoals["nether_demon_lvl_3"] = false;
+                    delete state.selectedGoals["nether_demon_lvl_1"];
+                    delete state.selectedGoals["nether_demon_lvl_2"];
+                } else if (level === 3) {
+                    state.completedGoals["nether_demon_lvl_1"] = true;
+                    state.completedGoals["nether_demon_lvl_2"] = true;
+                    state.completedGoals["nether_demon_lvl_3"] = true;
+                    delete state.selectedGoals["nether_demon_lvl_1"];
+                    delete state.selectedGoals["nether_demon_lvl_2"];
+                    delete state.selectedGoals["nether_demon_lvl_3"];
+                }
+                showToast(`Nether Demon set to Level ${level} (+${CREATURES_DATA.demon.baseDrops[level]} Crystals base)`);
+            } else if (creatureKey === "mountain") {
+                if (level === 1) {
+                    state.completedGoals["mountain_lvl_2"] = false;
+                } else if (level === 2) {
+                    state.completedGoals["mountain_lvl_1"] = true;
+                    state.completedGoals["mountain_lvl_2"] = true;
+                    delete state.selectedGoals["mountain_lvl_1"];
+                    delete state.selectedGoals["mountain_lvl_2"];
+                }
+                showToast(`Nether Mountain set to Level ${level} (+${CREATURES_DATA.mountain.baseDrops[level]} Star${level > 1 ? 's' : ''} base)`);
+            }
+
+            saveStateToLocalStorage();
+            renderAll();
+        }
+
         function toggleGoalCompleted(id) {
             state.completedGoals[id] = !state.completedGoals[id];
             
             if (state.completedGoals[id]) {
                 state.selectedGoals[id] = false;
+
+                // Prerequisite cascading for creature levels
+                if (id === "netherling_lvl_3") {
+                    state.completedGoals["netherling_lvl_1"] = true;
+                    state.completedGoals["netherling_lvl_2"] = true;
+                    state.selectedGoals["netherling_lvl_1"] = false;
+                    state.selectedGoals["netherling_lvl_2"] = false;
+                } else if (id === "netherling_lvl_2") {
+                    state.completedGoals["netherling_lvl_1"] = true;
+                    state.selectedGoals["netherling_lvl_1"] = false;
+                } else if (id === "nether_demon_lvl_3") {
+                    state.completedGoals["nether_demon_lvl_1"] = true;
+                    state.completedGoals["nether_demon_lvl_2"] = true;
+                    state.selectedGoals["nether_demon_lvl_1"] = false;
+                    state.selectedGoals["nether_demon_lvl_2"] = false;
+                } else if (id === "nether_demon_lvl_2") {
+                    state.completedGoals["nether_demon_lvl_1"] = true;
+                    state.selectedGoals["nether_demon_lvl_1"] = false;
+                } else if (id === "mountain_lvl_2") {
+                    state.completedGoals["mountain_lvl_1"] = true;
+                    state.selectedGoals["mountain_lvl_1"] = false;
+                }
+            } else {
+                // Dependent unchecking for creature levels
+                if (id === "netherling_lvl_2") {
+                    state.completedGoals["netherling_lvl_3"] = false;
+                } else if (id === "nether_demon_lvl_2") {
+                    state.completedGoals["nether_demon_lvl_3"] = false;
+                }
             }
 
             saveStateToLocalStorage();
