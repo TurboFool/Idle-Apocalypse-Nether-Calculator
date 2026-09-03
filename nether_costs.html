@@ -1434,9 +1434,22 @@
             left: 50%;
             transform: translate(-50%, -50%);
             max-height: 85vh;
+            max-height: 85dvh;
             overflow-y: auto;
+            overscroll-behavior: contain;
+            -webkit-overflow-scrolling: touch;
+            box-sizing: border-box;
             color: var(--text-color);
             margin: 0;
+        }
+
+        @media (max-width: 480px) {
+            .modal-dialog {
+                width: 95%;
+                padding: 20px 16px;
+                max-height: 88vh;
+                max-height: 88dvh;
+            }
         }
 
         .modal-dialog::backdrop {
@@ -1659,17 +1672,17 @@
                     </span>
                 </div>
 
-                <!-- Transient Custom Goal Card (Collapsible) -->
+                <!-- Quick Target Card (Collapsible) -->
                 <div class="transient-card" id="transientGoalCard">
                     <div class="transient-header" onclick="toggleTransientCollapse()" role="button" tabindex="0" aria-expanded="false" id="transientHeader">
                         <div class="transient-title-row">
                             <span class="transient-title">
                                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
-                                Quick Target (Transient Goal)
+                                Quick Target
                             </span>
                             <span class="transient-status-badge" id="transientStatusBadge">Inactive</span>
                         </div>
-                        <button class="transient-toggle-btn" id="transientToggleBtn" type="button" aria-label="Toggle transient goal panel">
+                        <button class="transient-toggle-btn" id="transientToggleBtn" type="button" aria-label="Toggle Quick Target panel">
                             Expand <span>&#9660;</span>
                         </button>
                     </div>
@@ -1774,6 +1787,7 @@
         
         <form id="customGoalForm" onsubmit="handleCustomGoalSubmit(event)">
             <input type="hidden" id="customGoalEditId" value="">
+            <input type="hidden" id="customGoalFromTransient" value="0">
             
             <div class="form-group">
                 <label for="customGoalName" class="form-label">Goal Name <span style="color: #ef4444;">*</span></label>
@@ -1839,12 +1853,12 @@
         
         <div class="instr-section">
             <h4>1. Modifiers &amp; Drop Yields</h4>
-            <p>Adjust <strong>Nether Pie</strong> level and <strong>Bounty</strong> upgrade to automatically recalculate creature drop yields.</p>
+            <p>Set your current <strong>Nether Pie</strong> level (0&ndash;3) and toggle <strong>Bounty</strong> (+1 drop yield) to dynamically calculate each creature's drop rates.</p>
         </div>
 
         <div class="instr-section">
-            <h4>2. Summon &amp; Undo Controls</h4>
-            <p>Under each creature tile in the yield rates section:</p>
+            <h4>2. Live Creature Summons &amp; Undo</h4>
+            <p>Under each creature card in <strong>Creature Summons &amp; Yields</strong>:</p>
             <div style="display: flex; gap: 10px; margin: 8px 0; background: rgba(13, 10, 18, 0.4); padding: 8px; border-radius: 6px; border: 1px solid rgba(168, 85, 247, 0.15);">
                 <div style="flex: 1; text-align: center; border-right: 1px solid rgba(255, 255, 255, 0.05); padding-right: 8px;">
                     <span class="badge-inline" style="background: var(--accent-purple); border-color: #a78bfa;">+ (Summon)</span>
@@ -1855,28 +1869,53 @@
                     <p style="margin-top: 4px; font-size: 0.65rem; color: #fff;">Refunds Cost &amp; Deducts Drop Yield</p>
                 </div>
             </div>
+            <p>Hover or tap either button to preview the exact materials deducted or refunded based on your active modifiers.</p>
         </div>
 
         <div class="instr-section">
-            <h4>3. On-Hand Resources</h4>
-            <p>Adjust on-hand inventory values using <code>+1</code>, <code>+10</code>, <code>-1</code>, <code>-10</code>, or direct text input.</p>
+            <h4>3. On-Hand Inventory</h4>
+            <p>Enter your current inventory of <strong>Orbs</strong>, <strong>Flames</strong>, <strong>Crystals</strong>, and <strong>Stars</strong> using the <code>-10</code>, <code>-1</code>, <code>+1</code>, <code>+10</code> quick buttons or direct text input.</p>
         </div>
 
         <div class="instr-section">
-            <h4>4. Target Goals &amp; Custom Goals</h4>
-            <p>Filter/search goals, select <span class="badge-inline">Target</span> to calculate requirements, and mark <span class="badge-inline">Achieved</span> to clear them.</p>
-            <p>Use the <strong>Quick Target (Transient Goal)</strong> card above the checklist for spur-of-the-moment calculations. Or save reusable custom goals under the <strong>Custom</strong> category tab.</p>
-        </div>
-
-        <div class="instr-section">
-            <h4>5. Cascading Math Engine</h4>
-            <p>Calculates total goals cost minus inventory, then solves deficits from top to bottom:</p>
+            <h4>4. Quick Target</h4>
+            <p>Pinned directly above the checklist (collapsed by default). Use it for immediate spur-of-the-moment calculations without creating a permanent goal:</p>
             <ul style="padding-left: 18px;">
-                <li style="margin-bottom: 2px;">⭐ <strong>Stars</strong> deficit (or Mountain target) &rarr; Summons <strong>Mountains</strong>.</li>
-                <li style="margin-bottom: 2px;">💎 <strong>Crystals</strong> deficit (incl. Mountains cost / Demon target) &rarr; Summons <strong>Demons</strong>.</li>
-                <li style="margin-bottom: 2px;">🔥 <strong>Flames</strong> deficit (incl. Demons cost / Netherling target) &rarr; Summons <strong>Netherlings</strong>.</li>
-                <li style="margin-bottom: 2px;">🔮 <strong>Orbs</strong> deficit (incl. Demons &amp; Netherlings cost) &rarr; Final cost required.</li>
+                <li style="margin-bottom: 2px;">Enter any combination of <strong>Resources</strong> and/or <strong>Creature Summons</strong>.</li>
+                <li style="margin-bottom: 2px;">Click <span class="badge-inline">Target</span> to toggle it into your live calculation.</li>
+                <li style="margin-bottom: 2px;">Click <span class="badge-inline">Clear</span> to zero out all fields.</li>
+                <li style="margin-bottom: 2px;">Click <span class="badge-inline">Save as Goal...</span> to convert your quick target into a permanent saved goal (automatically untargets and clears Quick Target so costs aren't doubled).</li>
             </ul>
+        </div>
+
+        <div class="instr-section">
+            <h4>5. Target Checklist &amp; Custom Goals</h4>
+            <p>Select <span class="badge-inline">Target</span> on any goals (Creatures, Scrolls, DDD, Lesley, or Custom) to calculate required summons. Multiple targets sum together additively.</p>
+            <ul style="padding-left: 18px;">
+                <li style="margin-bottom: 2px;"><strong>+ Add Custom Goal</strong>: Create reusable goals with custom resource and creature targets under the <strong>Custom</strong> category tab.</li>
+                <li style="margin-bottom: 2px;"><strong>Edit &amp; Delete</strong>: Use the pencil and trash icons on custom goal cards to modify or delete them.</li>
+                <li style="margin-bottom: 2px;"><strong>Achieved</strong>: Mark goals complete to clear their target. Creature level upgrades automatically increase base drop rates!</li>
+            </ul>
+        </div>
+
+        <div class="instr-section">
+            <h4>6. Cascading Summon Math Engine</h4>
+            <p>Solves deficits from highest creature tier to lowest, ensuring your final inventory satisfies all requested resources while honoring creature summon targets:</p>
+            <ul style="padding-left: 18px;">
+                <li style="margin-bottom: 2px;">⭐ <strong>Stars</strong> deficit (or Mountain requirement) &rarr; Summons <strong>Mountains</strong> (costs Crystals).</li>
+                <li style="margin-bottom: 2px;">💎 <strong>Crystals</strong> deficit (incl. Mountain costs / Demon requirement) &rarr; Summons <strong>Demons</strong> (costs Flames &amp; Orbs).</li>
+                <li style="margin-bottom: 2px;">🔥 <strong>Flames</strong> deficit (incl. Demon costs / Netherling requirement) &rarr; Summons <strong>Netherlings</strong> (costs Orbs).</li>
+                <li style="margin-bottom: 2px;">🔮 <strong>Orbs</strong> deficit (goals + Demon &amp; Netherling summons) &rarr; Final Orbs needed.</li>
+            </ul>
+        </div>
+
+        <div class="instr-section">
+            <h4>7. Backup &amp; Reset</h4>
+            <p>Use <strong>Export</strong> and <strong>Import</strong> in the header to backup or transfer your progress between devices. <strong>Reset</strong> clears inventory, active targets, and checklist achievements while safely preserving your library of custom goals.</p>
+        </div>
+
+        <div style="margin-top: 20px; text-align: right;">
+            <button class="btn-cancel" onclick="closeInstructions()" type="button" style="padding: 8px 22px; font-weight: 700;">Close</button>
         </div>
     </dialog>
 
@@ -2593,7 +2632,7 @@
             saveStateToLocalStorage();
             renderTransientGoal();
             renderCalculatorSummary();
-            showToast(state.transientGoal.active ? "Transient target activated." : "Transient target deactivated.");
+            showToast(state.transientGoal.active ? "Quick Target activated." : "Quick Target deactivated.");
         }
 
         function clearTransientGoal() {
@@ -2602,17 +2641,23 @@
             saveStateToLocalStorage();
             renderTransientGoal();
             renderCalculatorSummary();
-            showToast("Transient goal cleared.");
+            showToast("Quick Target cleared.");
         }
 
         function saveTransientAsCustomGoal() {
             const tg = state.transientGoal;
+            // Deactivate Quick Target right away to prevent double counting
+            state.transientGoal.active = false;
+            saveStateToLocalStorage();
+            renderTransientGoal();
+            renderCalculatorSummary();
+
             openCustomGoalModal(null, {
                 name: "",
                 description: "",
                 cost: { ...tg.cost },
                 creatures: { ...tg.creatures }
-            });
+            }, true);
         }
 
         // Render Goals Checklist Grid
@@ -2644,7 +2689,7 @@
                             <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="opacity: 0.4; margin-bottom: 8px;"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></svg>
                             <p style="margin-bottom: 12px;">No custom goals saved yet.</p>
                             <button class="btn-action-custom" onclick="openCustomGoalModal()">
-                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="vertical-align: middle;"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="vertical-align: middle;"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="12"/></svg>
                                 Create First Custom Goal
                             </button>
                         </div>
@@ -2731,11 +2776,13 @@
         }
 
         // Custom Goal Modal Dialog Handlers
-        function openCustomGoalModal(editId = null, prefillData = null) {
+        function openCustomGoalModal(editId = null, prefillData = null, fromTransient = false) {
             const modal = document.getElementById("customGoalModal");
             const heading = document.getElementById("customGoalModalHeading");
             const submitBtn = document.getElementById("customGoalSubmitBtn");
             const editIdInput = document.getElementById("customGoalEditId");
+            const fromTransientInput = document.getElementById("customGoalFromTransient");
+            if (fromTransientInput) fromTransientInput.value = fromTransient ? "1" : "0";
             
             let initialData = {
                 name: "",
@@ -2793,6 +2840,8 @@
         function handleCustomGoalSubmit(event) {
             event.preventDefault();
             const editId = document.getElementById("customGoalEditId").value;
+            const fromTransientInput = document.getElementById("customGoalFromTransient");
+            const isFromTransient = fromTransientInput && fromTransientInput.value === "1";
             const name = document.getElementById("customGoalName").value.trim() || "Custom Goal";
             const description = document.getElementById("customGoalDesc").value.trim();
 
@@ -2834,6 +2883,14 @@
                 };
                 state.customGoals.push(newGoal);
                 state.selectedGoals[newId] = true; // Auto-target upon creation
+                
+                // Untarget and clear Quick Target if promoted to saved goal
+                if (isFromTransient) {
+                    state.transientGoal.active = false;
+                    state.transientGoal.cost = { orbs: 0, flames: 0, crystals: 0, stars: 0 };
+                    state.transientGoal.creatures = { netherling: 0, demon: 0, mountain: 0 };
+                }
+
                 showToast(`Created and targeted "${name}"!`);
             }
 

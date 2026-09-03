@@ -97,7 +97,7 @@ $$\text{Drop Yield}(c) = \text{BaseDrop}(c, \text{Level}) + \text{PieLevel} + (\
 
 ### 2. Top-Down Deficit & Summon Cascade
 1. **Target Goal & Creature Aggregation**:
-   - Sum `orbs`, `flames`, `crystals`, `stars` across all selected standard goals, saved custom goals, and active transient goal.
+   - Sum `orbs`, `flames`, `crystals`, `stars` across all selected standard goals, saved custom goals, and active Quick Target.
    - Sum minimum target creature requirements `targetNetherlings`, `targetDemons`, `targetMountains` across active targets.
 2. **Stars Deficit $\rightarrow$ Mountain Summons**:
    $$\text{Star Deficit} = \max(0, \text{Target Stars} - \text{OnHand Stars})$$
@@ -153,7 +153,7 @@ $$\text{Drop Yield}(c) = \text{BaseDrop}(c, \text{Level}) + \text{PieLevel} + (\
    - Dynamic `title` tooltips and descriptive `aria-label`s list exact costs and yields based on current modifier state.
    - `.creature-title-label` specifies `min-height: 2.4rem` and `<br>` after creature name to keep cards and buttons aligned across desktop and mobile screens.
 3. **Custom Goals & Controls**:
-   - **Quick Target (Transient Goal)**: Collapsible card above checklist for immediate calculations without saving. Features Target toggle, Clear button, and "Save as Goal..." shortcut.
+   - **Quick Target**: Collapsible card above checklist for immediate calculations without saving. Features Target toggle, Clear button, and "Save as Goal..." shortcut (which cleanly untargets and clears Quick Target to prevent double-counting).
    - **Saved Custom Goals**: Reusable user-defined goals filtered under `"Custom"` category tab. Supports creating via "+ Add Custom Goal" button or saving transient inputs. Includes individual editing and deletion with confirmation.
    - **Dual Cost & Creature Badges**: Goal cards display non-zero resource badges (Orbs, Flames, Crystals, Stars) and non-zero creature badges (Netherlings, Demons, Mountains).
 4. **Modern CSS & Accessibility (A11y)**:

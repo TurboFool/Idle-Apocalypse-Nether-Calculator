@@ -8,7 +8,7 @@ A premium, self-contained, and offline-ready companion tool for the mobile game 
 
 - **Cascading Summon Engine**: Automatically computes how many of each creature you need to summon to cover resource costs, counting downstream requirements (e.g., how many Netherlings are needed to produce the Flames for Demon summons, and how many Demons are needed to produce the Crystals for Mountain summons).
 - **Custom Goals Engine**:
-  - **Quick Target (Transient Goal)**: Collapsible card for spur-of-the-moment calculations. Supports specifying custom resource pools (Orbs, Flames, Crystals, Stars) and/or creature summons (Netherlings, Demons, Mountains) with instant Target toggling, Clear, and "Save as Goal..." shortcut.
+  - **Quick Target**: Collapsible card for spur-of-the-moment calculations. Supports specifying custom resource pools (Orbs, Flames, Crystals, Stars) and/or creature summons (Netherlings, Demons, Mountains) with instant Target toggling, Clear, and "Save as Goal..." shortcut (which cleanly untargets and clears Quick Target).
   - **Saved Custom Goals**: Reusable custom targets categorized under the **Custom** tab. Create, target, achieve, edit, and delete custom goals with persistent local storage.
 - **Interactive Modifiers Card**: Supports custom inputs for your active **Nether Pie level** (0 to 3) and **Bounty upgrade** (+1 drop yield to all creatures) to adjust drop rates dynamically.
 - **Dynamic Creature Drop yields**: Displays current live creature drop numbers on a dedicated, glowing yields panel. The cards are styled with animations and color accents corresponding to their drops.
