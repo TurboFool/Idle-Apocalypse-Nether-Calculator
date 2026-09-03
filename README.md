@@ -7,11 +7,13 @@ A premium, self-contained, and offline-ready companion tool for the mobile game 
 ## 🚀 Features
 
 - **Cascading Summon Engine**: Automatically computes how many of each creature you need to summon to cover resource costs, counting downstream requirements (e.g., how many Netherlings are needed to produce the Flames for Demon summons, and how many Demons are needed to produce the Crystals for Mountain summons).
+- **Action Plan & Sequential Roadmap**: Context-aware status banners ("Goal Achievable!" vs "You still need X Nether Orbs to meet your goal") paired with a chronological, step-by-step roadmap detailing the exact order and yields of creature summons needed to reach your target.
+- **Two-Way Creature Upgrade Levels**: Select creature levels (`[1][2][3]`) directly in the Upgrades & Modifiers panel with instant bidirectional sync to checklist goals.
 - **Custom Goals Engine**:
   - **Quick Target**: Collapsible card for spur-of-the-moment calculations. Supports specifying custom resource pools (Orbs, Flames, Crystals, Stars) and/or creature summons (Netherlings, Demons, Mountains) with instant Target toggling, Clear, and "Save as Goal..." shortcut (which cleanly untargets and clears Quick Target).
   - **Saved Custom Goals**: Reusable custom targets categorized under the **Custom** tab. Create, target, achieve, edit, and delete custom goals with persistent local storage.
 - **Interactive Modifiers Card**: Supports custom inputs for your active **Nether Pie level** (0 to 3) and **Bounty upgrade** (+1 drop yield to all creatures) to adjust drop rates dynamically.
-- **Dynamic Creature Drop yields**: Displays current live creature drop numbers on a dedicated, glowing yields panel. The cards are styled with animations and color accents corresponding to their drops.
+- **Dynamic Creature Drop yields**: Displays current live creature drop numbers on a dedicated, glowing yields panel with interactive `+` and `-` summon buttons for live tracking.
 - **Progress Checklist**: Easily select which scrolls, upgrades, trades, or custom goals you are targeting. Mark them as **Achieved** to hide them from the checklist and dynamically update your permanent upgrades (like creature levels).
 - **Offline Persistence**: Saves your inventory numbers, target selections, custom goals, modifications, and completed items directly in your browser's local storage (`localStorage`). No servers, no sign-ups.
 - **Import / Export Backup**: Save your progress as a lightweight `.json` backup file so you can transfer your checklist state between mobile devices, tablets, and desktops.

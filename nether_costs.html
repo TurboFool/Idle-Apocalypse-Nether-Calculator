@@ -289,7 +289,7 @@
         }
 
         .collapsible-content.expanded {
-            max-height: 500px;
+            max-height: 800px;
         }
 
         .panel:has(.collapsible-content:not(.expanded)) .panel-header {
@@ -302,6 +302,106 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 16px;
+        }
+
+        .creature-levels-section {
+            margin-top: 14px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(168, 85, 247, 0.15);
+        }
+
+        .section-subtitle {
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .creature-levels-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .creature-level-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(13, 10, 18, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.15);
+            border-radius: 6px;
+            padding: 6px 10px;
+            transition: border-color 0.2s;
+        }
+
+        .creature-level-row:hover {
+            border-color: rgba(168, 85, 247, 0.35);
+        }
+
+        .creature-level-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .creature-level-icon {
+            width: 22px;
+            height: 22px;
+            image-rendering: pixelated;
+        }
+
+        .creature-level-meta {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.2;
+        }
+
+        .creature-level-name {
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .level-base-badge {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .level-pill-group {
+            display: inline-flex;
+            background: #0d0a12;
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            padding: 2px;
+            gap: 2px;
+        }
+
+        .level-pill-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-family: inherit;
+            font-size: 0.72rem;
+            font-weight: 700;
+            padding: 3px 9px;
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            line-height: 1;
+        }
+
+        .level-pill-btn:hover {
+            color: #fff;
+            background: rgba(168, 85, 247, 0.15);
+        }
+
+        .level-pill-btn.active {
+            background: var(--accent-purple);
+            color: #fff;
+            box-shadow: 0 0 8px rgba(168, 85, 247, 0.6);
         }
 
         .modifier-box {
@@ -689,6 +789,163 @@
             margin-bottom: 0;
         }
 
+        /* Action Banners & Roadmap */
+        .action-banner {
+            border-radius: 8px;
+            padding: 12px 14px;
+            margin-bottom: 12px;
+            border: 1px solid transparent;
+            position: relative;
+        }
+
+        .action-banner.banner-warning {
+            background: rgba(239, 68, 68, 0.08);
+            border-color: rgba(239, 68, 68, 0.35);
+            box-shadow: 0 0 14px rgba(239, 68, 68, 0.15);
+        }
+
+        .action-banner.banner-success {
+            background: rgba(34, 197, 94, 0.08);
+            border-color: rgba(34, 197, 94, 0.35);
+            box-shadow: 0 0 14px rgba(34, 197, 94, 0.15);
+        }
+
+        .banner-header {
+            margin-bottom: 6px;
+        }
+
+        .banner-badge {
+            display: inline-block;
+            font-size: 0.72rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+
+        .badge-warning {
+            background: rgba(239, 68, 68, 0.2);
+            color: #f87171;
+            border: 1px solid rgba(239, 68, 68, 0.4);
+        }
+
+        .badge-success {
+            background: rgba(34, 197, 94, 0.2);
+            color: #4ade80;
+            border: 1px solid rgba(34, 197, 94, 0.4);
+        }
+
+        .banner-main-text {
+            font-size: 0.85rem;
+            color: #fff;
+            margin-bottom: 4px;
+            line-height: 1.35;
+        }
+
+        .banner-main-text strong {
+            color: #fff;
+            text-shadow: 0 0 6px rgba(255, 255, 255, 0.2);
+        }
+
+        .banner-sub-text {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            line-height: 1.3;
+        }
+
+        .action-roadmap {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .roadmap-step-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            background: rgba(13, 10, 18, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.15);
+            border-radius: 6px;
+            padding: 8px 10px;
+            transition: border-color 0.2s;
+        }
+
+        .roadmap-step-item:hover {
+            border-color: rgba(168, 85, 247, 0.35);
+        }
+
+        .roadmap-step-num {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: var(--accent-purple);
+            color: #fff;
+            font-size: 0.72rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 1px;
+            box-shadow: 0 0 6px rgba(168, 85, 247, 0.5);
+        }
+
+        .roadmap-step-content {
+            flex: 1;
+            line-height: 1.25;
+        }
+
+        .roadmap-step-title {
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 3px;
+        }
+
+        .roadmap-step-icon {
+            width: 16px;
+            height: 16px;
+            image-rendering: pixelated;
+        }
+
+        .roadmap-step-desc {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+        }
+
+        .roadmap-step-desc strong {
+            color: #fff;
+        }
+
+        .math-breakdown-wrapper {
+            margin-top: 10px;
+        }
+
+        .btn-toggle-math {
+            background: transparent;
+            border: none;
+            color: #a78bfa;
+            font-family: inherit;
+            font-size: 0.75rem;
+            font-weight: 700;
+            cursor: pointer;
+            padding: 4px 0;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            transition: color 0.2s;
+        }
+
+        .btn-toggle-math:hover {
+            color: #c084fc;
+            text-decoration: underline;
+        }
+
         /* Right Column Checklist Panel */
         .checklist-controls {
             display: flex;
@@ -729,6 +986,13 @@
         .search-row {
             display: flex;
             gap: 8px;
+            align-items: center;
+        }
+
+        .search-actions {
+            display: flex;
+            gap: 8px;
+            align-items: center;
         }
 
         .search-input {
@@ -758,6 +1022,8 @@
             cursor: pointer;
             user-select: none;
             color: var(--text-muted);
+            white-space: nowrap;
+            flex-shrink: 0;
         }
 
         .checkbox-container input {
@@ -1057,6 +1323,21 @@
             grid-template-columns: repeat(3, 1fr);
         }
         @media (max-width: 600px) {
+            .search-row {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 8px;
+            }
+            .search-input {
+                width: 100%;
+                box-sizing: border-box;
+            }
+            .search-actions {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                width: 100%;
+            }
             .transient-inputs-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
@@ -1628,6 +1909,56 @@
 
                     </div>
 
+                    <div class="creature-levels-section">
+                        <div class="section-subtitle">Creature Upgrade Levels</div>
+                        <div class="creature-levels-list">
+                            <!-- Netherling -->
+                            <div class="creature-level-row">
+                                <div class="creature-level-info">
+                                    <img class="creature-level-icon" id="iconLevelNetherling" alt="Netherling">
+                                    <div class="creature-level-meta">
+                                        <span class="creature-level-name">Netherling</span>
+                                        <span class="level-base-badge" id="netherlingBaseDropBadge">Base: +3 Flames</span>
+                                    </div>
+                                </div>
+                                <div class="level-pill-group" role="group" aria-label="Netherling level selector">
+                                    <button type="button" class="level-pill-btn active" id="btnNetherlingLvl1" onclick="setCreatureLevel('netherling', 1)" aria-label="Netherling Level 1" aria-pressed="true">1</button>
+                                    <button type="button" class="level-pill-btn" id="btnNetherlingLvl2" onclick="setCreatureLevel('netherling', 2)" aria-label="Netherling Level 2" aria-pressed="false">2</button>
+                                    <button type="button" class="level-pill-btn" id="btnNetherlingLvl3" onclick="setCreatureLevel('netherling', 3)" aria-label="Netherling Level 3" aria-pressed="false">3</button>
+                                </div>
+                            </div>
+                            <!-- Nether Demon -->
+                            <div class="creature-level-row">
+                                <div class="creature-level-info">
+                                    <img class="creature-level-icon" id="iconLevelDemon" alt="Nether Demon">
+                                    <div class="creature-level-meta">
+                                        <span class="creature-level-name">Nether Demon</span>
+                                        <span class="level-base-badge" id="demonBaseDropBadge">Base: +2 Crystals</span>
+                                    </div>
+                                </div>
+                                <div class="level-pill-group" role="group" aria-label="Nether Demon level selector">
+                                    <button type="button" class="level-pill-btn active" id="btnDemonLvl1" onclick="setCreatureLevel('demon', 1)" aria-label="Nether Demon Level 1" aria-pressed="true">1</button>
+                                    <button type="button" class="level-pill-btn" id="btnDemonLvl2" onclick="setCreatureLevel('demon', 2)" aria-label="Nether Demon Level 2" aria-pressed="false">2</button>
+                                    <button type="button" class="level-pill-btn" id="btnDemonLvl3" onclick="setCreatureLevel('demon', 3)" aria-label="Nether Demon Level 3" aria-pressed="false">3</button>
+                                </div>
+                            </div>
+                            <!-- Nether Mountain -->
+                            <div class="creature-level-row">
+                                <div class="creature-level-info">
+                                    <img class="creature-level-icon" id="iconLevelMountain" alt="Nether Mountain">
+                                    <div class="creature-level-meta">
+                                        <span class="creature-level-name">Nether Mountain</span>
+                                        <span class="level-base-badge" id="mountainBaseDropBadge">Base: +1 Star</span>
+                                    </div>
+                                </div>
+                                <div class="level-pill-group" role="group" aria-label="Nether Mountain level selector">
+                                    <button type="button" class="level-pill-btn active" id="btnMountainLvl1" onclick="setCreatureLevel('mountain', 1)" aria-label="Nether Mountain Level 1" aria-pressed="true">1</button>
+                                    <button type="button" class="level-pill-btn" id="btnMountainLvl2" onclick="setCreatureLevel('mountain', 2)" aria-label="Nether Mountain Level 2" aria-pressed="false">2</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
 
@@ -1756,15 +2087,17 @@
                     </div>
                     <div class="search-row">
                         <input type="search" class="search-input" id="searchBar" placeholder="Search targets by name..." aria-label="Search targets by name" oninput="handleSearch(this.value)">
-                        <button class="btn-action-custom" id="addCustomGoalBtn" onclick="openCustomGoalModal()" title="Create a new reusable custom goal" type="button">
-                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="vertical-align: middle;"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                            Add Custom Goal
-                        </button>
-                        <label class="checkbox-container">
-                            <input type="checkbox" id="hideCompletedCheck" onchange="toggleHideCompleted(this.checked)">
-                            <span class="checkbox-custom"></span>
-                            Hide Completed
-                        </label>
+                        <div class="search-actions">
+                            <button class="btn-action-custom" id="addCustomGoalBtn" onclick="openCustomGoalModal()" title="Create a new reusable custom goal" type="button">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="vertical-align: middle;"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                                Add Custom Goal
+                            </button>
+                            <label class="checkbox-container">
+                                <input type="checkbox" id="hideCompletedCheck" onchange="toggleHideCompleted(this.checked)">
+                                <span class="checkbox-custom"></span>
+                                Hide Completed
+                            </label>
+                        </div>
                     </div>
                 </div>
 
@@ -1852,8 +2185,8 @@
         </h3>
         
         <div class="instr-section">
-            <h4>1. Modifiers &amp; Drop Yields</h4>
-            <p>Set your current <strong>Nether Pie</strong> level (0&ndash;3) and toggle <strong>Bounty</strong> (+1 drop yield) to dynamically calculate each creature's drop rates.</p>
+            <h4>1. Modifiers &amp; Creature Levels</h4>
+            <p>Configure your <strong>Nether Pie</strong> level (0&ndash;3), toggle <strong>Bounty</strong> (+1 drop yield), and select your <strong>Creature Upgrade Levels</strong> (1&ndash;3 for Netherling &amp; Demon, 1&ndash;2 for Mountain). Creature levels sync bidirectionally with checklist goals and dynamically update drop yields.</p>
         </div>
 
         <div class="instr-section">
@@ -1899,13 +2232,12 @@
         </div>
 
         <div class="instr-section">
-            <h4>6. Cascading Summon Math Engine</h4>
-            <p>Solves deficits from highest creature tier to lowest, ensuring your final inventory satisfies all requested resources while honoring creature summon targets:</p>
+            <h4>6. Action Plan, Roadmap &amp; Cascading Math</h4>
+            <p>The calculator evaluates your inventory and targets from highest creature tier to lowest, providing an actionable roadmap:</p>
             <ul style="padding-left: 18px;">
-                <li style="margin-bottom: 2px;">⭐ <strong>Stars</strong> deficit (or Mountain requirement) &rarr; Summons <strong>Mountains</strong> (costs Crystals).</li>
-                <li style="margin-bottom: 2px;">💎 <strong>Crystals</strong> deficit (incl. Mountain costs / Demon requirement) &rarr; Summons <strong>Demons</strong> (costs Flames &amp; Orbs).</li>
-                <li style="margin-bottom: 2px;">🔥 <strong>Flames</strong> deficit (incl. Demon costs / Netherling requirement) &rarr; Summons <strong>Netherlings</strong> (costs Orbs).</li>
-                <li style="margin-bottom: 2px;">🔮 <strong>Orbs</strong> deficit (goals + Demon &amp; Netherling summons) &rarr; Final Orbs needed.</li>
+                <li style="margin-bottom: 2px;"><strong>Action Status</strong>: Instantly highlights whether your goal is achievable or displays the exact remaining Nether Orbs you still need.</li>
+                <li style="margin-bottom: 2px;"><strong>Step-by-Step Roadmap</strong>: Outlines the sequential summon chain (Netherlings &rarr; Demons &rarr; Mountains &rarr; Claim Goals) to reach your targets.</li>
+                <li style="margin-bottom: 2px;"><strong>Detailed Math Breakdown</strong>: Expandable technical log explaining the exact arithmetic for each tier.</li>
             </ul>
         </div>
 
@@ -1927,7 +2259,7 @@
 
     <!-- JS Core Engine -->
     <script>
-        const APP_VERSION = "v1.1.0";
+        const APP_VERSION = "v1.1.1";
 
         // --- 1. Base64 Icons Database ---
         const ICONS = {
@@ -2038,7 +2370,8 @@
                 cost: { orbs: 0, flames: 0, crystals: 0, stars: 0 },
                 creatures: { netherling: 0, demon: 0, mountain: 0 }
             },
-            customGoals: []
+            customGoals: [],
+            showMathDetails: false
         };
 
         // --- 5. Application Persistence Engine ---
@@ -2060,6 +2393,7 @@
                 activeCategory: typeof parsed?.activeCategory === 'string' ? parsed.activeCategory : "All",
                 searchQuery: typeof parsed?.searchQuery === 'string' ? parsed.searchQuery : "",
                 modifiersExpanded: parsed?.modifiersExpanded !== undefined ? !!parsed.modifiersExpanded : true,
+                showMathDetails: !!parsed?.showMathDetails,
                 transientGoal: {
                     active: !!parsed?.transientGoal?.active,
                     collapsed: parsed?.transientGoal?.collapsed !== undefined ? !!parsed.transientGoal.collapsed : true,
@@ -2281,7 +2615,7 @@
                 if (targetStars > 0) {
                     text += `Target: <strong>${targetStars} Stars</strong>. On-hand: <strong>${state.onHand.stars}</strong>. `;
                     if (initialStarDeficit > 0) {
-                        text += `Deficit: <strong>${initialStarDeficit}</strong>. `;
+                        text += `Need <strong>${initialStarDeficit} more Stars</strong> from Mountain summons. `;
                     } else {
                         text += `Covered by inventory. `;
                     }
@@ -2310,7 +2644,7 @@
                 if (totalCrystalsNeeded > 0) {
                     text += `Need <strong>${totalCrystalsNeeded} Crystals</strong> (${targetCrystals} goals + ${mountainCrystalsCost} summons). On-hand: <strong>${state.onHand.crystals}</strong>. `;
                     if (initialCrystalDeficit > 0) {
-                        text += `Deficit: <strong>${initialCrystalDeficit}</strong>. `;
+                        text += `Need <strong>${initialCrystalDeficit} more Crystals</strong> from Demon summons. `;
                     } else {
                         text += `Covered by inventory. `;
                     }
@@ -2338,7 +2672,7 @@
                 if (totalFlamesNeeded > 0) {
                     text += `Need <strong>${totalFlamesNeeded} Flames</strong> (${targetFlames} goals + ${demonFlamesCost} summons). On-hand: <strong>${state.onHand.flames}</strong>. `;
                     if (initialFlameDeficit > 0) {
-                        text += `Deficit: <strong>${initialFlameDeficit}</strong>. `;
+                        text += `Need <strong>${initialFlameDeficit} more Flames</strong> from Netherling summons. `;
                     } else {
                         text += `Covered by inventory. `;
                     }
@@ -2358,7 +2692,47 @@
 
             if (totalOrbsNeeded > 0) {
                 explanation.push(`Need <strong>${totalOrbsNeeded} Orbs</strong> (${targetOrbs} goals + ${demonOrbsCost + netherlingOrbsCost} summons). On-hand: <strong>${state.onHand.orbs}</strong>.<br>
-                    ${initialOrbDeficit > 0 ? `Deficit: <strong>${initialOrbDeficit} Orbs</strong> required.` : `Covered completely.`}`);
+                    ${initialOrbDeficit > 0 ? `You still need <strong>${initialOrbDeficit} Nether Orbs</strong> to meet your goal(s).` : `Covered completely by inventory.`}`);
+            }
+
+            // Build chronological action roadmap steps
+            const roadmap = [];
+            let stepNum = 1;
+
+            if (netherlingsToSummon > 0) {
+                roadmap.push({
+                    step: stepNum++,
+                    title: `Summon ${netherlingsToSummon} Netherling${netherlingsToSummon > 1 ? 's' : ''}`,
+                    desc: `Costs <strong>${netherlingOrbsCost} Orbs</strong> &rarr; Yields <strong>+${flameYield} Flames</strong>${flameSurplus > 0 ? ` (+${flameSurplus} surplus)` : ''}.`,
+                    icon: ICONS.netherling
+                });
+            }
+
+            if (demonsToSummon > 0) {
+                roadmap.push({
+                    step: stepNum++,
+                    title: `Summon ${demonsToSummon} Nether Demon${demonsToSummon > 1 ? 's' : ''}`,
+                    desc: `Costs <strong>${demonFlamesCost} Flames</strong> &amp; <strong>${demonOrbsCost} Orbs</strong> &rarr; Yields <strong>+${crystalYield} Crystals</strong>${crystalSurplus > 0 ? ` (+${crystalSurplus} surplus)` : ''}.`,
+                    icon: ICONS.demon
+                });
+            }
+
+            if (mountainsToSummon > 0) {
+                roadmap.push({
+                    step: stepNum++,
+                    title: `Summon ${mountainsToSummon} Nether Mountain${mountainsToSummon > 1 ? 's' : ''}`,
+                    desc: `Costs <strong>${mountainCrystalsCost} Crystals</strong> &rarr; Yields <strong>+${starYield} Stars</strong>${starSurplus > 0 ? ` (+${starSurplus} surplus)` : ''}.`,
+                    icon: ICONS.mountain
+                });
+            }
+
+            if (targetOrbs > 0 || targetFlames > 0 || targetCrystals > 0 || targetStars > 0 || targetNetherlings > 0 || targetDemons > 0 || targetMountains > 0) {
+                roadmap.push({
+                    step: stepNum++,
+                    title: `Claim Goal(s)`,
+                    desc: `You will have all required materials to complete your targeted checklist item(s).`,
+                    icon: null
+                });
             }
 
             return {
@@ -2367,6 +2741,7 @@
                 summons: { netherling: netherlingsToSummon, demon: demonsToSummon, mountain: mountainsToSummon },
                 deficits: { orbs: initialOrbDeficit, flames: initialFlameDeficit, crystals: initialCrystalDeficit, stars: initialStarDeficit },
                 totalNeeded: { orbs: totalOrbsNeeded, flames: totalFlamesNeeded, crystals: totalCrystalsNeeded, stars: targetStars },
+                roadmap,
                 explanation
             };
         }
@@ -2416,11 +2791,61 @@
                 btn.innerText = "Disabled";
                 btn.setAttribute("aria-pressed", "false");
             }
+
+            // Update Creature Upgrade Levels
+            const netherlingStats = getCreatureStats("netherling");
+            const demonStats = getCreatureStats("demon");
+            const mountainStats = getCreatureStats("mountain");
+
+            // Netherling Pills
+            [1, 2, 3].forEach(lvl => {
+                const pill = document.getElementById(`btnNetherlingLvl${lvl}`);
+                if (pill) {
+                    const isActive = netherlingStats.level === lvl;
+                    pill.classList.toggle("active", isActive);
+                    pill.setAttribute("aria-pressed", isActive ? "true" : "false");
+                }
+            });
+            const netherlingBadge = document.getElementById("netherlingBaseDropBadge");
+            if (netherlingBadge) {
+                netherlingBadge.innerText = `Base: +${CREATURES_DATA.netherling.baseDrops[netherlingStats.level]} Flames`;
+            }
+
+            // Demon Pills
+            [1, 2, 3].forEach(lvl => {
+                const pill = document.getElementById(`btnDemonLvl${lvl}`);
+                if (pill) {
+                    const isActive = demonStats.level === lvl;
+                    pill.classList.toggle("active", isActive);
+                    pill.setAttribute("aria-pressed", isActive ? "true" : "false");
+                }
+            });
+            const demonBadge = document.getElementById("demonBaseDropBadge");
+            if (demonBadge) {
+                demonBadge.innerText = `Base: +${CREATURES_DATA.demon.baseDrops[demonStats.level]} Crystals`;
+            }
+
+            // Mountain Pills
+            [1, 2].forEach(lvl => {
+                const pill = document.getElementById(`btnMountainLvl${lvl}`);
+                if (pill) {
+                    const isActive = mountainStats.level === lvl;
+                    pill.classList.toggle("active", isActive);
+                    pill.setAttribute("aria-pressed", isActive ? "true" : "false");
+                }
+            });
+            const mountainBadge = document.getElementById("mountainBaseDropBadge");
+            if (mountainBadge) {
+                mountainBadge.innerText = `Base: +${CREATURES_DATA.mountain.baseDrops[mountainStats.level]} Star${CREATURES_DATA.mountain.baseDrops[mountainStats.level] > 1 ? 's' : ''}`;
+            }
         }
 
         // Initialize dynamic icon sources for transient and modal elements
         function initIconSources() {
             const iconMap = {
+                iconLevelNetherling: ICONS.netherling,
+                iconLevelDemon: ICONS.demon,
+                iconLevelMountain: ICONS.mountain,
                 iconTransientOrb: ICONS.orb,
                 iconTransientFlame: ICONS.flame,
                 iconTransientCrystal: ICONS.crystal,
@@ -2525,7 +2950,7 @@
                     <!-- Deficits / Resource Grid -->
                     <div class="results-section-title" style="margin-top: 16px;">
                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11.5 21a9.5 9.5 0 1 0 0-19 9.5 9.5 0 0 0 0 19z"/><path d="M12.5 7v6h4"/></svg>
-                        Additional Resource Deficit
+                        Additional resources needed for goal(s):
                     </div>
                     <div class="deficits-grid">
                         <div class="deficit-item ${results.deficits.orbs > 0 ? 'deficit-active def-orb' : ''}">
@@ -2546,18 +2971,101 @@
                         </div>
                     </div>
 
-                    <!-- Cascade Math Log -->
-                    <div class="results-section-title">
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
-                        Cascading Calculation Log
+                    <!-- Action Plan & Next Steps -->
+                    <div class="results-section-title" style="margin-top: 16px;">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+                        Action Plan &amp; Next Steps
                     </div>
-                    <div class="explanation-box">
-                        ${results.explanation.map(step => `<div class="explanation-step">${step}</div>`).join('')}
-                    </div>
+                    ${(() => {
+                        let actionPlanHtml = "";
+                        const totalSummons = (results.summons.netherling || 0) + (results.summons.demon || 0) + (results.summons.mountain || 0);
+
+                        if (results.deficits.orbs > 0) {
+                            actionPlanHtml += `
+                                <div class="action-banner banner-warning">
+                                    <div class="banner-header">
+                                        <span class="banner-badge badge-warning">&#9888; Goal Not Yet Reachable</span>
+                                    </div>
+                                    <p class="banner-main-text">You still need <strong>${results.deficits.orbs} Nether Orb${results.deficits.orbs > 1 ? 's' : ''}</strong> to meet your goal(s).</p>
+                                    <p class="banner-sub-text">Collecting ${results.deficits.orbs} more Orb${results.deficits.orbs > 1 ? 's' : ''} will provide enough materials to complete all required creature summons.</p>
+                                </div>
+                            `;
+                        } else {
+                            if (totalSummons > 0) {
+                                actionPlanHtml += `
+                                    <div class="action-banner banner-success">
+                                        <div class="banner-header">
+                                            <span class="banner-badge badge-success">&#10004; Goal Achievable!</span>
+                                        </div>
+                                        <p class="banner-main-text">You have enough resources on hand to achieve your target(s)!</p>
+                                        <p class="banner-sub-text">Follow the step-by-step roadmap below to summon creatures in sequence and reach your goal.</p>
+                                    </div>
+                                `;
+                            } else {
+                                actionPlanHtml += `
+                                    <div class="action-banner banner-success">
+                                        <div class="banner-header">
+                                            <span class="banner-badge badge-success">&#10004; Goal Ready to Claim!</span>
+                                        </div>
+                                        <p class="banner-main-text">You already have all required resources in your inventory.</p>
+                                        <p class="banner-sub-text">No creature summons are needed to complete your targeted items.</p>
+                                    </div>
+                                `;
+                            }
+                        }
+
+                        if (results.roadmap && results.roadmap.length > 0) {
+                            actionPlanHtml += `
+                                <div class="action-roadmap">
+                                    ${results.roadmap.map(item => `
+                                        <div class="roadmap-step-item">
+                                            <div class="roadmap-step-num">${item.step}</div>
+                                            <div class="roadmap-step-content">
+                                                <div class="roadmap-step-title">
+                                                    ${item.icon ? `<img src="${item.icon}" class="roadmap-step-icon" alt="">` : ''}
+                                                    <span>${item.title}</span>
+                                                </div>
+                                                <div class="roadmap-step-desc">${item.desc}</div>
+                                            </div>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            `;
+                        }
+
+                        actionPlanHtml += `
+                            <div class="math-breakdown-wrapper">
+                                <button type="button" class="btn-toggle-math" id="btnToggleMathDetails" onclick="toggleMathDetails()">
+                                    ${state.showMathDetails ? 'Hide Detailed Math Breakdown <span id="mathToggleArrow">&#9650;</span>' : 'Show Detailed Math Breakdown <span id="mathToggleArrow">&#9660;</span>'}
+                                </button>
+                                <div class="explanation-box" id="mathDetailsContainer" style="display: ${state.showMathDetails ? 'block' : 'none'}; margin-top: 8px;">
+                                    ${results.explanation.map(step => `<div class="explanation-step">${step}</div>`).join('')}
+                                </div>
+                            </div>
+                        `;
+
+                        return actionPlanHtml;
+                    })()}
                 `;
             }
 
             container.innerHTML = html;
+        }
+
+        function toggleMathDetails() {
+            state.showMathDetails = !state.showMathDetails;
+            saveStateToLocalStorage();
+            const el = document.getElementById("mathDetailsContainer");
+            const btn = document.getElementById("btnToggleMathDetails");
+            if (el && btn) {
+                if (state.showMathDetails) {
+                    el.style.display = "block";
+                    btn.innerHTML = `Hide Detailed Math Breakdown <span id="mathToggleArrow">&#9650;</span>`;
+                } else {
+                    el.style.display = "none";
+                    btn.innerHTML = `Show Detailed Math Breakdown <span id="mathToggleArrow">&#9660;</span>`;
+                }
+            }
         }
 
         // Render Transient Goal Card
@@ -3031,11 +3539,96 @@
             renderCalculatorSummary();
         }
 
+        function setCreatureLevel(creatureKey, level) {
+            level = parseInt(level) || 1;
+            if (creatureKey === "netherling") {
+                if (level === 1) {
+                    state.completedGoals["netherling_lvl_2"] = false;
+                    state.completedGoals["netherling_lvl_3"] = false;
+                } else if (level === 2) {
+                    state.completedGoals["netherling_lvl_1"] = true;
+                    state.completedGoals["netherling_lvl_2"] = true;
+                    state.completedGoals["netherling_lvl_3"] = false;
+                    delete state.selectedGoals["netherling_lvl_1"];
+                    delete state.selectedGoals["netherling_lvl_2"];
+                } else if (level === 3) {
+                    state.completedGoals["netherling_lvl_1"] = true;
+                    state.completedGoals["netherling_lvl_2"] = true;
+                    state.completedGoals["netherling_lvl_3"] = true;
+                    delete state.selectedGoals["netherling_lvl_1"];
+                    delete state.selectedGoals["netherling_lvl_2"];
+                    delete state.selectedGoals["netherling_lvl_3"];
+                }
+                showToast(`Netherling set to Level ${level} (+${CREATURES_DATA.netherling.baseDrops[level]} Flames base)`);
+            } else if (creatureKey === "demon") {
+                if (level === 1) {
+                    state.completedGoals["nether_demon_lvl_2"] = false;
+                    state.completedGoals["nether_demon_lvl_3"] = false;
+                } else if (level === 2) {
+                    state.completedGoals["nether_demon_lvl_1"] = true;
+                    state.completedGoals["nether_demon_lvl_2"] = true;
+                    state.completedGoals["nether_demon_lvl_3"] = false;
+                    delete state.selectedGoals["nether_demon_lvl_1"];
+                    delete state.selectedGoals["nether_demon_lvl_2"];
+                } else if (level === 3) {
+                    state.completedGoals["nether_demon_lvl_1"] = true;
+                    state.completedGoals["nether_demon_lvl_2"] = true;
+                    state.completedGoals["nether_demon_lvl_3"] = true;
+                    delete state.selectedGoals["nether_demon_lvl_1"];
+                    delete state.selectedGoals["nether_demon_lvl_2"];
+                    delete state.selectedGoals["nether_demon_lvl_3"];
+                }
+                showToast(`Nether Demon set to Level ${level} (+${CREATURES_DATA.demon.baseDrops[level]} Crystals base)`);
+            } else if (creatureKey === "mountain") {
+                if (level === 1) {
+                    state.completedGoals["mountain_lvl_2"] = false;
+                } else if (level === 2) {
+                    state.completedGoals["mountain_lvl_1"] = true;
+                    state.completedGoals["mountain_lvl_2"] = true;
+                    delete state.selectedGoals["mountain_lvl_1"];
+                    delete state.selectedGoals["mountain_lvl_2"];
+                }
+                showToast(`Nether Mountain set to Level ${level} (+${CREATURES_DATA.mountain.baseDrops[level]} Star${level > 1 ? 's' : ''} base)`);
+            }
+
+            saveStateToLocalStorage();
+            renderAll();
+        }
+
         function toggleGoalCompleted(id) {
             state.completedGoals[id] = !state.completedGoals[id];
             
             if (state.completedGoals[id]) {
                 state.selectedGoals[id] = false;
+
+                // Prerequisite cascading for creature levels
+                if (id === "netherling_lvl_3") {
+                    state.completedGoals["netherling_lvl_1"] = true;
+                    state.completedGoals["netherling_lvl_2"] = true;
+                    state.selectedGoals["netherling_lvl_1"] = false;
+                    state.selectedGoals["netherling_lvl_2"] = false;
+                } else if (id === "netherling_lvl_2") {
+                    state.completedGoals["netherling_lvl_1"] = true;
+                    state.selectedGoals["netherling_lvl_1"] = false;
+                } else if (id === "nether_demon_lvl_3") {
+                    state.completedGoals["nether_demon_lvl_1"] = true;
+                    state.completedGoals["nether_demon_lvl_2"] = true;
+                    state.selectedGoals["nether_demon_lvl_1"] = false;
+                    state.selectedGoals["nether_demon_lvl_2"] = false;
+                } else if (id === "nether_demon_lvl_2") {
+                    state.completedGoals["nether_demon_lvl_1"] = true;
+                    state.selectedGoals["nether_demon_lvl_1"] = false;
+                } else if (id === "mountain_lvl_2") {
+                    state.completedGoals["mountain_lvl_1"] = true;
+                    state.selectedGoals["mountain_lvl_1"] = false;
+                }
+            } else {
+                // Dependent unchecking for creature levels
+                if (id === "netherling_lvl_2") {
+                    state.completedGoals["netherling_lvl_3"] = false;
+                } else if (id === "nether_demon_lvl_2") {
+                    state.completedGoals["nether_demon_lvl_3"] = false;
+                }
             }
 
             saveStateToLocalStorage();
