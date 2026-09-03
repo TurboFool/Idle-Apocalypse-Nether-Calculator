@@ -193,13 +193,13 @@ $$\text{Drop Yield}(c) = \text{BaseDrop}(c, \text{Level}) + \text{PieLevel} + (\
 
 ### Versioning Format & Lifecycle
 Follow Semantic Versioning (`MAJOR.MINOR.PATCH`):
-- **Pre-Releases**: `vX.Y.Z-beta.N` (e.g., `v1.1.1-beta.2`) used on feature/dev iterations during testing phases.
-- **Production Releases**: Clean `vX.Y.Z` (e.g., `v1.1.0`) used for official, non-beta production releases merged to `main`.
+- **Pre-Releases**: `vX.Y.Z-beta.N` (e.g., `v1.1.2-beta.1`) used on feature/dev iterations during testing phases.
+- **Production Releases**: Clean `vX.Y.Z` (e.g., `v1.1.1`) used for official, non-beta production releases merged to `main`.
 
 ### Embedded Version Single Source of Truth
 The version string is declared in JavaScript at the top of the `<script>` tag in `nether_costs.html`:
 ```javascript
-const APP_VERSION = "v1.1.1-beta.2";
+const APP_VERSION = "v1.1.1";
 ```
 On page load (`DOMContentLoaded`), this value is assigned to the header element `<span id="app-version">`.
 
