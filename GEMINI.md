@@ -21,15 +21,20 @@ This configuration file defines mandatory developer and agent guidelines for wor
 
 ## 🌿 2. Git Branching, Versioning & Push Policy
 
-1. **Branch & Push Rules**:
+1. **Multi-Machine & Multi-IDE Synchronization Policy**:
+   - Because this project may be developed across multiple workstations and IDEs, agents must maintain awareness of potential remote commits.
+   - **Check at the Start of New Conversations**: Always run `git fetch origin` and check `git status` at the beginning of a conversation or when newly activated in a workspace to ensure the local repository reflects updates made from other machines.
+   - **Time-Elapsed Liveness Checks**: Within an ongoing conversation, check `git fetch origin` before starting a major modification batch if significant time (e.g. >1–2 hours or resumption after inactivity) has elapsed since the last interaction. Avoid excessive polling during active, back-and-forth turns.
+   - **Reconciliation Protocol**: If remote commits exist (`git status` reports local is behind `origin/dev`), fast-forward or reconcile with user awareness before applying local edits.
+2. **Branch & Push Rules**:
    - **Strict `dev` Branch Target**: All feature work, bug fixes, and experiments must be performed on and pushed to the `dev` branch.
    - **Do NOT push to `main`** unless the user explicitly instructs you to perform a release merge or push to `main`.
    - Before pushing or committing, verify active branch (`git branch --show-current`).
-2. **Version Promotion & Tags**:
+3. **Version Promotion & Tags**:
    - Pre-release versions on `dev` must follow the format `vX.Y.Z-beta.N` (e.g. `v1.0.1-beta.1`).
    - Official production releases on `main` use clean Semantic Versioning `vX.Y.Z`.
    - Always synchronize the version string in JavaScript (`const APP_VERSION = "vX.Y.Z";` in `nether_costs.html`), which updates `<span id="app-version">`.
-3. **Commit Message Standards**:
+4. **Commit Message Standards**:
    - Follow Conventional Commits format:
      - `feat: ...` for new user-facing features or calculations
      - `fix: ...` for bug fixes

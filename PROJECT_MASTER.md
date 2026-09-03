@@ -169,6 +169,12 @@ On page load (`DOMContentLoaded`), this value is assigned to the header element 
 - **`main`**: Stable production release branch. Holds official non-beta releases tagged with clean semantic tags (e.g. `v1.0.0`).
 - **`dev`**: Active feature development and pre-release testing branch (`-beta.N` tags).
 
+### Multi-Workstation & Multi-IDE Synchronization Policy
+Because development and agent management occur across multiple computers and IDEs:
+1. **New Conversation Check**: Always run `git fetch origin` and check `git status` when initiating a new session or switching workstations/IDEs.
+2. **Inactivity / Resumption Check**: Check `git fetch origin` before initiating a new round of changes if significant time has elapsed (>1–2 hours) since the last local interaction.
+3. **Reconciliation**: If remote commits are present on `origin/dev`, pull/fast-forward before making local modifications to avoid divergence or merge conflicts.
+
 ### Release Workflow & Documentation Standards
 Whenever preparing a new version release:
 1. **Version Promotion**:
@@ -225,6 +231,7 @@ If game icon WebP images in `assets/` are replaced or updated:
 
 ### Antigravity Agent & Modern Web Standards
 - Project rules and AI coding agent guidelines are defined in `GEMINI.md`.
+- Multi-device git check policies (session start and elapsed time checks) ensure seamless handoffs between workstations.
 - Always consult `modern-web-guidance` (`npx.cmd -y modern-web-guidance@latest search "<query>"`) prior to web UI implementations.
 - Changes must be targeted to the `dev` branch only, unless explicit release merge to `main` is requested.
 - `PROJECT_MASTER.md` must be updated on all functional, mathematical, and UI changes.
