@@ -964,6 +964,386 @@
             border-radius: 10px;
         }
 
+        /* Transient Quick Target Card */
+        .transient-card {
+            background: rgba(20, 16, 30, 0.95);
+            border: 1px solid rgba(168, 85, 247, 0.25);
+            border-radius: 8px;
+            margin-bottom: 14px;
+            overflow: hidden;
+            transition: all 0.2s;
+        }
+        .transient-card.active {
+            border-color: rgba(168, 85, 247, 0.6);
+            box-shadow: 0 0 12px rgba(139, 92, 246, 0.2);
+        }
+        .transient-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 14px;
+            background: rgba(13, 10, 18, 0.7);
+            cursor: pointer;
+            user-select: none;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.1);
+        }
+        .transient-title-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .transient-title {
+            font-size: 0.8rem;
+            font-weight: 800;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-family: 'Cinzel', serif;
+            letter-spacing: 0.03em;
+        }
+        .transient-status-badge {
+            font-size: 0.55rem;
+            font-weight: 800;
+            padding: 2px 6px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-muted);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            transition: all 0.2s;
+        }
+        .transient-status-badge.active {
+            background: rgba(139, 92, 246, 0.25);
+            color: #d8b4fe;
+            border-color: #a78bfa;
+            box-shadow: 0 0 8px rgba(139, 92, 246, 0.3);
+        }
+        .transient-toggle-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 0.7rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            transition: color 0.15s;
+        }
+        .transient-toggle-btn:hover {
+            color: #fff;
+        }
+        .transient-body {
+            padding: 12px 14px;
+        }
+        .transient-section-label {
+            font-size: 0.65rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+        .transient-inputs-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+        .transient-creatures-grid {
+            grid-template-columns: repeat(3, 1fr);
+        }
+        @media (max-width: 600px) {
+            .transient-inputs-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .transient-creatures-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        .transient-input-item {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            background: rgba(13, 10, 18, 0.6);
+            padding: 6px 8px;
+            border-radius: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .transient-input-item label {
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .transient-input-item input {
+            background: #0d0a12;
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 4px;
+            padding: 4px 6px;
+            color: #fff;
+            font-size: 0.85rem;
+            width: 100%;
+            outline: none;
+            box-sizing: border-box;
+            transition: border-color 0.2s;
+        }
+        .transient-input-item input:focus {
+            border-color: var(--accent-purple);
+        }
+        .transient-actions-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 12px;
+            padding-top: 10px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .transient-actions-left {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        .transient-btn-clear {
+            background: none;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-muted);
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            transition: all 0.15s;
+        }
+        .transient-btn-clear:hover {
+            color: #ef4444;
+            border-color: rgba(239, 68, 68, 0.3);
+            background: rgba(239, 68, 68, 0.05);
+        }
+        .transient-btn-save {
+            background: rgba(139, 92, 246, 0.15);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            color: #d8b4fe;
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.15s;
+        }
+        .transient-btn-save:hover {
+            background: rgba(139, 92, 246, 0.3);
+            color: #fff;
+            border-color: #a78bfa;
+        }
+
+        /* Custom Goal Card Badges & Actions */
+        .cost-badge-creature {
+            border-color: rgba(168, 85, 247, 0.35);
+            color: #d8b4fe;
+            background: rgba(139, 92, 246, 0.1);
+        }
+        .goal-btn-edit {
+            background: none;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-muted);
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 4px 6px;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            transition: all 0.15s;
+        }
+        .goal-btn-edit:hover {
+            color: #06b6d4;
+            border-color: rgba(6, 182, 212, 0.4);
+            background: rgba(6, 182, 212, 0.05);
+        }
+        .goal-btn-delete {
+            background: none;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-muted);
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 4px 6px;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            transition: all 0.15s;
+        }
+        .goal-btn-delete:hover {
+            color: #ef4444;
+            border-color: rgba(239, 68, 68, 0.4);
+            background: rgba(239, 68, 68, 0.05);
+        }
+        .btn-action-custom {
+            background: rgba(139, 92, 246, 0.15);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            color: #d8b4fe;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        .btn-action-custom:hover {
+            background: var(--accent-purple);
+            color: #fff;
+            border-color: #a78bfa;
+            box-shadow: 0 0 10px rgba(139, 92, 246, 0.3);
+        }
+
+        /* Custom Goal Modal Form */
+        .form-group {
+            margin-bottom: 12px;
+        }
+        .form-label {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+            color: var(--text-muted);
+        }
+        .modal-input {
+            width: 100%;
+            background: #0d0a12;
+            border: 1px solid rgba(168, 85, 247, 0.25);
+            border-radius: 6px;
+            padding: 8px 10px;
+            color: #fff;
+            font-size: 0.85rem;
+            font-family: inherit;
+            box-sizing: border-box;
+            transition: border-color 0.2s;
+        }
+        .modal-input:focus {
+            border-color: var(--accent-purple);
+            box-shadow: 0 0 8px rgba(139, 92, 246, 0.25);
+            outline: none;
+        }
+        .form-section-title {
+            font-size: 0.7rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #a78bfa;
+            margin-bottom: 6px;
+        }
+        .modal-grid-4 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+        .modal-grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+        @media (max-width: 480px) {
+            .modal-grid-4 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .modal-grid-3 {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        .form-field-card {
+            background: rgba(13, 10, 18, 0.6);
+            padding: 8px;
+            border-radius: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .field-card-label {
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .modal-mini-input {
+            background: #0d0a12;
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 4px;
+            padding: 4px 6px;
+            color: #fff;
+            font-size: 0.85rem;
+            width: 100%;
+            outline: none;
+            box-sizing: border-box;
+            transition: border-color 0.2s;
+        }
+        .modal-mini-input:focus {
+            border-color: var(--accent-purple);
+        }
+        .modal-actions-row {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            padding-top: 14px;
+            margin-top: 10px;
+        }
+        .btn-cancel {
+            background: none;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: var(--text-muted);
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .btn-cancel:hover {
+            color: #fff;
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+        .btn-save-goal {
+            background: var(--accent-purple);
+            border: 1px solid #a78bfa;
+            color: #fff;
+            padding: 8px 18px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(139, 92, 246, 0.3);
+            transition: all 0.15s;
+        }
+        .btn-save-goal:hover {
+            background: #7c3aed;
+            box-shadow: 0 0 14px rgba(139, 92, 246, 0.5);
+        }
+
         /* Notifications / Toast styling */
         .toast {
             position: fixed;
@@ -1279,6 +1659,78 @@
                     </span>
                 </div>
 
+                <!-- Transient Custom Goal Card (Collapsible) -->
+                <div class="transient-card" id="transientGoalCard">
+                    <div class="transient-header" onclick="toggleTransientCollapse()" role="button" tabindex="0" aria-expanded="false" id="transientHeader">
+                        <div class="transient-title-row">
+                            <span class="transient-title">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+                                Quick Target (Transient Goal)
+                            </span>
+                            <span class="transient-status-badge" id="transientStatusBadge">Inactive</span>
+                        </div>
+                        <button class="transient-toggle-btn" id="transientToggleBtn" type="button" aria-label="Toggle transient goal panel">
+                            Expand <span>&#9660;</span>
+                        </button>
+                    </div>
+                    <div class="transient-body" id="transientBody" style="display: none;">
+                        <div class="transient-grid-section">
+                            <div class="transient-section-label">Target Resources</div>
+                            <div class="transient-inputs-grid">
+                                <div class="transient-input-item">
+                                    <label><img class="resource-icon" id="iconTransientOrb" src="" alt="Orbs"> Orbs</label>
+                                    <input type="number" min="0" step="1" inputmode="numeric" pattern="[0-9]*" class="mono-num" id="transientOrbInput" placeholder="0" onchange="updateTransientValue('cost', 'orbs', this.value)">
+                                </div>
+                                <div class="transient-input-item">
+                                    <label><img class="resource-icon" id="iconTransientFlame" src="" alt="Flames"> Flames</label>
+                                    <input type="number" min="0" step="1" inputmode="numeric" pattern="[0-9]*" class="mono-num" id="transientFlameInput" placeholder="0" onchange="updateTransientValue('cost', 'flames', this.value)">
+                                </div>
+                                <div class="transient-input-item">
+                                    <label><img class="resource-icon" id="iconTransientCrystal" src="" alt="Crystals"> Crystals</label>
+                                    <input type="number" min="0" step="1" inputmode="numeric" pattern="[0-9]*" class="mono-num" id="transientCrystalInput" placeholder="0" onchange="updateTransientValue('cost', 'crystals', this.value)">
+                                </div>
+                                <div class="transient-input-item">
+                                    <label><img class="resource-icon" id="iconTransientStar" src="" alt="Stars"> Stars</label>
+                                    <input type="number" min="0" step="1" inputmode="numeric" pattern="[0-9]*" class="mono-num" id="transientStarInput" placeholder="0" onchange="updateTransientValue('cost', 'stars', this.value)">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="transient-grid-section" style="margin-top: 10px;">
+                            <div class="transient-section-label">Target Creatures</div>
+                            <div class="transient-inputs-grid transient-creatures-grid">
+                                <div class="transient-input-item">
+                                    <label><img class="resource-icon" id="iconTransientNetherling" src="" alt="Netherlings"> Netherlings</label>
+                                    <input type="number" min="0" step="1" inputmode="numeric" pattern="[0-9]*" class="mono-num" id="transientNetherlingInput" placeholder="0" onchange="updateTransientValue('creatures', 'netherling', this.value)">
+                                </div>
+                                <div class="transient-input-item">
+                                    <label><img class="resource-icon" id="iconTransientDemon" src="" alt="Demons"> Demons</label>
+                                    <input type="number" min="0" step="1" inputmode="numeric" pattern="[0-9]*" class="mono-num" id="transientDemonInput" placeholder="0" onchange="updateTransientValue('creatures', 'demon', this.value)">
+                                </div>
+                                <div class="transient-input-item">
+                                    <label><img class="resource-icon" id="iconTransientMountain" src="" alt="Mountains"> Mountains</label>
+                                    <input type="number" min="0" step="1" inputmode="numeric" pattern="[0-9]*" class="mono-num" id="transientMountainInput" placeholder="0" onchange="updateTransientValue('creatures', 'mountain', this.value)">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="transient-actions-row">
+                            <div class="transient-actions-left">
+                                <button class="goal-btn-target" id="transientTargetBtn" onclick="toggleTransientTarget()" aria-pressed="false">
+                                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>
+                                    Target
+                                </button>
+                                <button class="transient-btn-clear" onclick="clearTransientGoal()" title="Clear all transient fields">
+                                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                                    Clear
+                                </button>
+                            </div>
+                            <button class="transient-btn-save" onclick="saveTransientAsCustomGoal()" title="Save current values as a reusable Custom Goal">
+                                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                                Save as Goal...
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Filters & Search Toolbar -->
                 <div class="checklist-controls">
                     <div class="filter-row" id="categoryTabs">
@@ -1287,9 +1739,14 @@
                         <button class="filter-tab" onclick="setCategoryFilter('Scrolls')">Scrolls</button>
                         <button class="filter-tab" onclick="setCategoryFilter('DDD')">DDD</button>
                         <button class="filter-tab" onclick="setCategoryFilter('Lesley')">Lesley</button>
+                        <button class="filter-tab" onclick="setCategoryFilter('Custom')">Custom</button>
                     </div>
                     <div class="search-row">
                         <input type="search" class="search-input" id="searchBar" placeholder="Search targets by name..." aria-label="Search targets by name" oninput="handleSearch(this.value)">
+                        <button class="btn-action-custom" id="addCustomGoalBtn" onclick="openCustomGoalModal()" title="Create a new reusable custom goal" type="button">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="vertical-align: middle;"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                            Add Custom Goal
+                        </button>
                         <label class="checkbox-container">
                             <input type="checkbox" id="hideCompletedCheck" onchange="toggleHideCompleted(this.checked)">
                             <span class="checkbox-custom"></span>
@@ -1306,6 +1763,70 @@
         </div>
 
     </div>
+
+    <!-- Custom Goal Modal (Create / Edit) -->
+    <dialog class="modal-dialog" id="customGoalModal" aria-labelledby="customGoalModalTitle">
+        <button class="modal-close" onclick="closeCustomGoalModal()" aria-label="Close modal">&times;</button>
+        <h3 class="modal-title" id="customGoalModalTitle">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle;"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+            <span id="customGoalModalHeading">Add Custom Goal</span>
+        </h3>
+        
+        <form id="customGoalForm" onsubmit="handleCustomGoalSubmit(event)">
+            <input type="hidden" id="customGoalEditId" value="">
+            
+            <div class="form-group">
+                <label for="customGoalName" class="form-label">Goal Name <span style="color: #ef4444;">*</span></label>
+                <input type="text" id="customGoalName" class="modal-input" placeholder="e.g. 5 Mountains + 24 Netherlings" required>
+            </div>
+
+            <div class="form-group">
+                <label for="customGoalDesc" class="form-label">Description (Optional)</label>
+                <input type="text" id="customGoalDesc" class="modal-input" placeholder="e.g. Damage requirement for stage 650">
+            </div>
+
+            <div class="form-section-title">Target Resources</div>
+            <div class="modal-grid-4">
+                <div class="form-field-card">
+                    <label for="modalCostOrbs" class="field-card-label"><img class="resource-icon" id="iconModalOrb" src="" alt="Orbs"> Orbs</label>
+                    <input type="number" min="0" step="1" inputmode="numeric" pattern="[0-9]*" id="modalCostOrbs" class="modal-mini-input mono-num" placeholder="0">
+                </div>
+                <div class="form-field-card">
+                    <label for="modalCostFlames" class="field-card-label"><img class="resource-icon" id="iconModalFlame" src="" alt="Flames"> Flames</label>
+                    <input type="number" min="0" step="1" inputmode="numeric" pattern="[0-9]*" id="modalCostFlames" class="modal-mini-input mono-num" placeholder="0">
+                </div>
+                <div class="form-field-card">
+                    <label for="modalCostCrystals" class="field-card-label"><img class="resource-icon" id="iconModalCrystal" src="" alt="Crystals"> Crystals</label>
+                    <input type="number" min="0" step="1" inputmode="numeric" pattern="[0-9]*" id="modalCostCrystals" class="modal-mini-input mono-num" placeholder="0">
+                </div>
+                <div class="form-field-card">
+                    <label for="modalCostStars" class="field-card-label"><img class="resource-icon" id="iconModalStar" src="" alt="Stars"> Stars</label>
+                    <input type="number" min="0" step="1" inputmode="numeric" pattern="[0-9]*" id="modalCostStars" class="modal-mini-input mono-num" placeholder="0">
+                </div>
+            </div>
+
+            <div class="form-section-title" style="margin-top: 12px;">Target Creature Summons</div>
+            <div class="modal-grid-3">
+                <div class="form-field-card">
+                    <label for="modalCreatureNetherling" class="field-card-label"><img class="resource-icon" id="iconModalNetherling" src="" alt="Netherlings"> Netherlings</label>
+                    <input type="number" min="0" step="1" inputmode="numeric" pattern="[0-9]*" id="modalCreatureNetherling" class="modal-mini-input mono-num" placeholder="0">
+                </div>
+                <div class="form-field-card">
+                    <label for="modalCreatureDemon" class="field-card-label"><img class="resource-icon" id="iconModalDemon" src="" alt="Demons"> Demons</label>
+                    <input type="number" min="0" step="1" inputmode="numeric" pattern="[0-9]*" id="modalCreatureDemon" class="modal-mini-input mono-num" placeholder="0">
+                </div>
+                <div class="form-field-card">
+                    <label for="modalCreatureMountain" class="field-card-label"><img class="resource-icon" id="iconModalMountain" src="" alt="Mountains"> Mountains</label>
+                    <input type="number" min="0" step="1" inputmode="numeric" pattern="[0-9]*" id="modalCreatureMountain" class="modal-mini-input mono-num" placeholder="0">
+                </div>
+            </div>
+
+            <div class="modal-actions-row">
+                <button type="button" class="btn-cancel" onclick="closeCustomGoalModal()">Cancel</button>
+                <button type="submit" class="btn-save-goal" id="customGoalSubmitBtn">Save Goal</button>
+            </div>
+        </form>
+    </dialog>
 
     <!-- General Instructions Popup Modal (Native Dialog) -->
     <dialog class="modal-dialog" id="instructionsModal" aria-labelledby="instructionsModalTitle">
@@ -1338,26 +1859,22 @@
 
         <div class="instr-section">
             <h4>3. On-Hand Resources</h4>
-            <p>Track your current inventory. Edit counts directly or use the quick buttons:</p>
-            <p style="margin-top: 4px; padding-left: 4px; font-size: 0.7rem; color: var(--text-muted);">
-                <span class="badge-inline">-10</span> &nbsp; <span class="badge-inline">-1</span> &nbsp; 
-                <span class="instr-key">Value Input</span> &nbsp; 
-                <span class="badge-inline">+1</span> &nbsp; <span class="badge-inline">+10</span>
-            </p>
+            <p>Adjust on-hand inventory values using <code>+1</code>, <code>+10</code>, <code>-1</code>, <code>-10</code>, or direct text input.</p>
         </div>
 
         <div class="instr-section">
-            <h4>4. Target Goals Checklist</h4>
+            <h4>4. Target Goals &amp; Custom Goals</h4>
             <p>Filter/search goals, select <span class="badge-inline">Target</span> to calculate requirements, and mark <span class="badge-inline">Achieved</span> to clear them.</p>
+            <p>Use the <strong>Quick Target (Transient Goal)</strong> card above the checklist for spur-of-the-moment calculations. Or save reusable custom goals under the <strong>Custom</strong> category tab.</p>
         </div>
 
         <div class="instr-section">
-            <h4>5. Nether Requirements &amp; Cascade Math</h4>
+            <h4>5. Cascading Math Engine</h4>
             <p>Calculates total goals cost minus inventory, then solves deficits from top to bottom:</p>
-            <ul style="font-size: 0.7rem; color: var(--text-muted); list-style-type: none; padding-left: 4px;">
-                <li style="margin-bottom: 2px;">🌟 <strong>Stars</strong> deficit &rarr; Summons <strong>Mountains</strong>.</li>
-                <li style="margin-bottom: 2px;">💎 <strong>Crystals</strong> deficit (incl. Mountains cost) &rarr; Summons <strong>Demons</strong>.</li>
-                <li style="margin-bottom: 2px;">🔥 <strong>Flames</strong> deficit (incl. Demons cost) &rarr; Summons <strong>Netherlings</strong>.</li>
+            <ul style="padding-left: 18px;">
+                <li style="margin-bottom: 2px;">⭐ <strong>Stars</strong> deficit (or Mountain target) &rarr; Summons <strong>Mountains</strong>.</li>
+                <li style="margin-bottom: 2px;">💎 <strong>Crystals</strong> deficit (incl. Mountains cost / Demon target) &rarr; Summons <strong>Demons</strong>.</li>
+                <li style="margin-bottom: 2px;">🔥 <strong>Flames</strong> deficit (incl. Demons cost / Netherling target) &rarr; Summons <strong>Netherlings</strong>.</li>
                 <li style="margin-bottom: 2px;">🔮 <strong>Orbs</strong> deficit (incl. Demons &amp; Netherlings cost) &rarr; Final cost required.</li>
             </ul>
         </div>
@@ -1371,7 +1888,7 @@
 
     <!-- JS Core Engine -->
     <script>
-        const APP_VERSION = "v1.0.1";
+        const APP_VERSION = "v1.1.0-beta.1";
 
         // --- 1. Base64 Icons Database ---
         const ICONS = {
@@ -1475,11 +1992,69 @@
             hideCompleted: false, // UI Filters
             activeCategory: "All",
             searchQuery: "",
-            modifiersExpanded: true
+            modifiersExpanded: true,
+            transientGoal: {
+                active: false,
+                collapsed: true, // Collapsed by default as requested
+                cost: { orbs: 0, flames: 0, crystals: 0, stars: 0 },
+                creatures: { netherling: 0, demon: 0, mountain: 0 }
+            },
+            customGoals: []
         };
 
         // --- 5. Application Persistence Engine ---
         const STORAGE_KEY = "idle_apoc_nether_costs_state_v2";
+
+        function sanitizeAndMergeState(parsed) {
+            return {
+                onHand: {
+                    orbs: Math.max(0, parseInt(parsed?.onHand?.orbs) || 0),
+                    flames: Math.max(0, parseInt(parsed?.onHand?.flames) || 0),
+                    crystals: Math.max(0, parseInt(parsed?.onHand?.crystals) || 0),
+                    stars: Math.max(0, parseInt(parsed?.onHand?.stars) || 0)
+                },
+                completedGoals: typeof parsed?.completedGoals === 'object' && parsed.completedGoals !== null ? { ...parsed.completedGoals } : {},
+                selectedGoals: typeof parsed?.selectedGoals === 'object' && parsed.selectedGoals !== null ? { ...parsed.selectedGoals } : {},
+                pieLevel: Math.max(0, Math.min(3, parseInt(parsed?.pieLevel) || 0)),
+                bountyEnabled: !!parsed?.bountyEnabled,
+                hideCompleted: !!parsed?.hideCompleted,
+                activeCategory: typeof parsed?.activeCategory === 'string' ? parsed.activeCategory : "All",
+                searchQuery: typeof parsed?.searchQuery === 'string' ? parsed.searchQuery : "",
+                modifiersExpanded: parsed?.modifiersExpanded !== undefined ? !!parsed.modifiersExpanded : true,
+                transientGoal: {
+                    active: !!parsed?.transientGoal?.active,
+                    collapsed: parsed?.transientGoal?.collapsed !== undefined ? !!parsed.transientGoal.collapsed : true,
+                    cost: {
+                        orbs: Math.max(0, parseInt(parsed?.transientGoal?.cost?.orbs) || 0),
+                        flames: Math.max(0, parseInt(parsed?.transientGoal?.cost?.flames) || 0),
+                        crystals: Math.max(0, parseInt(parsed?.transientGoal?.cost?.crystals) || 0),
+                        stars: Math.max(0, parseInt(parsed?.transientGoal?.cost?.stars) || 0)
+                    },
+                    creatures: {
+                        netherling: Math.max(0, parseInt(parsed?.transientGoal?.creatures?.netherling) || 0),
+                        demon: Math.max(0, parseInt(parsed?.transientGoal?.creatures?.demon) || 0),
+                        mountain: Math.max(0, parseInt(parsed?.transientGoal?.creatures?.mountain) || 0)
+                    }
+                },
+                customGoals: Array.isArray(parsed?.customGoals) ? parsed.customGoals.map(cg => ({
+                    id: cg.id || `custom_${Date.now()}_${Math.random().toString(36).substr(2, 4)}`,
+                    name: String(cg.name || "Custom Goal"),
+                    description: String(cg.description || ""),
+                    category: "Custom",
+                    cost: {
+                        orbs: Math.max(0, parseInt(cg?.cost?.orbs) || 0),
+                        flames: Math.max(0, parseInt(cg?.cost?.flames) || 0),
+                        crystals: Math.max(0, parseInt(cg?.cost?.crystals) || 0),
+                        stars: Math.max(0, parseInt(cg?.cost?.stars) || 0)
+                    },
+                    creatures: {
+                        netherling: Math.max(0, parseInt(cg?.creatures?.netherling) || 0),
+                        demon: Math.max(0, parseInt(cg?.creatures?.demon) || 0),
+                        mountain: Math.max(0, parseInt(cg?.creatures?.mountain) || 0)
+                    }
+                })) : []
+            };
+        }
 
         function saveStateToLocalStorage() {
             try {
@@ -1494,7 +2069,7 @@
                 const raw = localStorage.getItem(STORAGE_KEY);
                 if (raw) {
                     const parsed = JSON.parse(raw);
-                    state = { ...state, ...parsed };
+                    state = sanitizeAndMergeState(parsed);
                 }
             } catch (e) {
                 console.error("Failed to load state from localStorage", e);
@@ -1502,10 +2077,13 @@
         }
 
         function resetState() {
-            if (confirm("Are you sure you want to clear your current progress and reset everything?")) {
+            if (confirm("Are you sure you want to clear your current progress, on-hand resources, and targets?\n(Your saved custom goals will be preserved.)")) {
                 state.onHand = { orbs: 0, flames: 0, crystals: 0, stars: 0 };
                 state.completedGoals = {};
                 state.selectedGoals = {};
+                if (state.transientGoal) {
+                    state.transientGoal.active = false;
+                }
                 state.pieLevel = 0;
                 state.bountyEnabled = false;
                 state.hideCompleted = false;
@@ -1514,7 +2092,7 @@
                 
                 saveStateToLocalStorage();
                 renderAll();
-                showToast("All progress reset to defaults.");
+                showToast("Progress reset to defaults (custom goals kept).");
             }
         }
 
@@ -1543,7 +2121,7 @@
                 try {
                     const parsed = JSON.parse(e.target.result);
                     if (parsed.onHand) {
-                        state = { ...state, ...parsed };
+                        state = sanitizeAndMergeState(parsed);
                         saveStateToLocalStorage();
                         renderAll();
                         showToast("Progress successfully imported!");
@@ -1595,15 +2173,53 @@
             let targetFlames = 0;
             let targetCrystals = 0;
             let targetStars = 0;
+            let targetNetherlings = 0;
+            let targetDemons = 0;
+            let targetMountains = 0;
 
+            // Standard goals
             TARGETS_DATA.forEach(goal => {
                 if (state.selectedGoals[goal.id] && !state.completedGoals[goal.id]) {
-                    targetOrbs += goal.cost.orbs;
-                    targetFlames += goal.cost.flames;
-                    targetCrystals += goal.cost.crystals;
-                    targetStars += goal.cost.stars;
+                    targetOrbs += goal.cost.orbs || 0;
+                    targetFlames += goal.cost.flames || 0;
+                    targetCrystals += goal.cost.crystals || 0;
+                    targetStars += goal.cost.stars || 0;
                 }
             });
+
+            // Saved custom goals
+            if (state.customGoals) {
+                state.customGoals.forEach(cg => {
+                    if (state.selectedGoals[cg.id] && !state.completedGoals[cg.id]) {
+                        if (cg.cost) {
+                            targetOrbs += cg.cost.orbs || 0;
+                            targetFlames += cg.cost.flames || 0;
+                            targetCrystals += cg.cost.crystals || 0;
+                            targetStars += cg.cost.stars || 0;
+                        }
+                        if (cg.creatures) {
+                            targetNetherlings += cg.creatures.netherling || 0;
+                            targetDemons += cg.creatures.demon || 0;
+                            targetMountains += cg.creatures.mountain || 0;
+                        }
+                    }
+                });
+            }
+
+            // Transient goal (if active)
+            if (state.transientGoal && state.transientGoal.active) {
+                if (state.transientGoal.cost) {
+                    targetOrbs += state.transientGoal.cost.orbs || 0;
+                    targetFlames += state.transientGoal.cost.flames || 0;
+                    targetCrystals += state.transientGoal.cost.crystals || 0;
+                    targetStars += state.transientGoal.cost.stars || 0;
+                }
+                if (state.transientGoal.creatures) {
+                    targetNetherlings += state.transientGoal.creatures.netherling || 0;
+                    targetDemons += state.transientGoal.creatures.demon || 0;
+                    targetMountains += state.transientGoal.creatures.mountain || 0;
+                }
+            }
 
             const drops = {
                 netherling: getCreatureDrop("netherling"),
@@ -1615,69 +2231,92 @@
 
             // A. Star deficits -> Summon Mountains
             const initialStarDeficit = Math.max(0, targetStars - state.onHand.stars);
-            let mountainsToSummon = 0;
-            let starSurplus = 0;
-            let mountainCrystalsCost = 0;
-            
-            if (initialStarDeficit > 0) {
-                mountainsToSummon = Math.ceil(initialStarDeficit / drops.mountain);
-                const starYield = mountainsToSummon * drops.mountain;
-                starSurplus = starYield - initialStarDeficit;
-                mountainCrystalsCost = mountainsToSummon * CREATURES_DATA.mountain.crystalCost;
-                
-                explanation.push(`Need <strong>${targetStars} Stars</strong>. On-hand: <strong>${state.onHand.stars}</strong>. Deficit: <strong>${initialStarDeficit}</strong>.<br>
-                    Summon <strong>${mountainsToSummon} Mountain(s)</strong> (drops +${drops.mountain} each) yielding <strong>+${starYield} Stars</strong> (Surplus: +${starSurplus}).<br>
-                    Mountain summons require <strong>${mountainCrystalsCost} Crystals</strong>.`);
-            } else if (targetStars > 0) {
-                explanation.push(`Need <strong>${targetStars} Stars</strong>. On-hand: <strong>${state.onHand.stars}</strong>. Covered completely.`);
+            const mountainsForStars = initialStarDeficit > 0 ? Math.ceil(initialStarDeficit / drops.mountain) : 0;
+            const mountainsToSummon = Math.max(targetMountains, mountainsForStars);
+            const starYield = mountainsToSummon * drops.mountain;
+            const starSurplus = Math.max(0, (state.onHand.stars + starYield) - targetStars);
+            const mountainCrystalsCost = mountainsToSummon * CREATURES_DATA.mountain.crystalCost;
+
+            if (mountainsToSummon > 0 || targetStars > 0) {
+                let text = "";
+                if (targetStars > 0) {
+                    text += `Target: <strong>${targetStars} Stars</strong>. On-hand: <strong>${state.onHand.stars}</strong>. `;
+                    if (initialStarDeficit > 0) {
+                        text += `Deficit: <strong>${initialStarDeficit}</strong>. `;
+                    } else {
+                        text += `Covered by inventory. `;
+                    }
+                }
+                if (targetMountains > 0) {
+                    text += `Target Creature Requirement: <strong>${targetMountains} Mountain(s)</strong>. `;
+                }
+                if (mountainsToSummon > 0) {
+                    text += `<br>Summon <strong>${mountainsToSummon} Mountain(s)</strong> (drops +${drops.mountain} each) yielding <strong>+${starYield} Stars</strong>${starSurplus > 0 ? ` (Surplus: +${starSurplus})` : ''}.<br>Mountain summons require <strong>${mountainCrystalsCost} Crystals</strong>.`;
+                }
+                explanation.push(text);
             }
 
             // B. Crystal deficits -> Summon Demons
             const totalCrystalsNeeded = targetCrystals + mountainCrystalsCost;
             const initialCrystalDeficit = Math.max(0, totalCrystalsNeeded - state.onHand.crystals);
-            let demonsToSummon = 0;
-            let crystalSurplus = 0;
-            let demonFlamesCost = 0;
-            let demonOrbsCost = 0;
+            const demonsForCrystals = initialCrystalDeficit > 0 ? Math.ceil(initialCrystalDeficit / drops.demon) : 0;
+            const demonsToSummon = Math.max(targetDemons, demonsForCrystals);
+            const crystalYield = demonsToSummon * drops.demon;
+            const crystalSurplus = Math.max(0, (state.onHand.crystals + crystalYield) - totalCrystalsNeeded);
+            const demonFlamesCost = demonsToSummon * CREATURES_DATA.demon.flameCost;
+            const demonOrbsCost = demonsToSummon * CREATURES_DATA.demon.orbCost;
 
-            if (initialCrystalDeficit > 0) {
-                demonsToSummon = Math.ceil(initialCrystalDeficit / drops.demon);
-                const crystalYield = demonsToSummon * drops.demon;
-                crystalSurplus = crystalYield - initialCrystalDeficit;
-                demonFlamesCost = demonsToSummon * CREATURES_DATA.demon.flameCost;
-                demonOrbsCost = demonsToSummon * CREATURES_DATA.demon.orbCost;
-
-                explanation.push(`Need <strong>${totalCrystalsNeeded} Crystals</strong> (${targetCrystals} goals + ${mountainCrystalsCost} summons). On-hand: <strong>${state.onHand.crystals}</strong>. Deficit: <strong>${initialCrystalDeficit}</strong>.<br>
-                    Summon <strong>${demonsToSummon} Demon(s)</strong> (drops +${drops.demon} each) yielding <strong>+${crystalYield} Crystals</strong> (Surplus: +${crystalSurplus}).<br>
-                    Demon summons require <strong>${demonFlamesCost} Flames</strong> and <strong>${demonOrbsCost} Orbs</strong>.`);
-            } else if (totalCrystalsNeeded > 0) {
-                explanation.push(`Need <strong>${totalCrystalsNeeded} Crystals</strong> (${targetCrystals} goals + ${mountainCrystalsCost} summons). On-hand: <strong>${state.onHand.crystals}</strong>. Covered completely.`);
+            if (demonsToSummon > 0 || totalCrystalsNeeded > 0) {
+                let text = "";
+                if (totalCrystalsNeeded > 0) {
+                    text += `Need <strong>${totalCrystalsNeeded} Crystals</strong> (${targetCrystals} goals + ${mountainCrystalsCost} summons). On-hand: <strong>${state.onHand.crystals}</strong>. `;
+                    if (initialCrystalDeficit > 0) {
+                        text += `Deficit: <strong>${initialCrystalDeficit}</strong>. `;
+                    } else {
+                        text += `Covered by inventory. `;
+                    }
+                }
+                if (targetDemons > 0) {
+                    text += `Target Creature Requirement: <strong>${targetDemons} Demon(s)</strong>. `;
+                }
+                if (demonsToSummon > 0) {
+                    text += `<br>Summon <strong>${demonsToSummon} Demon(s)</strong> (drops +${drops.demon} each) yielding <strong>+${crystalYield} Crystals</strong>${crystalSurplus > 0 ? ` (Surplus: +${crystalSurplus})` : ''}.<br>Demon summons require <strong>${demonFlamesCost} Flames</strong> and <strong>${demonOrbsCost} Orbs</strong>.`;
+                }
+                explanation.push(text);
             }
 
             // C. Flame deficits -> Summon Netherlings
             const totalFlamesNeeded = targetFlames + demonFlamesCost;
             const initialFlameDeficit = Math.max(0, totalFlamesNeeded - state.onHand.flames);
-            let netherlingsToSummon = 0;
-            let flameSurplus = 0;
-            let netherlingOrbsCost = 0;
+            const netherlingsForFlames = initialFlameDeficit > 0 ? Math.ceil(initialFlameDeficit / drops.netherling) : 0;
+            const netherlingsToSummon = Math.max(targetNetherlings, netherlingsForFlames);
+            const flameYield = netherlingsToSummon * drops.netherling;
+            const flameSurplus = Math.max(0, (state.onHand.flames + flameYield) - totalFlamesNeeded);
+            const netherlingOrbsCost = netherlingsToSummon * CREATURES_DATA.netherling.orbCost;
 
-            if (initialFlameDeficit > 0) {
-                netherlingsToSummon = Math.ceil(initialFlameDeficit / drops.netherling);
-                const flameYield = netherlingsToSummon * drops.netherling;
-                flameSurplus = flameYield - initialFlameDeficit;
-                netherlingOrbsCost = netherlingsToSummon * CREATURES_DATA.netherling.orbCost;
-
-                explanation.push(`Need <strong>${totalFlamesNeeded} Flames</strong> (${targetFlames} goals + ${demonFlamesCost} summons). On-hand: <strong>${state.onHand.flames}</strong>. Deficit: <strong>${initialFlameDeficit}</strong>.<br>
-                    Summon <strong>${netherlingsToSummon} Netherling(s)</strong> (drops +${drops.netherling} each) yielding <strong>+${flameYield} Flames</strong> (Surplus: +${flameSurplus}).<br>
-                    Netherling summons require <strong>${netherlingOrbsCost} Orbs</strong>.`);
-            } else if (totalFlamesNeeded > 0) {
-                explanation.push(`Need <strong>${totalFlamesNeeded} Flames</strong> (${targetFlames} goals + ${demonFlamesCost} summons). On-hand: <strong>${state.onHand.flames}</strong>. Covered completely.`);
+            if (netherlingsToSummon > 0 || totalFlamesNeeded > 0) {
+                let text = "";
+                if (totalFlamesNeeded > 0) {
+                    text += `Need <strong>${totalFlamesNeeded} Flames</strong> (${targetFlames} goals + ${demonFlamesCost} summons). On-hand: <strong>${state.onHand.flames}</strong>. `;
+                    if (initialFlameDeficit > 0) {
+                        text += `Deficit: <strong>${initialFlameDeficit}</strong>. `;
+                    } else {
+                        text += `Covered by inventory. `;
+                    }
+                }
+                if (targetNetherlings > 0) {
+                    text += `Target Creature Requirement: <strong>${targetNetherlings} Netherling(s)</strong>. `;
+                }
+                if (netherlingsToSummon > 0) {
+                    text += `<br>Summon <strong>${netherlingsToSummon} Netherling(s)</strong> (drops +${drops.netherling} each) yielding <strong>+${flameYield} Flames</strong>${flameSurplus > 0 ? ` (Surplus: +${flameSurplus})` : ''}.<br>Netherling summons require <strong>${netherlingOrbsCost} Orbs</strong>.`;
+                }
+                explanation.push(text);
             }
 
             // D. Orb deficits
             const totalOrbsNeeded = targetOrbs + demonOrbsCost + netherlingOrbsCost;
             const initialOrbDeficit = Math.max(0, totalOrbsNeeded - state.onHand.orbs);
-            
+
             if (totalOrbsNeeded > 0) {
                 explanation.push(`Need <strong>${totalOrbsNeeded} Orbs</strong> (${targetOrbs} goals + ${demonOrbsCost + netherlingOrbsCost} summons). On-hand: <strong>${state.onHand.orbs}</strong>.<br>
                     ${initialOrbDeficit > 0 ? `Deficit: <strong>${initialOrbDeficit} Orbs</strong> required.` : `Covered completely.`}`);
@@ -1685,6 +2324,7 @@
 
             return {
                 baseCosts: { orbs: targetOrbs, flames: targetFlames, crystals: targetCrystals, stars: targetStars },
+                targetCreatures: { netherling: targetNetherlings, demon: targetDemons, mountain: targetMountains },
                 summons: { netherling: netherlingsToSummon, demon: demonsToSummon, mountain: mountainsToSummon },
                 deficits: { orbs: initialOrbDeficit, flames: initialFlameDeficit, crystals: initialCrystalDeficit, stars: initialStarDeficit },
                 totalNeeded: { orbs: totalOrbsNeeded, flames: totalFlamesNeeded, crystals: totalCrystalsNeeded, stars: targetStars },
@@ -1739,12 +2379,41 @@
             }
         }
 
+        // Initialize dynamic icon sources for transient and modal elements
+        function initIconSources() {
+            const iconMap = {
+                iconTransientOrb: ICONS.orb,
+                iconTransientFlame: ICONS.flame,
+                iconTransientCrystal: ICONS.crystal,
+                iconTransientStar: ICONS.star,
+                iconTransientNetherling: ICONS.netherling,
+                iconTransientDemon: ICONS.demon,
+                iconTransientMountain: ICONS.mountain,
+                iconModalOrb: ICONS.orb,
+                iconModalFlame: ICONS.flame,
+                iconModalCrystal: ICONS.crystal,
+                iconModalStar: ICONS.star,
+                iconModalNetherling: ICONS.netherling,
+                iconModalDemon: ICONS.demon,
+                iconModalMountain: ICONS.mountain
+            };
+            for (const [id, src] of Object.entries(iconMap)) {
+                const el = document.getElementById(id);
+                if (el) el.src = src;
+            }
+        }
+
         // Render Calculator calculations output
         function renderCalculatorSummary() {
             const container = document.getElementById("calculatorSummary");
             const results = calculateCosts();
 
-            const activeTargetsCount = Object.keys(state.selectedGoals).filter(k => state.selectedGoals[k] && !state.completedGoals[k]).length;
+            const allGoals = [...TARGETS_DATA, ...(state.customGoals || [])];
+            const activeTargetsCount = allGoals.filter(g => state.selectedGoals[g.id] && !state.completedGoals[g.id]).length
+                + ((state.transientGoal && state.transientGoal.active && (
+                    (state.transientGoal.cost && (state.transientGoal.cost.orbs || state.transientGoal.cost.flames || state.transientGoal.cost.crystals || state.transientGoal.cost.stars)) ||
+                    (state.transientGoal.creatures && (state.transientGoal.creatures.netherling || state.transientGoal.creatures.demon || state.transientGoal.creatures.mountain))
+                )) ? 1 : 0);
 
             const creatures = [
                 { key: 'netherling', label: 'Netherling', icon: ICONS.netherling, unit: 'Flames', color: 'var(--color-flame)', class: 'drop-card-netherling' },
@@ -1852,16 +2521,115 @@
             container.innerHTML = html;
         }
 
+        // Render Transient Goal Card
+        function renderTransientGoal() {
+            const tg = state.transientGoal;
+            const card = document.getElementById("transientGoalCard");
+            const header = document.getElementById("transientHeader");
+            const body = document.getElementById("transientBody");
+            const badge = document.getElementById("transientStatusBadge");
+            const toggleBtn = document.getElementById("transientToggleBtn");
+            const targetBtn = document.getElementById("transientTargetBtn");
+
+            if (!card) return;
+
+            if (tg.active) {
+                card.classList.add("active");
+                badge.classList.add("active");
+                badge.textContent = "Active";
+                targetBtn.classList.add("active");
+                targetBtn.setAttribute("aria-pressed", "true");
+            } else {
+                card.classList.remove("active");
+                badge.classList.remove("active");
+                badge.textContent = "Inactive";
+                targetBtn.classList.remove("active");
+                targetBtn.setAttribute("aria-pressed", "false");
+            }
+
+            if (tg.collapsed) {
+                body.style.display = "none";
+                header.setAttribute("aria-expanded", "false");
+                toggleBtn.innerHTML = "Expand <span>&#9660;</span>";
+            } else {
+                body.style.display = "block";
+                header.setAttribute("aria-expanded", "true");
+                toggleBtn.innerHTML = "Collapse <span>&#9650;</span>";
+            }
+
+            const setVal = (id, val) => {
+                const el = document.getElementById(id);
+                if (el && document.activeElement !== el) {
+                    el.value = val > 0 ? val : "";
+                }
+            };
+
+            setVal("transientOrbInput", tg.cost.orbs);
+            setVal("transientFlameInput", tg.cost.flames);
+            setVal("transientCrystalInput", tg.cost.crystals);
+            setVal("transientStarInput", tg.cost.stars);
+
+            setVal("transientNetherlingInput", tg.creatures.netherling);
+            setVal("transientDemonInput", tg.creatures.demon);
+            setVal("transientMountainInput", tg.creatures.mountain);
+        }
+
+        function toggleTransientCollapse() {
+            state.transientGoal.collapsed = !state.transientGoal.collapsed;
+            saveStateToLocalStorage();
+            renderTransientGoal();
+        }
+
+        function updateTransientValue(group, field, val) {
+            const num = Math.max(0, parseInt(val) || 0);
+            state.transientGoal[group][field] = num;
+            saveStateToLocalStorage();
+            renderTransientGoal();
+            renderCalculatorSummary();
+        }
+
+        function toggleTransientTarget() {
+            state.transientGoal.active = !state.transientGoal.active;
+            saveStateToLocalStorage();
+            renderTransientGoal();
+            renderCalculatorSummary();
+            showToast(state.transientGoal.active ? "Transient target activated." : "Transient target deactivated.");
+        }
+
+        function clearTransientGoal() {
+            state.transientGoal.cost = { orbs: 0, flames: 0, crystals: 0, stars: 0 };
+            state.transientGoal.creatures = { netherling: 0, demon: 0, mountain: 0 };
+            saveStateToLocalStorage();
+            renderTransientGoal();
+            renderCalculatorSummary();
+            showToast("Transient goal cleared.");
+        }
+
+        function saveTransientAsCustomGoal() {
+            const tg = state.transientGoal;
+            openCustomGoalModal(null, {
+                name: "",
+                description: "",
+                cost: { ...tg.cost },
+                creatures: { ...tg.creatures }
+            });
+        }
+
         // Render Goals Checklist Grid
         function renderGoalsList() {
             const container = document.getElementById("goalsListContainer");
             
-            const filtered = TARGETS_DATA.filter(goal => {
+            const allGoals = [...TARGETS_DATA, ...(state.customGoals || [])];
+
+            const filtered = allGoals.filter(goal => {
                 if (state.activeCategory !== "All" && goal.category !== state.activeCategory) {
                     return false;
                 }
-                if (state.searchQuery && !goal.name.toLowerCase().includes(state.searchQuery.toLowerCase())) {
-                    return false;
+                if (state.searchQuery) {
+                    const query = state.searchQuery.toLowerCase();
+                    const matchesName = goal.name.toLowerCase().includes(query);
+                    const matchesDesc = goal.description ? goal.description.toLowerCase().includes(query) : false;
+                    if (!matchesName && !matchesDesc) return false;
                 }
                 if (state.hideCompleted && state.completedGoals[goal.id]) {
                     return false;
@@ -1870,24 +2638,44 @@
             });
 
             if (filtered.length === 0) {
-                container.innerHTML = `
-                    <div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: var(--text-muted);">
-                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="opacity: 0.4; margin-bottom: 8px;"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-                        <p>No matching goals found.</p>
-                    </div>
-                `;
+                if (state.activeCategory === "Custom") {
+                    container.innerHTML = `
+                        <div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: var(--text-muted);">
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="opacity: 0.4; margin-bottom: 8px;"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></svg>
+                            <p style="margin-bottom: 12px;">No custom goals saved yet.</p>
+                            <button class="btn-action-custom" onclick="openCustomGoalModal()">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="vertical-align: middle;"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                                Create First Custom Goal
+                            </button>
+                        </div>
+                    `;
+                } else {
+                    container.innerHTML = `
+                        <div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: var(--text-muted);">
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="opacity: 0.4; margin-bottom: 8px;"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                            <p>No matching goals found.</p>
+                        </div>
+                    `;
+                }
                 return;
             }
 
             container.innerHTML = filtered.map(goal => {
                 const isCompleted = !!state.completedGoals[goal.id];
                 const isSelected = !!state.selectedGoals[goal.id];
+                const isCustom = goal.category === "Custom";
                 
                 let costsHtml = "";
-                if (goal.cost.orbs > 0) costsHtml += `<span class="goal-cost-badge cost-badge-orb"><img class="resource-icon" src="${ICONS.orb}"> ${goal.cost.orbs}</span>`;
-                if (goal.cost.flames > 0) costsHtml += `<span class="goal-cost-badge cost-badge-flame"><img class="resource-icon" src="${ICONS.flame}"> ${goal.cost.flames}</span>`;
-                if (goal.cost.crystals > 0) costsHtml += `<span class="goal-cost-badge cost-badge-crystal"><img class="resource-icon" src="${ICONS.crystal}"> ${goal.cost.crystals}</span>`;
-                if (goal.cost.stars > 0) costsHtml += `<span class="goal-cost-badge cost-badge-star"><img class="resource-icon" src="${ICONS.star}"> ${goal.cost.stars}</span>`;
+                if (goal.cost && goal.cost.orbs > 0) costsHtml += `<span class="goal-cost-badge cost-badge-orb"><img class="resource-icon" src="${ICONS.orb}"> ${goal.cost.orbs}</span>`;
+                if (goal.cost && goal.cost.flames > 0) costsHtml += `<span class="goal-cost-badge cost-badge-flame"><img class="resource-icon" src="${ICONS.flame}"> ${goal.cost.flames}</span>`;
+                if (goal.cost && goal.cost.crystals > 0) costsHtml += `<span class="goal-cost-badge cost-badge-crystal"><img class="resource-icon" src="${ICONS.crystal}"> ${goal.cost.crystals}</span>`;
+                if (goal.cost && goal.cost.stars > 0) costsHtml += `<span class="goal-cost-badge cost-badge-star"><img class="resource-icon" src="${ICONS.star}"> ${goal.cost.stars}</span>`;
+
+                if (isCustom && goal.creatures) {
+                    if (goal.creatures.netherling > 0) costsHtml += `<span class="goal-cost-badge cost-badge-creature" title="Netherlings required"><img class="resource-icon" src="${ICONS.netherling}"> ${goal.creatures.netherling}</span>`;
+                    if (goal.creatures.demon > 0) costsHtml += `<span class="goal-cost-badge cost-badge-creature" title="Demons required"><img class="resource-icon" src="${ICONS.demon}"> ${goal.creatures.demon}</span>`;
+                    if (goal.creatures.mountain > 0) costsHtml += `<span class="goal-cost-badge cost-badge-creature" title="Mountains required"><img class="resource-icon" src="${ICONS.mountain}"> ${goal.creatures.mountain}</span>`;
+                }
 
                 let levelBadge = "";
                 if (goal.id === "netherling_lvl_2") levelBadge = `<span class="level-badge">Netherling Lvl 2</span>`;
@@ -1895,6 +2683,20 @@
                 else if (goal.id === "nether_demon_lvl_2") levelBadge = `<span class="level-badge">Demon Lvl 2</span>`;
                 else if (goal.id === "nether_demon_lvl_3") levelBadge = `<span class="level-badge">Demon Lvl 3</span>`;
                 else if (goal.id === "mountain_lvl_2") levelBadge = `<span class="level-badge">Mountain Lvl 2</span>`;
+
+                let customActionsHtml = "";
+                if (isCustom) {
+                    customActionsHtml = `
+                        <div style="display: flex; gap: 4px; align-items: center;">
+                            <button class="goal-btn-edit" onclick="editCustomGoal('${goal.id}')" title="Edit custom goal" aria-label="Edit ${goal.name}">
+                                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                            </button>
+                            <button class="goal-btn-delete" onclick="deleteCustomGoal('${goal.id}')" title="Delete custom goal" aria-label="Delete ${goal.name}">
+                                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                            </button>
+                        </div>
+                    `;
+                }
 
                 return `
                     <div class="goal-card ${isCompleted ? 'completed' : ''}">
@@ -1908,26 +2710,159 @@
                             ${costsHtml || '<span style="font-size:0.65rem; color:gray;">Free/None</span>'}
                         </div>
                         <div class="goal-actions">
-                            <button class="goal-btn-target ${isSelected && !isCompleted ? 'active' : ''}" 
-                                onclick="toggleGoalSelected('${goal.id}')" ${isCompleted ? 'disabled' : ''}
-                                aria-label="Set ${goal.name} as target" aria-pressed="${isSelected && !isCompleted ? 'true' : 'false'}">
-                                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>
-                                Target
-                            </button>
-                            <button class="goal-btn-done" onclick="toggleGoalCompleted('${goal.id}')"
-                                aria-label="Mark ${goal.name} as achieved" aria-pressed="${isCompleted ? 'true' : 'false'}">
-                                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
-                                Achieved
-                            </button>
+                            <div style="display: flex; gap: 6px; align-items: center;">
+                                <button class="goal-btn-target ${isSelected && !isCompleted ? 'active' : ''}" 
+                                    onclick="toggleGoalSelected('${goal.id}')" ${isCompleted ? 'disabled' : ''}
+                                    aria-label="Set ${goal.name} as target" aria-pressed="${isSelected && !isCompleted ? 'true' : 'false'}">
+                                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>
+                                    Target
+                                </button>
+                                <button class="goal-btn-done" onclick="toggleGoalCompleted('${goal.id}')"
+                                    aria-label="Mark ${goal.name} as achieved" aria-pressed="${isCompleted ? 'true' : 'false'}">
+                                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                                    Achieved
+                                </button>
+                            </div>
+                            ${customActionsHtml}
                         </div>
                     </div>
                 `;
             }).join('');
         }
 
+        // Custom Goal Modal Dialog Handlers
+        function openCustomGoalModal(editId = null, prefillData = null) {
+            const modal = document.getElementById("customGoalModal");
+            const heading = document.getElementById("customGoalModalHeading");
+            const submitBtn = document.getElementById("customGoalSubmitBtn");
+            const editIdInput = document.getElementById("customGoalEditId");
+            
+            let initialData = {
+                name: "",
+                description: "",
+                cost: { orbs: 0, flames: 0, crystals: 0, stars: 0 },
+                creatures: { netherling: 0, demon: 0, mountain: 0 }
+            };
+
+            if (editId) {
+                const existing = (state.customGoals || []).find(g => g.id === editId);
+                if (existing) {
+                    initialData = existing;
+                    heading.textContent = "Edit Custom Goal";
+                    submitBtn.textContent = "Update Goal";
+                    editIdInput.value = editId;
+                }
+            } else if (prefillData) {
+                initialData = prefillData;
+                heading.textContent = "Save as Custom Goal";
+                submitBtn.textContent = "Save Goal";
+                editIdInput.value = "";
+            } else {
+                heading.textContent = "Add Custom Goal";
+                submitBtn.textContent = "Save Goal";
+                editIdInput.value = "";
+            }
+
+            document.getElementById("customGoalName").value = initialData.name || "";
+            document.getElementById("customGoalDesc").value = initialData.description || "";
+            
+            const setInput = (id, val) => {
+                const el = document.getElementById(id);
+                if (el) el.value = val > 0 ? val : "";
+            };
+
+            setInput("modalCostOrbs", initialData.cost?.orbs);
+            setInput("modalCostFlames", initialData.cost?.flames);
+            setInput("modalCostCrystals", initialData.cost?.crystals);
+            setInput("modalCostStars", initialData.cost?.stars);
+
+            setInput("modalCreatureNetherling", initialData.creatures?.netherling);
+            setInput("modalCreatureDemon", initialData.creatures?.demon);
+            setInput("modalCreatureMountain", initialData.creatures?.mountain);
+
+            if (modal.showModal) modal.showModal();
+            else modal.setAttribute("open", "");
+        }
+
+        function closeCustomGoalModal() {
+            const modal = document.getElementById("customGoalModal");
+            if (modal.close) modal.close();
+            else modal.removeAttribute("open");
+        }
+
+        function handleCustomGoalSubmit(event) {
+            event.preventDefault();
+            const editId = document.getElementById("customGoalEditId").value;
+            const name = document.getElementById("customGoalName").value.trim() || "Custom Goal";
+            const description = document.getElementById("customGoalDesc").value.trim();
+
+            const parseVal = id => Math.max(0, parseInt(document.getElementById(id).value) || 0);
+
+            const cost = {
+                orbs: parseVal("modalCostOrbs"),
+                flames: parseVal("modalCostFlames"),
+                crystals: parseVal("modalCostCrystals"),
+                stars: parseVal("modalCostStars")
+            };
+
+            const creatures = {
+                netherling: parseVal("modalCreatureNetherling"),
+                demon: parseVal("modalCreatureDemon"),
+                mountain: parseVal("modalCreatureMountain")
+            };
+
+            if (!state.customGoals) state.customGoals = [];
+
+            if (editId) {
+                const idx = state.customGoals.findIndex(g => g.id === editId);
+                if (idx !== -1) {
+                    state.customGoals[idx].name = name;
+                    state.customGoals[idx].description = description;
+                    state.customGoals[idx].cost = cost;
+                    state.customGoals[idx].creatures = creatures;
+                    showToast(`Updated custom goal "${name}"!`);
+                }
+            } else {
+                const newId = `custom_${Date.now()}_${Math.random().toString(36).substr(2, 4)}`;
+                const newGoal = {
+                    id: newId,
+                    name: name,
+                    description: description,
+                    category: "Custom",
+                    cost: cost,
+                    creatures: creatures
+                };
+                state.customGoals.push(newGoal);
+                state.selectedGoals[newId] = true; // Auto-target upon creation
+                showToast(`Created and targeted "${name}"!`);
+            }
+
+            saveStateToLocalStorage();
+            closeCustomGoalModal();
+            renderAll();
+        }
+
+        function editCustomGoal(id) {
+            openCustomGoalModal(id);
+        }
+
+        function deleteCustomGoal(id) {
+            const goal = (state.customGoals || []).find(g => g.id === id);
+            const name = goal ? goal.name : "this custom goal";
+            if (confirm(`Are you sure you want to delete "${name}"?`)) {
+                state.customGoals = (state.customGoals || []).filter(g => g.id !== id);
+                delete state.selectedGoals[id];
+                delete state.completedGoals[id];
+                saveStateToLocalStorage();
+                renderAll();
+                showToast(`Deleted "${name}".`);
+            }
+        }
+
         function renderAll() {
             renderInventory();
             renderUpgradesPanel();
+            renderTransientGoal();
             renderCalculatorSummary();
             renderGoalsList();
         }
@@ -2087,6 +3022,7 @@
 
         // --- 9. Initializer ---
         window.addEventListener("DOMContentLoaded", () => {
+            initIconSources();
             loadStateFromLocalStorage();
             
             // Set App Version in UI
@@ -2104,18 +3040,19 @@
 
             document.getElementById("hideCompletedCheck").checked = state.hideCompleted;
 
-            // Close dialog when clicking on the backdrop
-            const modal = document.getElementById("instructionsModal");
-            if (modal) {
-                modal.addEventListener("click", (event) => {
-                    const rect = modal.getBoundingClientRect();
-                    const isInDialog = (rect.top <= event.clientY && event.clientY <= rect.top + rect.height &&
-                                        rect.left <= event.clientX && event.clientX <= rect.left + rect.width);
-                    if (!isInDialog) {
-                        modal.close();
-                    }
-                });
-            }
+            // Close dialogs when clicking on the backdrop
+            [document.getElementById("instructionsModal"), document.getElementById("customGoalModal")].forEach(modal => {
+                if (modal) {
+                    modal.addEventListener("click", (event) => {
+                        const rect = modal.getBoundingClientRect();
+                        const isInDialog = (rect.top <= event.clientY && event.clientY <= rect.top + rect.height &&
+                                            rect.left <= event.clientX && event.clientX <= rect.left + rect.width);
+                        if (!isInDialog) {
+                            modal.close();
+                        }
+                    });
+                }
+            });
             
             renderAll();
         });

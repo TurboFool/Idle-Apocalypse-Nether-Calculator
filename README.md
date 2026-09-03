@@ -7,10 +7,13 @@ A premium, self-contained, and offline-ready companion tool for the mobile game 
 ## 🚀 Features
 
 - **Cascading Summon Engine**: Automatically computes how many of each creature you need to summon to cover resource costs, counting downstream requirements (e.g., how many Netherlings are needed to produce the Flames for Demon summons, and how many Demons are needed to produce the Crystals for Mountain summons).
+- **Custom Goals Engine**:
+  - **Quick Target (Transient Goal)**: Collapsible card for spur-of-the-moment calculations. Supports specifying custom resource pools (Orbs, Flames, Crystals, Stars) and/or creature summons (Netherlings, Demons, Mountains) with instant Target toggling, Clear, and "Save as Goal..." shortcut.
+  - **Saved Custom Goals**: Reusable custom targets categorized under the **Custom** tab. Create, target, achieve, edit, and delete custom goals with persistent local storage.
 - **Interactive Modifiers Card**: Supports custom inputs for your active **Nether Pie level** (0 to 3) and **Bounty upgrade** (+1 drop yield to all creatures) to adjust drop rates dynamically.
 - **Dynamic Creature Drop yields**: Displays current live creature drop numbers on a dedicated, glowing yields panel. The cards are styled with animations and color accents corresponding to their drops.
-- **Progress Checklist**: Easily select which scrolls, upgrades, or trades you are targeting. Mark them as **Achieved** to hide them from the checklist and dynamically update your permanent upgrades (like creature levels).
-- **Offline Persistence**: Saves your inventory numbers, target selections, modifications, and completed items directly in your browser's local storage (`localStorage`). No servers, no sign-ups.
+- **Progress Checklist**: Easily select which scrolls, upgrades, trades, or custom goals you are targeting. Mark them as **Achieved** to hide them from the checklist and dynamically update your permanent upgrades (like creature levels).
+- **Offline Persistence**: Saves your inventory numbers, target selections, custom goals, modifications, and completed items directly in your browser's local storage (`localStorage`). No servers, no sign-ups.
 - **Import / Export Backup**: Save your progress as a lightweight `.json` backup file so you can transfer your checklist state between mobile devices, tablets, and desktops.
 
 ---
@@ -23,12 +26,14 @@ A premium, self-contained, and offline-ready companion tool for the mobile game 
    Enter your current on-hand resources (**Orbs**, **Flames**, **Crystals**, **Stars**) in the inputs or use the quick increment buttons (+1, -1, etc.).
 3. **Set Upgrades**:
    Adjust your active Nether Pie level and toggle the Bounty check in the *Upgrades & Modifiers* card to reflect your current in-game status.
-4. **Target Goals**:
-   Go through the checklist in the right-hand panel and click **Target** on any items you want to acquire. You can filter by category (Creatures, Scrolls, DDD, Lesley) or search by name.
+4. **Target Goals & Custom Targets**:
+   - Go through the checklist in the right-hand panel and click **Target** on any items you want to acquire. Filter by category (Creatures, Scrolls, DDD, Lesley, Custom) or search by name.
+   - Use the **Quick Target** card to plan custom combinations of resources and creature summons on the fly.
+   - Click **+ Add Custom Goal** or **Save as Goal...** to create permanent reusable custom targets.
 5. **Summoning Recommendations**:
    The *Nether Requirements* panel will output exactly how many Netherlings, Demons, and Mountains you need to summon, along with a detailed step-by-step log of the calculation cascade.
 6. **Mark Achievements**:
-   When you purchase an upgrade in-game, click **Achieved** on the card. This hides the card and automatically updates your creature levels (updating their base drop rates for future calculations).
+   When you purchase an upgrade in-game or achieve a goal, click **Achieved** on the card. This hides the card and automatically updates your creature levels (updating their base drop rates for future calculations).
 
 ---
 

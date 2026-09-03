@@ -3,7 +3,14 @@ var state = {
     completedGoals: {},
     selectedGoals: { "scroll_plenty": true },
     pieLevel: 0,
-    bountyEnabled: false
+    bountyEnabled: false,
+    transientGoal: {
+        active: false,
+        collapsed: true,
+        cost: { orbs: 0, flames: 0, crystals: 0, stars: 0 },
+        creatures: { netherling: 0, demon: 0, mountain: 0 }
+    },
+    customGoals: []
 };
 
 var TARGETS_DATA = [
@@ -20,7 +27,7 @@ function getCreatureDrop(creatureKey) {
     var creature = CREATURES_DATA[creatureKey];
     var currentLevel = 1;
     var baseDrop = creature.baseDrops[currentLevel];
-    var pieBonus = state.pieLevel;
+    var pieBonus = state.pieLevel || 0;
     var bountyBonus = state.bountyEnabled ? 1 : 0;
     return baseDrop + pieBonus + bountyBonus;
 }
@@ -30,14 +37,53 @@ function calculateCosts() {
     var targetFlames = 0;
     var targetCrystals = 0;
     var targetStars = 0;
+    var targetNetherlings = 0;
+    var targetDemons = 0;
+    var targetMountains = 0;
 
+    // Standard goals
     for (var i = 0; i < TARGETS_DATA.length; i++) {
         var goal = TARGETS_DATA[i];
         if (state.selectedGoals[goal.id] && !state.completedGoals[goal.id]) {
-            targetOrbs += goal.cost.orbs;
-            targetFlames += goal.cost.flames;
-            targetCrystals += goal.cost.crystals;
-            targetStars += goal.cost.stars;
+            targetOrbs += goal.cost.orbs || 0;
+            targetFlames += goal.cost.flames || 0;
+            targetCrystals += goal.cost.crystals || 0;
+            targetStars += goal.cost.stars || 0;
+        }
+    }
+
+    // Saved custom goals
+    if (state.customGoals) {
+        for (var j = 0; j < state.customGoals.length; j++) {
+            var cg = state.customGoals[j];
+            if (state.selectedGoals[cg.id] && !state.completedGoals[cg.id]) {
+                if (cg.cost) {
+                    targetOrbs += cg.cost.orbs || 0;
+                    targetFlames += cg.cost.flames || 0;
+                    targetCrystals += cg.cost.crystals || 0;
+                    targetStars += cg.cost.stars || 0;
+                }
+                if (cg.creatures) {
+                    targetNetherlings += cg.creatures.netherling || 0;
+                    targetDemons += cg.creatures.demon || 0;
+                    targetMountains += cg.creatures.mountain || 0;
+                }
+            }
+        }
+    }
+
+    // Transient goal
+    if (state.transientGoal && state.transientGoal.active) {
+        if (state.transientGoal.cost) {
+            targetOrbs += state.transientGoal.cost.orbs || 0;
+            targetFlames += state.transientGoal.cost.flames || 0;
+            targetCrystals += state.transientGoal.cost.crystals || 0;
+            targetStars += state.transientGoal.cost.stars || 0;
+        }
+        if (state.transientGoal.creatures) {
+            targetNetherlings += state.transientGoal.creatures.netherling || 0;
+            targetDemons += state.transientGoal.creatures.demon || 0;
+            targetMountains += state.transientGoal.creatures.mountain || 0;
         }
     }
 
@@ -47,45 +93,103 @@ function calculateCosts() {
         mountain: getCreatureDrop("mountain")
     };
 
+    // A. Stars -> Mountains
     var initialStarDeficit = Math.max(0, targetStars - state.onHand.stars);
-    var mountainsToSummon = 0;
-    var mountainCrystalsCost = 0;
-    if (initialStarDeficit > 0) {
-        mountainsToSummon = Math.ceil(initialStarDeficit / drops.mountain);
-        mountainCrystalsCost = mountainsToSummon * CREATURES_DATA.mountain.crystalCost;
-    }
+    var mountainsForStars = initialStarDeficit > 0 ? Math.ceil(initialStarDeficit / drops.mountain) : 0;
+    var mountainsToSummon = Math.max(targetMountains, mountainsForStars);
+    var mountainCrystalsCost = mountainsToSummon * CREATURES_DATA.mountain.crystalCost;
 
+    // B. Crystals -> Demons
     var totalCrystalsNeeded = targetCrystals + mountainCrystalsCost;
     var initialCrystalDeficit = Math.max(0, totalCrystalsNeeded - state.onHand.crystals);
-    var demonsToSummon = 0;
-    var demonFlamesCost = 0;
-    var demonOrbsCost = 0;
-    if (initialCrystalDeficit > 0) {
-        demonsToSummon = Math.ceil(initialCrystalDeficit / drops.demon);
-        demonFlamesCost = demonsToSummon * CREATURES_DATA.demon.flameCost;
-        demonOrbsCost = demonsToSummon * CREATURES_DATA.demon.orbCost;
-    }
+    var demonsForCrystals = initialCrystalDeficit > 0 ? Math.ceil(initialCrystalDeficit / drops.demon) : 0;
+    var demonsToSummon = Math.max(targetDemons, demonsForCrystals);
+    var demonFlamesCost = demonsToSummon * CREATURES_DATA.demon.flameCost;
+    var demonOrbsCost = demonsToSummon * CREATURES_DATA.demon.orbCost;
 
+    // C. Flames -> Netherlings
     var totalFlamesNeeded = targetFlames + demonFlamesCost;
     var initialFlameDeficit = Math.max(0, totalFlamesNeeded - state.onHand.flames);
-    var netherlingsToSummon = 0;
-    var netherlingOrbsCost = 0;
-    if (initialFlameDeficit > 0) {
-        netherlingsToSummon = Math.ceil(initialFlameDeficit / drops.netherling);
-        netherlingOrbsCost = netherlingsToSummon * CREATURES_DATA.netherling.orbCost;
-    }
+    var netherlingsForFlames = initialFlameDeficit > 0 ? Math.ceil(initialFlameDeficit / drops.netherling) : 0;
+    var netherlingsToSummon = Math.max(targetNetherlings, netherlingsForFlames);
+    var netherlingOrbsCost = netherlingsToSummon * CREATURES_DATA.netherling.orbCost;
 
+    // D. Orbs
     var totalOrbsNeeded = targetOrbs + demonOrbsCost + netherlingOrbsCost;
     var initialOrbDeficit = Math.max(0, totalOrbsNeeded - state.onHand.orbs);
 
     return {
+        targetResources: { orbs: targetOrbs, flames: targetFlames, crystals: targetCrystals, stars: targetStars },
+        targetCreatures: { netherling: targetNetherlings, demon: targetDemons, mountain: targetMountains },
         summons: { netherling: netherlingsToSummon, demon: demonsToSummon, mountain: mountainsToSummon },
         deficits: { orbs: initialOrbDeficit, flames: initialFlameDeficit, crystals: initialCrystalDeficit, stars: initialStarDeficit }
     };
 }
 
-var results = calculateCosts();
-WScript.Echo("Netherlings: " + results.summons.netherling);
-WScript.Echo("Demons: " + results.summons.demon);
-WScript.Echo("Mountains: " + results.summons.mountain);
-WScript.Echo("Orb Deficit: " + results.deficits.orbs);
+function assert(condition, message) {
+    if (!condition) {
+        WScript.Echo("FAIL: " + message);
+        WScript.Quit(1);
+    } else {
+        WScript.Echo("PASS: " + message);
+    }
+}
+
+// Test 1: Original baseline Scroll of Plenty
+var res1 = calculateCosts();
+assert(res1.summons.netherling === 34, "Test 1: 34 Netherlings");
+assert(res1.summons.demon === 5, "Test 1: 5 Demons");
+assert(res1.summons.mountain === 0, "Test 1: 0 Mountains");
+assert(res1.deficits.orbs === 29, "Test 1: Orb deficit is 29");
+
+// Test 2: Custom pure creature goal (5 Mountains + 24 Netherlings) with empty inventory
+state.selectedGoals = {};
+state.onHand = { orbs: 0, flames: 0, crystals: 0, stars: 0 };
+state.transientGoal.active = true;
+state.transientGoal.creatures = { netherling: 24, demon: 0, mountain: 5 };
+var res2 = calculateCosts();
+assert(res2.summons.mountain === 5, "Test 2: 5 Mountains");
+assert(res2.summons.demon === 30, "Test 2: 30 Demons");
+assert(res2.summons.netherling === 100, "Test 2: 100 Netherlings (cascade covers 24 minimum)");
+assert(res2.deficits.orbs === 190, "Test 2: 190 Orbs required");
+
+// Test 3: Custom creature where minimum exceeds cascade (1 Mountain + 50 Netherlings)
+state.transientGoal.creatures = { netherling: 50, demon: 0, mountain: 1 };
+var res3 = calculateCosts();
+assert(res3.summons.mountain === 1, "Test 3: 1 Mountain");
+assert(res3.summons.demon === 6, "Test 3: 6 Demons");
+assert(res3.summons.netherling === 50, "Test 3: 50 Netherlings (minimum requested exceeds 20 cascade)");
+assert(res3.deficits.orbs === 68, "Test 3: 68 Orbs required");
+
+// Test 4: Combined creature & resource goal (5 Mountains + 10 Stars)
+state.transientGoal.creatures = { netherling: 0, demon: 0, mountain: 5 };
+state.transientGoal.cost = { orbs: 0, flames: 0, crystals: 0, stars: 10 };
+var res4 = calculateCosts();
+assert(res4.summons.mountain === 10, "Test 4: 10 Mountains to satisfy 10 stars");
+assert(res4.summons.demon === 60, "Test 4: 60 Demons");
+assert(res4.summons.netherling === 200, "Test 4: 200 Netherlings");
+assert(res4.deficits.orbs === 380, "Test 4: 380 Orbs required");
+
+// Test 5: Saved custom goals aggregation with Transient goal
+state.transientGoal.active = true;
+state.transientGoal.cost = { orbs: 10, flames: 0, crystals: 0, stars: 0 };
+state.transientGoal.creatures = { netherling: 5, demon: 1, mountain: 0 };
+state.customGoals = [
+    {
+        id: "custom_1",
+        name: "Goal 1",
+        cost: { orbs: 5, flames: 0, crystals: 0, stars: 0 },
+        creatures: { netherling: 10, demon: 2, mountain: 1 }
+    }
+];
+state.selectedGoals["custom_1"] = true;
+var res5 = calculateCosts();
+assert(res5.targetCreatures.mountain === 1, "Test 5: Target mountains is 1");
+assert(res5.targetCreatures.demon === 3, "Test 5: Target demons is 3");
+assert(res5.targetCreatures.netherling === 15, "Test 5: Target netherlings is 15");
+assert(res5.summons.mountain === 1, "Test 5: Mountain summons is 1");
+assert(res5.summons.demon === 6, "Test 5: Demon summons is 6");
+assert(res5.summons.netherling === 20, "Test 5: Netherling summons is 20");
+assert(res5.deficits.orbs === 53, "Test 5: Total orb deficit is 53");
+
+WScript.Echo("ALL TESTS PASSED SUCCESSFULLY!");

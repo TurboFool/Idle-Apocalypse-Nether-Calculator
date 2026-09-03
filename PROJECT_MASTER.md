@@ -65,18 +65,25 @@ Idle Apocalypse Nether Costs/
       pieLevel: 0,          // Nether Pie level (0-3)
       bountyEnabled: false, // Bounty upgrade (+1 drop)
       hideCompleted: false, // UI filter
-      activeCategory: "All",// Category tab filter
+      activeCategory: "All",// Category tab filter ("All", "Creatures", "Scrolls", "DDD", "Lesley", "Custom")
       searchQuery: "",      // Checklist search text
-      modifiersExpanded: true
+      modifiersExpanded: true,
+      transientGoal: {
+          active: false,
+          collapsed: true,  // Collapsed by default
+          cost: { orbs: 0, flames: 0, crystals: 0, stars: 0 },
+          creatures: { netherling: 0, demon: 0, mountain: 0 }
+      },
+      customGoals: []       // Reusable saved custom goals
   };
   ```
-- **Persistence Engine**: State is serialized to `localStorage` under key `idle_apoc_nether_costs_state_v2`.
+- **Persistence Engine**: State is serialized to `localStorage` under key `idle_apoc_nether_costs_state_v2`. Backward compatibility is maintained via `sanitizeAndMergeState(parsed)`.
 
 ---
 
 ## 🧮 3. Cascading Summon Math Algorithm
 
-The core engine `calculateCosts()` computes resource requirements using top-down deficit resolution:
+The core engine `calculateCosts()` computes resource requirements using top-down deficit resolution, factoring in both target resources and minimum creature summon requirements:
 
 ### 1. Dynamic Drop Rates Calculation
 For each creature type $c$:
@@ -89,22 +96,27 @@ $$\text{Drop Yield}(c) = \text{BaseDrop}(c, \text{Level}) + \text{PieLevel} + (\
 *Note: Creature levels automatically upgrade when the user marks their respective level goals as "Achieved" in the checklist.*
 
 ### 2. Top-Down Deficit & Summon Cascade
-1. **Target Goal Aggregation**: Sum `orbs`, `flames`, `crystals`, `stars` for all selected, uncompleted target goals.
+1. **Target Goal & Creature Aggregation**:
+   - Sum `orbs`, `flames`, `crystals`, `stars` across all selected standard goals, saved custom goals, and active transient goal.
+   - Sum minimum target creature requirements `targetNetherlings`, `targetDemons`, `targetMountains` across active targets.
 2. **Stars Deficit $\rightarrow$ Mountain Summons**:
    $$\text{Star Deficit} = \max(0, \text{Target Stars} - \text{OnHand Stars})$$
-   $$\text{Mountains Needed} = \lceil \text{Star Deficit} / \text{Mountain Yield} \rceil$$
-   $$\text{Additional Crystals Required} = \text{Mountains Needed} \times 12$$
+   $$\text{Mountains For Stars} = \lceil \text{Star Deficit} / \text{Mountain Yield} \rceil$$
+   $$\text{Mountains To Summon} = \max(\text{Target Mountains}, \text{Mountains For Stars})$$
+   $$\text{Additional Crystals Required} = \text{Mountains To Summon} \times 12$$
 3. **Crystals Deficit $\rightarrow$ Demon Summons**:
    $$\text{Total Crystals Needed} = \text{Target Crystals} + \text{Additional Crystals Required}$$
    $$\text{Crystal Deficit} = \max(0, \text{Total Crystals Needed} - \text{OnHand Crystals})$$
-   $$\text{Demons Needed} = \lceil \text{Crystal Deficit} / \text{Demon Yield} \rceil$$
-   $$\text{Additional Flames Required} = \text{Demons Needed} \times 10$$
-   $$\text{Additional Orbs Required (Demons)} = \text{Demons Needed} \times 3$$
+   $$\text{Demons For Crystals} = \lceil \text{Crystal Deficit} / \text{Demon Yield} \rceil$$
+   $$\text{Demons To Summon} = \max(\text{Target Demons}, \text{Demons For Crystals})$$
+   $$\text{Additional Flames Required} = \text{Demons To Summon} \times 10$$
+   $$\text{Additional Orbs Required (Demons)} = \text{Demons To Summon} \times 3$$
 4. **Flames Deficit $\rightarrow$ Netherling Summons**:
    $$\text{Total Flames Needed} = \text{Target Flames} + \text{Additional Flames Required}$$
    $$\text{Flame Deficit} = \max(0, \text{Total Flames Needed} - \text{OnHand Flames})$$
-   $$\text{Netherlings Needed} = \lceil \text{Flame Deficit} / \text{Netherling Yield} \rceil$$
-   $$\text{Additional Orbs Required (Netherlings)} = \text{Netherlings Needed} \times 1$$
+   $$\text{Netherlings For Flames} = \lceil \text{Flame Deficit} / \text{Netherling Yield} \rceil$$
+   $$\text{Netherlings To Summon} = \max(\text{Target Netherlings}, \text{Netherlings For Flames})$$
+   $$\text{Additional Orbs Required (Netherlings)} = \text{Netherlings To Summon} \times 1$$
 5. **Orbs Deficit**:
    $$\text{Total Orbs Needed} = \text{Target Orbs} + \text{Demon Orbs Cost} + \text{Netherling Orbs Cost}$$
    $$\text{Orb Deficit} = \max(0, \text{Total Orbs Needed} - \text{OnHand Orbs})$$
@@ -140,7 +152,11 @@ $$\text{Drop Yield}(c) = \text{BaseDrop}(c, \text{Level}) + \text{PieLevel} + (\
    - `-` (Undo): Refunds creature costs and deducts drop yields from on-hand inventory.
    - Dynamic `title` tooltips and descriptive `aria-label`s list exact costs and yields based on current modifier state.
    - `.creature-title-label` specifies `min-height: 2.4rem` and `<br>` after creature name to keep cards and buttons aligned across desktop and mobile screens.
-3. **Modern CSS & Accessibility (A11y)**:
+3. **Custom Goals & Controls**:
+   - **Quick Target (Transient Goal)**: Collapsible card above checklist for immediate calculations without saving. Features Target toggle, Clear button, and "Save as Goal..." shortcut.
+   - **Saved Custom Goals**: Reusable user-defined goals filtered under `"Custom"` category tab. Supports creating via "+ Add Custom Goal" button or saving transient inputs. Includes individual editing and deletion with confirmation.
+   - **Dual Cost & Creature Badges**: Goal cards display non-zero resource badges (Orbs, Flames, Crystals, Stars) and non-zero creature badges (Netherlings, Demons, Mountains).
+4. **Modern CSS & Accessibility (A11y)**:
    - **`color-scheme: dark`**: Informs UA inputs, native scrollbars, and browser UI of the dark fantasy theme.
    - **Standard Scrollbars**: `scrollbar-color: #2b1f3c #09070c;` and `scrollbar-width: thin;` with `@supports not (scrollbar-color: auto)` fallback for legacy WebKit.
    - **Typography Layout**: `text-wrap: balance;` on headings (`h1-h4`) and `text-wrap: pretty;` on instructional body copy.
@@ -155,13 +171,13 @@ $$\text{Drop Yield}(c) = \text{BaseDrop}(c, \text{Level}) + \text{PieLevel} + (\
 
 ### Versioning Format & Lifecycle
 Follow Semantic Versioning (`MAJOR.MINOR.PATCH`):
-- **Pre-Releases**: `vX.Y.Z-beta.N` (e.g., `v1.0.0-beta.2`) used on feature/dev iterations during testing phases.
-- **Production Releases**: Clean `vX.Y.Z` (e.g., `v1.0.0`) used for official, non-beta production releases merged to `main`.
+- **Pre-Releases**: `vX.Y.Z-beta.N` (e.g., `v1.1.0-beta.1`) used on feature/dev iterations during testing phases.
+- **Production Releases**: Clean `vX.Y.Z` (e.g., `v1.1.0`) used for official, non-beta production releases merged to `main`.
 
 ### Embedded Version Single Source of Truth
 The version string is declared in JavaScript at the top of the `<script>` tag in `nether_costs.html`:
 ```javascript
-const APP_VERSION = "v1.0.1";
+const APP_VERSION = "v1.1.0-beta.1";
 ```
 On page load (`DOMContentLoaded`), this value is assigned to the header element `<span id="app-version">`.
 
