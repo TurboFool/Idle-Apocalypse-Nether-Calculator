@@ -789,6 +789,163 @@
             margin-bottom: 0;
         }
 
+        /* Action Banners & Roadmap */
+        .action-banner {
+            border-radius: 8px;
+            padding: 12px 14px;
+            margin-bottom: 12px;
+            border: 1px solid transparent;
+            position: relative;
+        }
+
+        .action-banner.banner-warning {
+            background: rgba(239, 68, 68, 0.08);
+            border-color: rgba(239, 68, 68, 0.35);
+            box-shadow: 0 0 14px rgba(239, 68, 68, 0.15);
+        }
+
+        .action-banner.banner-success {
+            background: rgba(34, 197, 94, 0.08);
+            border-color: rgba(34, 197, 94, 0.35);
+            box-shadow: 0 0 14px rgba(34, 197, 94, 0.15);
+        }
+
+        .banner-header {
+            margin-bottom: 6px;
+        }
+
+        .banner-badge {
+            display: inline-block;
+            font-size: 0.72rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+
+        .badge-warning {
+            background: rgba(239, 68, 68, 0.2);
+            color: #f87171;
+            border: 1px solid rgba(239, 68, 68, 0.4);
+        }
+
+        .badge-success {
+            background: rgba(34, 197, 94, 0.2);
+            color: #4ade80;
+            border: 1px solid rgba(34, 197, 94, 0.4);
+        }
+
+        .banner-main-text {
+            font-size: 0.85rem;
+            color: #fff;
+            margin-bottom: 4px;
+            line-height: 1.35;
+        }
+
+        .banner-main-text strong {
+            color: #fff;
+            text-shadow: 0 0 6px rgba(255, 255, 255, 0.2);
+        }
+
+        .banner-sub-text {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            line-height: 1.3;
+        }
+
+        .action-roadmap {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .roadmap-step-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            background: rgba(13, 10, 18, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.15);
+            border-radius: 6px;
+            padding: 8px 10px;
+            transition: border-color 0.2s;
+        }
+
+        .roadmap-step-item:hover {
+            border-color: rgba(168, 85, 247, 0.35);
+        }
+
+        .roadmap-step-num {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: var(--accent-purple);
+            color: #fff;
+            font-size: 0.72rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 1px;
+            box-shadow: 0 0 6px rgba(168, 85, 247, 0.5);
+        }
+
+        .roadmap-step-content {
+            flex: 1;
+            line-height: 1.25;
+        }
+
+        .roadmap-step-title {
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 3px;
+        }
+
+        .roadmap-step-icon {
+            width: 16px;
+            height: 16px;
+            image-rendering: pixelated;
+        }
+
+        .roadmap-step-desc {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+        }
+
+        .roadmap-step-desc strong {
+            color: #fff;
+        }
+
+        .math-breakdown-wrapper {
+            margin-top: 10px;
+        }
+
+        .btn-toggle-math {
+            background: transparent;
+            border: none;
+            color: #a78bfa;
+            font-family: inherit;
+            font-size: 0.75rem;
+            font-weight: 700;
+            cursor: pointer;
+            padding: 4px 0;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            transition: color 0.2s;
+        }
+
+        .btn-toggle-math:hover {
+            color: #c084fc;
+            text-decoration: underline;
+        }
+
         /* Right Column Checklist Panel */
         .checklist-controls {
             display: flex;
@@ -2075,13 +2232,12 @@
         </div>
 
         <div class="instr-section">
-            <h4>6. Cascading Summon Math Engine</h4>
-            <p>Solves deficits from highest creature tier to lowest, ensuring your final inventory satisfies all requested resources while honoring creature summon targets:</p>
+            <h4>6. Action Plan, Roadmap &amp; Cascading Math</h4>
+            <p>The calculator evaluates your inventory and targets from highest creature tier to lowest, providing an actionable roadmap:</p>
             <ul style="padding-left: 18px;">
-                <li style="margin-bottom: 2px;">⭐ <strong>Stars</strong> deficit (or Mountain requirement) &rarr; Summons <strong>Mountains</strong> (costs Crystals).</li>
-                <li style="margin-bottom: 2px;">💎 <strong>Crystals</strong> deficit (incl. Mountain costs / Demon requirement) &rarr; Summons <strong>Demons</strong> (costs Flames &amp; Orbs).</li>
-                <li style="margin-bottom: 2px;">🔥 <strong>Flames</strong> deficit (incl. Demon costs / Netherling requirement) &rarr; Summons <strong>Netherlings</strong> (costs Orbs).</li>
-                <li style="margin-bottom: 2px;">🔮 <strong>Orbs</strong> deficit (goals + Demon &amp; Netherling summons) &rarr; Final Orbs needed.</li>
+                <li style="margin-bottom: 2px;"><strong>Action Status</strong>: Instantly highlights whether your goal is achievable or displays the exact remaining Nether Orbs you still need.</li>
+                <li style="margin-bottom: 2px;"><strong>Step-by-Step Roadmap</strong>: Outlines the sequential summon chain (Netherlings &rarr; Demons &rarr; Mountains &rarr; Claim Goals) to reach your targets.</li>
+                <li style="margin-bottom: 2px;"><strong>Detailed Math Breakdown</strong>: Expandable technical log explaining the exact arithmetic for each tier.</li>
             </ul>
         </div>
 
@@ -2103,7 +2259,7 @@
 
     <!-- JS Core Engine -->
     <script>
-        const APP_VERSION = "v1.1.1-beta.1";
+        const APP_VERSION = "v1.1.1-beta.2";
 
         // --- 1. Base64 Icons Database ---
         const ICONS = {
@@ -2214,7 +2370,8 @@
                 cost: { orbs: 0, flames: 0, crystals: 0, stars: 0 },
                 creatures: { netherling: 0, demon: 0, mountain: 0 }
             },
-            customGoals: []
+            customGoals: [],
+            showMathDetails: false
         };
 
         // --- 5. Application Persistence Engine ---
@@ -2236,6 +2393,7 @@
                 activeCategory: typeof parsed?.activeCategory === 'string' ? parsed.activeCategory : "All",
                 searchQuery: typeof parsed?.searchQuery === 'string' ? parsed.searchQuery : "",
                 modifiersExpanded: parsed?.modifiersExpanded !== undefined ? !!parsed.modifiersExpanded : true,
+                showMathDetails: !!parsed?.showMathDetails,
                 transientGoal: {
                     active: !!parsed?.transientGoal?.active,
                     collapsed: parsed?.transientGoal?.collapsed !== undefined ? !!parsed.transientGoal.collapsed : true,
@@ -2457,7 +2615,7 @@
                 if (targetStars > 0) {
                     text += `Target: <strong>${targetStars} Stars</strong>. On-hand: <strong>${state.onHand.stars}</strong>. `;
                     if (initialStarDeficit > 0) {
-                        text += `Deficit: <strong>${initialStarDeficit}</strong>. `;
+                        text += `Need <strong>${initialStarDeficit} more Stars</strong> from Mountain summons. `;
                     } else {
                         text += `Covered by inventory. `;
                     }
@@ -2486,7 +2644,7 @@
                 if (totalCrystalsNeeded > 0) {
                     text += `Need <strong>${totalCrystalsNeeded} Crystals</strong> (${targetCrystals} goals + ${mountainCrystalsCost} summons). On-hand: <strong>${state.onHand.crystals}</strong>. `;
                     if (initialCrystalDeficit > 0) {
-                        text += `Deficit: <strong>${initialCrystalDeficit}</strong>. `;
+                        text += `Need <strong>${initialCrystalDeficit} more Crystals</strong> from Demon summons. `;
                     } else {
                         text += `Covered by inventory. `;
                     }
@@ -2514,7 +2672,7 @@
                 if (totalFlamesNeeded > 0) {
                     text += `Need <strong>${totalFlamesNeeded} Flames</strong> (${targetFlames} goals + ${demonFlamesCost} summons). On-hand: <strong>${state.onHand.flames}</strong>. `;
                     if (initialFlameDeficit > 0) {
-                        text += `Deficit: <strong>${initialFlameDeficit}</strong>. `;
+                        text += `Need <strong>${initialFlameDeficit} more Flames</strong> from Netherling summons. `;
                     } else {
                         text += `Covered by inventory. `;
                     }
@@ -2534,7 +2692,47 @@
 
             if (totalOrbsNeeded > 0) {
                 explanation.push(`Need <strong>${totalOrbsNeeded} Orbs</strong> (${targetOrbs} goals + ${demonOrbsCost + netherlingOrbsCost} summons). On-hand: <strong>${state.onHand.orbs}</strong>.<br>
-                    ${initialOrbDeficit > 0 ? `Deficit: <strong>${initialOrbDeficit} Orbs</strong> required.` : `Covered completely.`}`);
+                    ${initialOrbDeficit > 0 ? `You still need <strong>${initialOrbDeficit} Nether Orbs</strong> to meet your goal(s).` : `Covered completely by inventory.`}`);
+            }
+
+            // Build chronological action roadmap steps
+            const roadmap = [];
+            let stepNum = 1;
+
+            if (netherlingsToSummon > 0) {
+                roadmap.push({
+                    step: stepNum++,
+                    title: `Summon ${netherlingsToSummon} Netherling${netherlingsToSummon > 1 ? 's' : ''}`,
+                    desc: `Costs <strong>${netherlingOrbsCost} Orbs</strong> &rarr; Yields <strong>+${flameYield} Flames</strong>${flameSurplus > 0 ? ` (+${flameSurplus} surplus)` : ''}.`,
+                    icon: ICONS.netherling
+                });
+            }
+
+            if (demonsToSummon > 0) {
+                roadmap.push({
+                    step: stepNum++,
+                    title: `Summon ${demonsToSummon} Nether Demon${demonsToSummon > 1 ? 's' : ''}`,
+                    desc: `Costs <strong>${demonFlamesCost} Flames</strong> &amp; <strong>${demonOrbsCost} Orbs</strong> &rarr; Yields <strong>+${crystalYield} Crystals</strong>${crystalSurplus > 0 ? ` (+${crystalSurplus} surplus)` : ''}.`,
+                    icon: ICONS.demon
+                });
+            }
+
+            if (mountainsToSummon > 0) {
+                roadmap.push({
+                    step: stepNum++,
+                    title: `Summon ${mountainsToSummon} Nether Mountain${mountainsToSummon > 1 ? 's' : ''}`,
+                    desc: `Costs <strong>${mountainCrystalsCost} Crystals</strong> &rarr; Yields <strong>+${starYield} Stars</strong>${starSurplus > 0 ? ` (+${starSurplus} surplus)` : ''}.`,
+                    icon: ICONS.mountain
+                });
+            }
+
+            if (targetOrbs > 0 || targetFlames > 0 || targetCrystals > 0 || targetStars > 0 || targetNetherlings > 0 || targetDemons > 0 || targetMountains > 0) {
+                roadmap.push({
+                    step: stepNum++,
+                    title: `Claim Goal(s)`,
+                    desc: `You will have all required materials to complete your targeted checklist item(s).`,
+                    icon: null
+                });
             }
 
             return {
@@ -2543,6 +2741,7 @@
                 summons: { netherling: netherlingsToSummon, demon: demonsToSummon, mountain: mountainsToSummon },
                 deficits: { orbs: initialOrbDeficit, flames: initialFlameDeficit, crystals: initialCrystalDeficit, stars: initialStarDeficit },
                 totalNeeded: { orbs: totalOrbsNeeded, flames: totalFlamesNeeded, crystals: totalCrystalsNeeded, stars: targetStars },
+                roadmap,
                 explanation
             };
         }
@@ -2751,7 +2950,7 @@
                     <!-- Deficits / Resource Grid -->
                     <div class="results-section-title" style="margin-top: 16px;">
                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11.5 21a9.5 9.5 0 1 0 0-19 9.5 9.5 0 0 0 0 19z"/><path d="M12.5 7v6h4"/></svg>
-                        Additional Resource Deficit
+                        Additional resources needed for goal(s):
                     </div>
                     <div class="deficits-grid">
                         <div class="deficit-item ${results.deficits.orbs > 0 ? 'deficit-active def-orb' : ''}">
@@ -2772,18 +2971,101 @@
                         </div>
                     </div>
 
-                    <!-- Cascade Math Log -->
-                    <div class="results-section-title">
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
-                        Cascading Calculation Log
+                    <!-- Action Plan & Next Steps -->
+                    <div class="results-section-title" style="margin-top: 16px;">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+                        Action Plan &amp; Next Steps
                     </div>
-                    <div class="explanation-box">
-                        ${results.explanation.map(step => `<div class="explanation-step">${step}</div>`).join('')}
-                    </div>
+                    ${(() => {
+                        let actionPlanHtml = "";
+                        const totalSummons = (results.summons.netherling || 0) + (results.summons.demon || 0) + (results.summons.mountain || 0);
+
+                        if (results.deficits.orbs > 0) {
+                            actionPlanHtml += `
+                                <div class="action-banner banner-warning">
+                                    <div class="banner-header">
+                                        <span class="banner-badge badge-warning">&#9888; Goal Not Yet Reachable</span>
+                                    </div>
+                                    <p class="banner-main-text">You still need <strong>${results.deficits.orbs} Nether Orb${results.deficits.orbs > 1 ? 's' : ''}</strong> to meet your goal(s).</p>
+                                    <p class="banner-sub-text">Collecting ${results.deficits.orbs} more Orb${results.deficits.orbs > 1 ? 's' : ''} will provide enough materials to complete all required creature summons.</p>
+                                </div>
+                            `;
+                        } else {
+                            if (totalSummons > 0) {
+                                actionPlanHtml += `
+                                    <div class="action-banner banner-success">
+                                        <div class="banner-header">
+                                            <span class="banner-badge badge-success">&#10004; Goal Achievable!</span>
+                                        </div>
+                                        <p class="banner-main-text">You have enough resources on hand to achieve your target(s)!</p>
+                                        <p class="banner-sub-text">Follow the step-by-step roadmap below to summon creatures in sequence and reach your goal.</p>
+                                    </div>
+                                `;
+                            } else {
+                                actionPlanHtml += `
+                                    <div class="action-banner banner-success">
+                                        <div class="banner-header">
+                                            <span class="banner-badge badge-success">&#10004; Goal Ready to Claim!</span>
+                                        </div>
+                                        <p class="banner-main-text">You already have all required resources in your inventory.</p>
+                                        <p class="banner-sub-text">No creature summons are needed to complete your targeted items.</p>
+                                    </div>
+                                `;
+                            }
+                        }
+
+                        if (results.roadmap && results.roadmap.length > 0) {
+                            actionPlanHtml += `
+                                <div class="action-roadmap">
+                                    ${results.roadmap.map(item => `
+                                        <div class="roadmap-step-item">
+                                            <div class="roadmap-step-num">${item.step}</div>
+                                            <div class="roadmap-step-content">
+                                                <div class="roadmap-step-title">
+                                                    ${item.icon ? `<img src="${item.icon}" class="roadmap-step-icon" alt="">` : ''}
+                                                    <span>${item.title}</span>
+                                                </div>
+                                                <div class="roadmap-step-desc">${item.desc}</div>
+                                            </div>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            `;
+                        }
+
+                        actionPlanHtml += `
+                            <div class="math-breakdown-wrapper">
+                                <button type="button" class="btn-toggle-math" id="btnToggleMathDetails" onclick="toggleMathDetails()">
+                                    ${state.showMathDetails ? 'Hide Detailed Math Breakdown <span id="mathToggleArrow">&#9650;</span>' : 'Show Detailed Math Breakdown <span id="mathToggleArrow">&#9660;</span>'}
+                                </button>
+                                <div class="explanation-box" id="mathDetailsContainer" style="display: ${state.showMathDetails ? 'block' : 'none'}; margin-top: 8px;">
+                                    ${results.explanation.map(step => `<div class="explanation-step">${step}</div>`).join('')}
+                                </div>
+                            </div>
+                        `;
+
+                        return actionPlanHtml;
+                    })()}
                 `;
             }
 
             container.innerHTML = html;
+        }
+
+        function toggleMathDetails() {
+            state.showMathDetails = !state.showMathDetails;
+            saveStateToLocalStorage();
+            const el = document.getElementById("mathDetailsContainer");
+            const btn = document.getElementById("btnToggleMathDetails");
+            if (el && btn) {
+                if (state.showMathDetails) {
+                    el.style.display = "block";
+                    btn.innerHTML = `Hide Detailed Math Breakdown <span id="mathToggleArrow">&#9650;</span>`;
+                } else {
+                    el.style.display = "none";
+                    btn.innerHTML = `Show Detailed Math Breakdown <span id="mathToggleArrow">&#9660;</span>`;
+                }
+            }
         }
 
         // Render Transient Goal Card

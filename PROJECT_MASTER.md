@@ -165,12 +165,20 @@ $$\text{Drop Yield}(c) = \text{BaseDrop}(c, \text{Level}) + \text{PieLevel} + (\
    - **Bidirectional Goal Synchronization**:
      - Adjusting levels in the panel automatically marks prerequisite checklist goals (`netherling_lvl_1`, `netherling_lvl_2`, `netherling_lvl_3`, etc.) as Achieved and clears active targets on them. Lowering levels unachieves higher tiers.
      - Conversely, checking/unchecking goals in the checklist automatically reflects on the segmented pill selectors in real time.
-4. **Custom Goals & Controls**:
+4. **Action Plan, Sequential Roadmap & Deficits Summary**:
+   - **Renamed Deficits Header**: Labeled `Additional resources needed for goal(s):` displaying four real-time deficit counters.
+   - **Prominent Status Banners**:
+     - **Goal Not Yet Reachable** (`deficits.orbs > 0`): High-visibility warning banner stating: *"You still need X Nether Orbs to meet your goal(s)."* with an encouraging note on collecting the required Orbs to fuel the summon chain.
+     - **Goal Achievable!** (`deficits.orbs === 0` with summons needed): High-visibility success banner indicating all summons can be safely performed.
+     - **Goal Ready to Claim!** (`deficits.orbs === 0` with 0 summons needed): High-visibility success banner stating resources are already completely covered by on-hand inventory.
+   - **Chronological Action Roadmap**: Numbered sequential steps guiding the player from lowest tier to highest tier (Step 1: Netherlings $\rightarrow$ Step 2: Demons $\rightarrow$ Step 3: Mountains $\rightarrow$ Final Step: Claim Goal).
+   - **Collapsible Detailed Math Breakdown**: Text toggle button (`Show/Hide Detailed Math Breakdown`) revealing step-by-step arithmetic rewritten in natural human-friendly language without dry "Deficit:" labels. Remembers expanded/collapsed preference across sessions in `localStorage`.
+5. **Custom Goals & Controls**:
    - **Quick Target**: Collapsible card above checklist for immediate calculations without saving. Features Target toggle, Clear button, and "Save as Goal..." shortcut (which cleanly untargets and clears Quick Target to prevent double-counting).
    - **Saved Custom Goals**: Reusable user-defined goals filtered under `"Custom"` category tab. Supports creating via "+ Add Custom Goal" button or saving transient inputs. Includes individual editing and deletion with confirmation.
    - **Dual Cost & Creature Badges**: Goal cards display non-zero resource badges (Orbs, Flames, Crystals, Stars) and non-zero creature badges (Netherlings, Demons, Mountains).
    - **Responsive Search & Filter Toolbar**: Full-width search input with wrapped `.search-actions` ("+ Add Custom Goal" and "Hide Completed" side-by-side) on mobile viewports (<600px) with `white-space: nowrap;` to prevent layout overflow.
-5. **Modern CSS & Accessibility (A11y)**:
+6. **Modern CSS & Accessibility (A11y)**:
    - **`color-scheme: dark`**: Informs UA inputs, native scrollbars, and browser UI of the dark fantasy theme.
    - **Standard Scrollbars**: `scrollbar-color: #2b1f3c #09070c;` and `scrollbar-width: thin;` with `@supports not (scrollbar-color: auto)` fallback for legacy WebKit.
    - **Typography Layout**: `text-wrap: balance;` on headings (`h1-h4`) and `text-wrap: pretty;` on instructional body copy.
@@ -185,13 +193,13 @@ $$\text{Drop Yield}(c) = \text{BaseDrop}(c, \text{Level}) + \text{PieLevel} + (\
 
 ### Versioning Format & Lifecycle
 Follow Semantic Versioning (`MAJOR.MINOR.PATCH`):
-- **Pre-Releases**: `vX.Y.Z-beta.N` (e.g., `v1.1.1-beta.1`) used on feature/dev iterations during testing phases.
+- **Pre-Releases**: `vX.Y.Z-beta.N` (e.g., `v1.1.1-beta.2`) used on feature/dev iterations during testing phases.
 - **Production Releases**: Clean `vX.Y.Z` (e.g., `v1.1.0`) used for official, non-beta production releases merged to `main`.
 
 ### Embedded Version Single Source of Truth
 The version string is declared in JavaScript at the top of the `<script>` tag in `nether_costs.html`:
 ```javascript
-const APP_VERSION = "v1.1.1-beta.1";
+const APP_VERSION = "v1.1.1-beta.2";
 ```
 On page load (`DOMContentLoaded`), this value is assigned to the header element `<span id="app-version">`.
 

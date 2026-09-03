@@ -1,4 +1,4 @@
-const CACHE_NAME = 'nether-calc-cache-v1.1.1-beta.1';
+const CACHE_NAME = 'nether-calc-cache-v1.1.1-beta.2';
 const ASSETS_TO_CACHE = [
   './nether_costs.html',
   './nether_costs',
