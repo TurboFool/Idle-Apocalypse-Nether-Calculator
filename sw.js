@@ -1,4 +1,4 @@
-const CACHE_NAME = 'nether-calc-cache-v3';
+const CACHE_NAME = 'nether-calc-cache-v1.1.0';
 const ASSETS_TO_CACHE = [
   './nether_costs.html',
   './nether_costs',
@@ -63,7 +63,18 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// Fetch Event: Serve from cache first, fallback to network and dynamic caching
+// Helper to check multiple cache keys sequentially
+async function matchCacheKeys(keys) {
+  for (const key of keys) {
+    const response = await caches.match(key);
+    if (response) return response;
+  }
+  return null;
+}
+
+// Fetch Event:
+// - Navigation/HTML requests: Network-First (ensures immediate updates, falls back to cache offline)
+// - Static assets (images, fonts, manifest): Cache-First (fast performance, falls back to network)
 self.addEventListener('fetch', (event) => {
   // Only handle GET requests
   if (event.request.method !== 'GET') return;
@@ -89,6 +100,33 @@ self.addEventListener('fetch', (event) => {
     ];
   }
 
+  const isNavigation = event.request.mode === 'navigate' ||
+    url.pathname.endsWith('/nether_costs') ||
+    url.pathname.endsWith('/nether_costs/') ||
+    url.pathname.endsWith('/nether_costs.html') ||
+    url.pathname === '/';
+
+  if (isNavigation) {
+    // Network-First for HTML documents: try fresh copy, update cache, fallback to cache if offline
+    event.respondWith(
+      fetch(event.request)
+        .then((networkResponse) => {
+          if (networkResponse && networkResponse.status === 200) {
+            const responseToCache = networkResponse.clone();
+            caches.open(CACHE_NAME).then((cache) => {
+              cache.put(event.request, responseToCache).catch(err => {
+                console.warn('[Service Worker] Navigation cache put failed:', err);
+              });
+            });
+          }
+          return networkResponse;
+        })
+        .catch(() => matchCacheKeys(cacheKeys))
+    );
+    return;
+  }
+
+  // Cache-First for static assets
   event.respondWith(
     matchCacheKeys(cacheKeys).then((cachedResponse) => {
       if (cachedResponse) {
@@ -110,12 +148,3 @@ self.addEventListener('fetch', (event) => {
     })
   );
 });
-
-// Helper to check multiple cache keys sequentially
-async function matchCacheKeys(keys) {
-  for (const key of keys) {
-    const response = await caches.match(key);
-    if (response) return response;
-  }
-  return null;
-}

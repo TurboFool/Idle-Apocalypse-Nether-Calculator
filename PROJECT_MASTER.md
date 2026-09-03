@@ -37,6 +37,8 @@ Idle Apocalypse Nether Costs/
 ├── assets/                   # Source WebP icons for game items
 │   ├── orb.webp
 │   ├── flame.webp
+├── manifest.json             # PWA web app manifest
+├── sw.js                     # PWA Service Worker (Network-First navigation, Cache-First assets)
 │   ├── crystal.webp
 │   ├── star.webp
 │   ├── netherling.webp
@@ -78,6 +80,11 @@ Idle Apocalypse Nether Costs/
   };
   ```
 - **Persistence Engine**: State is serialized to `localStorage` under key `idle_apoc_nether_costs_state_v2`. Backward compatibility is maintained via `sanitizeAndMergeState(parsed)`.
+- **PWA & Service Worker Caching Architecture (`sw.js`)**:
+  - **Navigation / HTML Documents (`Network-First`)**: Fetches fresh HTML over network to ensure newly deployed releases are applied immediately on app launch or refresh, caching the response and falling back to cache when offline.
+  - **Static Assets (`Cache-First`)**: Embedded icons, manifest, and font assets are served instantly from cache, falling back to network.
+  - **Liveness & Auto-Update**: `reg.update()` is called on every page load to detect `sw.js` changes immediately. When a new service worker installs, `skipWaiting()` and `clients.claim()` activate it, and `controllerchange` automatically reloads the page to present the new version.
+  - **Cache Versioning**: `CACHE_NAME` in `sw.js` matches the current release (`nether-calc-cache-vX.Y.Z`).
 
 ---
 
