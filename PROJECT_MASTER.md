@@ -79,8 +79,11 @@ Idle Apocalypse Nether Costs/
       transientGoal: {
           active: false,
           collapsed: true,  // Collapsed by default
+          trackProgress: true, // Live creature summon tracking
+          isComplementary: false, // Creature drops are surplus byproduct
           cost: { orbs: 0, flames: 0, crystals: 0, stars: 0 },
-          creatures: { netherling: 0, demon: 0, mountain: 0 }
+          creatures: { netherling: 0, demon: 0, mountain: 0 },
+          progress: { netherling: 0, demon: 0, mountain: 0 }
       },
       customGoals: []       // Reusable saved custom goals with progress tracking & complementary settings
   };
@@ -195,10 +198,14 @@ $$\text{Drop Yield}(c) = \text{BaseDrop}(c, \text{Level}) + \text{PieLevel} + (\
    - **Collapsible Detailed Math Breakdown**: Text toggle button (`Show/Hide Detailed Math Breakdown`) revealing step-by-step arithmetic rewritten in natural human-friendly language without dry "Deficit:" labels. Remembers expanded/collapsed preference across sessions in `localStorage`.
 7. **Custom Goals & Controls**:
    - **Quick Target**: Collapsible card above checklist for immediate calculations without saving. Features Target toggle, Clear button, and "Save as Goal..." shortcut (which cleanly untargets and clears Quick Target to prevent double-counting).
+     - **Track Summon Progress**: When checked, summoning creatures increments Quick Target progress in real-time, reducing remaining deficits, displaying interactive progress bars with `[-]` / `[+]` steppers on the card, and triggering completion confirmation upon the final summon.
+     - **Complementary Goal Option**: Checkbox to designate Quick Target as complementary (surplus drops not consumed), which transfers automatically when clicking "Save as Goal...".
+     - **Badges**: Displays `[Tracking]` and `[Surplus]` indicators in the card header when enabled.
    - **Saved Custom Goals**: Reusable user-defined goals filtered under `"Custom"` category tab. Supports creating via "+ Add Custom Goal" button or saving transient inputs. Includes individual editing and deletion with confirmation.
    - **Modal Form Layout**: Options checkboxes styled with `.modal-checkbox-row` (`white-space: normal; align-items: flex-start;`) and `.modal-dialog` with `overflow-x: hidden;` preventing text clipping and horizontal scrollbars.
    - **Dual Cost & Creature Badges**: Goal cards display non-zero resource badges (Orbs, Flames, Crystals, Stars) and non-zero creature badges (Netherlings, Demons, Mountains).
-   - **Responsive Search & Filter Toolbar**: Full-width search input with wrapped `.search-actions` ("+ Add Custom Goal", "Hide Completed", and "Auto-deduct on achieve" side-by-side).
+   - **Mobile-Responsive Checklist Toolbar**: Full-width search input on mobile viewports, full-width `+ Add Custom Goal` button, and wrapped `.search-checkboxes` container (`flex-wrap: wrap; white-space: normal;`) allowing "Hide Completed" and "Auto-deduct on achieve" to fit any screen size (from 320px up) without horizontal overflow.
+   - **Mobile Layout Hardening**: Header toolbar wraps gracefully, creature grids adapt down to narrow phone displays without blowout, and notifications constrain to viewport bounds.
 8. **Modern CSS & Accessibility (A11y)**:
    - **`color-scheme: dark`**: Informs UA inputs, native scrollbars, and browser UI of the dark fantasy theme.
    - **Standard Scrollbars**: `scrollbar-color: #2b1f3c #09070c;` and `scrollbar-width: thin;` with `@supports not (scrollbar-color: auto)` fallback for legacy WebKit.

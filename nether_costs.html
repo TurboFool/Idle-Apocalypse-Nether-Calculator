@@ -178,6 +178,7 @@
             display: flex;
             gap: 8px;
             align-items: center;
+            flex-wrap: wrap;
         }
 
         .btn {
@@ -1046,12 +1047,21 @@
             display: flex;
             gap: 8px;
             align-items: center;
+            flex-wrap: wrap;
         }
 
         .search-actions {
             display: flex;
-            gap: 8px;
+            gap: 12px;
             align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .search-checkboxes {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
         }
 
         .search-input {
@@ -1385,7 +1395,7 @@
             .search-row {
                 flex-direction: column;
                 align-items: stretch;
-                gap: 8px;
+                gap: 10px;
             }
             .search-input {
                 width: 100%;
@@ -1393,15 +1403,40 @@
             }
             .search-actions {
                 display: flex;
+                flex-direction: column;
+                gap: 8px;
+                width: 100%;
+            }
+            .search-actions .btn-action-custom {
+                width: 100%;
+                justify-content: center;
+                padding: 8px 12px;
+                font-size: 0.78rem;
+            }
+            .search-checkboxes {
+                display: flex;
                 justify-content: space-between;
                 align-items: center;
+                gap: 8px 12px;
                 width: 100%;
+                flex-wrap: wrap;
+            }
+            .search-checkboxes .checkbox-container {
+                white-space: normal;
+                font-size: 0.72rem;
+                line-height: 1.3;
+                flex: 1 1 120px;
             }
             .transient-inputs-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
             .transient-creatures-grid {
-                grid-template-columns: repeat(3, 1fr);
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
+        }
+        @media (max-width: 400px) {
+            .transient-creatures-grid {
+                grid-template-columns: repeat(auto-fit, minmax(85px, 1fr));
             }
         }
         .transient-input-item {
@@ -1488,6 +1523,22 @@
             background: rgba(139, 92, 246, 0.3);
             color: #fff;
             border-color: #a78bfa;
+        }
+
+        .transient-options-row {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-top: 10px;
+            padding-top: 8px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .transient-options-row .checkbox-container {
+            font-size: 0.72rem;
+            white-space: normal;
+            line-height: 1.3;
+            flex: 1 1 140px;
         }
 
         /* Custom Goal Card Badges & Actions */
@@ -1811,6 +1862,9 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            max-width: calc(100vw - 32px);
+            max-width: calc(100dvw - 32px);
+            box-sizing: border-box;
         }
 
         .toast.visible {
@@ -1844,6 +1898,25 @@
 
         /* Mobile specific enhancements for readability and finger-friendly tap targets */
         @media (max-width: 480px) {
+            .actions-toolbar {
+                width: 100%;
+                justify-content: flex-start;
+                gap: 6px;
+            }
+            .actions-toolbar .btn {
+                padding: 6px 10px;
+                font-size: 0.75rem;
+                flex: 1 1 auto;
+                justify-content: center;
+            }
+            .toast {
+                left: 16px;
+                right: 16px;
+                bottom: 16px;
+                justify-content: center;
+                text-align: center;
+                padding: 10px 14px;
+            }
             .goal-btn-target, .goal-btn-done {
                 padding: 10px 16px;
                 font-size: 0.8rem;
@@ -2227,6 +2300,7 @@
                                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
                                 Quick Target
                             </span>
+                            <span id="transientBadges"></span>
                             <span class="transient-status-badge" id="transientStatusBadge">Inactive</span>
                         </div>
                         <button class="transient-toggle-btn" id="transientToggleBtn" type="button" aria-label="Toggle Quick Target panel">
@@ -2272,6 +2346,23 @@
                                 </div>
                             </div>
                         </div>
+                        <!-- Progress Tracking Bars & Steppers (when tracking is enabled) -->
+                        <div class="goal-progress-section" id="transientProgressSection" style="display: none; margin-top: 10px;">
+                            <!-- Dynamically generated progress rows -->
+                        </div>
+                        <!-- Quick Target Options: Track Summon Progress & Complementary -->
+                        <div class="transient-options-row" id="transientOptionsRow">
+                            <label class="checkbox-container" title="Automatically track creature summons in real time and reduce remaining deficits">
+                                <input type="checkbox" id="transientTrackProgress" onchange="toggleTransientTrackProgress(this.checked)" checked>
+                                <span class="checkbox-custom"></span>
+                                <span>Track Summon Progress</span>
+                            </label>
+                            <label class="checkbox-container" title="Creature drops are surplus byproduct and not consumed upon completion">
+                                <input type="checkbox" id="transientComplementary" onchange="toggleTransientComplementary(this.checked)">
+                                <span class="checkbox-custom"></span>
+                                <span>Complementary Goal</span>
+                            </label>
+                        </div>
                         <div class="transient-actions-row">
                             <div class="transient-actions-left">
                                 <button class="goal-btn-target" id="transientTargetBtn" onclick="toggleTransientTarget()" aria-pressed="false">
@@ -2308,16 +2399,18 @@
                                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="vertical-align: middle;"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
                                 Add Custom Goal
                             </button>
-                            <label class="checkbox-container">
-                                <input type="checkbox" id="hideCompletedCheck" onchange="toggleHideCompleted(this.checked)">
-                                <span class="checkbox-custom"></span>
-                                Hide Completed
-                            </label>
-                            <label class="checkbox-container" title="Automatically deduct costs from on-hand inventory when marked as achieved">
-                                <input type="checkbox" id="autoDeductCheck" onchange="toggleAutoDeduct(this.checked)">
-                                <span class="checkbox-custom"></span>
-                                Auto-deduct on achieve
-                            </label>
+                            <div class="search-checkboxes">
+                                <label class="checkbox-container">
+                                    <input type="checkbox" id="hideCompletedCheck" onchange="toggleHideCompleted(this.checked)">
+                                    <span class="checkbox-custom"></span>
+                                    <span>Hide Completed</span>
+                                </label>
+                                <label class="checkbox-container" title="Automatically deduct costs from on-hand inventory when marked as achieved">
+                                    <input type="checkbox" id="autoDeductCheck" onchange="toggleAutoDeduct(this.checked)">
+                                    <span class="checkbox-custom"></span>
+                                    <span>Auto-deduct on achieve</span>
+                                </label>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -2463,9 +2556,11 @@
             <p>Pinned directly above the checklist (collapsed by default). Use it for immediate spur-of-the-moment calculations without creating a permanent goal:</p>
             <ul style="padding-left: 18px;">
                 <li style="margin-bottom: 2px;">Enter any combination of <strong>Resources</strong> and/or <strong>Creature Summons</strong>.</li>
+                <li style="margin-bottom: 2px;"><strong>Track Summon Progress</strong>: When enabled, creature summons update progress in real-time with card steppers, decrementing remaining deficits and providing a completion confirmation when finished.</li>
+                <li style="margin-bottom: 2px;"><strong>Complementary Goal</strong>: Mark creature summons as complementary (surplus drops not consumed on completion).</li>
                 <li style="margin-bottom: 2px;">Click <span class="badge-inline">Target</span> to toggle it into your live calculation.</li>
-                <li style="margin-bottom: 2px;">Click <span class="badge-inline">Clear</span> to zero out all fields.</li>
-                <li style="margin-bottom: 2px;">Click <span class="badge-inline">Save as Goal...</span> to convert your quick target into a permanent saved goal (automatically untargets and clears Quick Target so costs aren't doubled).</li>
+                <li style="margin-bottom: 2px;">Click <span class="badge-inline">Clear</span> to zero out all fields and reset progress.</li>
+                <li style="margin-bottom: 2px;">Click <span class="badge-inline">Save as Goal...</span> to convert your quick target into a permanent saved goal (automatically passes progress tracking and complementary settings, and untargets Quick Target so costs aren't doubled).</li>
             </ul>
         </div>
 
@@ -2510,7 +2605,7 @@
 
     <!-- JS Core Engine -->
     <script>
-        const APP_VERSION = "v1.3.0-beta.1";
+        const APP_VERSION = "v1.3.0-beta.2";
 
         // --- 1. Base64 Icons Database ---
         const ICONS = {
@@ -2620,8 +2715,11 @@
             transientGoal: {
                 active: false,
                 collapsed: true, // Collapsed by default as requested
+                trackProgress: true,
+                isComplementary: false,
                 cost: { orbs: 0, flames: 0, crystals: 0, stars: 0 },
-                creatures: { netherling: 0, demon: 0, mountain: 0 }
+                creatures: { netherling: 0, demon: 0, mountain: 0 },
+                progress: { netherling: 0, demon: 0, mountain: 0 }
             },
             customGoals: [],
             showMathDetails: false
@@ -2656,6 +2754,8 @@
                 transientGoal: {
                     active: !!parsed?.transientGoal?.active,
                     collapsed: parsed?.transientGoal?.collapsed !== undefined ? !!parsed.transientGoal.collapsed : true,
+                    trackProgress: parsed?.transientGoal?.trackProgress !== undefined ? !!parsed.transientGoal.trackProgress : true,
+                    isComplementary: !!parsed?.transientGoal?.isComplementary,
                     cost: {
                         orbs: Math.max(0, parseInt(parsed?.transientGoal?.cost?.orbs) || 0),
                         flames: Math.max(0, parseInt(parsed?.transientGoal?.cost?.flames) || 0),
@@ -2666,6 +2766,11 @@
                         netherling: Math.max(0, parseInt(parsed?.transientGoal?.creatures?.netherling) || 0),
                         demon: Math.max(0, parseInt(parsed?.transientGoal?.creatures?.demon) || 0),
                         mountain: Math.max(0, parseInt(parsed?.transientGoal?.creatures?.mountain) || 0)
+                    },
+                    progress: {
+                        netherling: Math.max(0, parseInt(parsed?.transientGoal?.progress?.netherling) || 0),
+                        demon: Math.max(0, parseInt(parsed?.transientGoal?.progress?.demon) || 0),
+                        mountain: Math.max(0, parseInt(parsed?.transientGoal?.progress?.mountain) || 0)
                     }
                 },
                 customGoals: Array.isArray(parsed?.customGoals) ? parsed.customGoals.map(cg => ({
@@ -2858,9 +2963,10 @@
                     targetStars += state.transientGoal.cost.stars || 0;
                 }
                 if (state.transientGoal.creatures) {
-                    targetNetherlings += state.transientGoal.creatures.netherling || 0;
-                    targetDemons += state.transientGoal.creatures.demon || 0;
-                    targetMountains += state.transientGoal.creatures.mountain || 0;
+                    const prog = (state.transientGoal.trackProgress !== false && state.transientGoal.progress) ? state.transientGoal.progress : { netherling: 0, demon: 0, mountain: 0 };
+                    targetNetherlings += Math.max(0, (state.transientGoal.creatures.netherling || 0) - (prog.netherling || 0));
+                    targetDemons += Math.max(0, (state.transientGoal.creatures.demon || 0) - (prog.demon || 0));
+                    targetMountains += Math.max(0, (state.transientGoal.creatures.mountain || 0) - (prog.mountain || 0));
                 }
             }
 
@@ -3372,6 +3478,18 @@
                 targetBtn.setAttribute("aria-pressed", "false");
             }
 
+            const badgesContainer = document.getElementById("transientBadges");
+            if (badgesContainer) {
+                let badgesHtml = "";
+                if (tg.trackProgress !== false) {
+                    badgesHtml += ` <span class="badge-tracking" title="Tracking creature summons in real time">Tracking</span>`;
+                }
+                if (tg.isComplementary) {
+                    badgesHtml += ` <span class="badge-complementary" title="Drops are surplus and not consumed">Surplus</span>`;
+                }
+                badgesContainer.innerHTML = badgesHtml;
+            }
+
             if (tg.collapsed) {
                 body.style.display = "none";
                 header.setAttribute("aria-expanded", "false");
@@ -3397,6 +3515,51 @@
             setVal("transientNetherlingInput", tg.creatures.netherling);
             setVal("transientDemonInput", tg.creatures.demon);
             setVal("transientMountainInput", tg.creatures.mountain);
+
+            const trackCheck = document.getElementById("transientTrackProgress");
+            if (trackCheck) trackCheck.checked = tg.trackProgress !== false;
+            const compCheck = document.getElementById("transientComplementary");
+            if (compCheck) compCheck.checked = !!tg.isComplementary;
+
+            // Render progress bars and steppers if tracking is enabled and has creature targets
+            const progSection = document.getElementById("transientProgressSection");
+            if (progSection) {
+                const hasCreatureTargets = tg.creatures && ((tg.creatures.netherling || 0) > 0 || (tg.creatures.demon || 0) > 0 || (tg.creatures.mountain || 0) > 0);
+                if (tg.trackProgress !== false && hasCreatureTargets) {
+                    progSection.style.display = "flex";
+                    let progHtml = "";
+                    const creatureList = [
+                        { key: 'netherling', name: 'Netherling', icon: ICONS.netherling },
+                        { key: 'demon', name: 'Demon', icon: ICONS.demon },
+                        { key: 'mountain', name: 'Mountain', icon: ICONS.mountain }
+                    ];
+                    creatureList.forEach(c => {
+                        const target = tg.creatures[c.key] || 0;
+                        if (target > 0) {
+                            const cur = Math.min(target, (tg.progress && tg.progress[c.key]) || 0);
+                            const pct = Math.min(100, Math.round((cur / target) * 100));
+                            progHtml += `
+                                <div class="goal-progress-row">
+                                    <div class="goal-progress-creature">
+                                        <img src="${c.icon}" class="resource-icon" alt="${c.name}">
+                                        <span>${c.name}</span>
+                                    </div>
+                                    <div class="goal-progress-bar-wrap" role="progressbar" aria-valuenow="${cur}" aria-valuemin="0" aria-valuemax="${target}" aria-label="${c.name} progress: ${cur} of ${target}">
+                                        <div class="goal-progress-bar-fill" style="width: ${pct}%;"></div>
+                                    </div>
+                                    <span class="goal-progress-label mono-num">${cur}/${target}</span>
+                                    <button class="goal-stepper-btn" onclick="adjustTransientGoalProgress('${c.key}', -1)" title="Decrement progress" ${!tg.active || cur <= 0 ? 'disabled' : ''} type="button">&minus;</button>
+                                    <button class="goal-stepper-btn" onclick="adjustTransientGoalProgress('${c.key}', 1)" title="Increment progress" ${!tg.active || cur >= target ? 'disabled' : ''} type="button">&plus;</button>
+                                </div>
+                            `;
+                        }
+                    });
+                    progSection.innerHTML = progHtml;
+                } else {
+                    progSection.style.display = "none";
+                    progSection.innerHTML = "";
+                }
+            }
         }
 
         function toggleTransientCollapse() {
@@ -3413,6 +3576,20 @@
             renderCalculatorSummary();
         }
 
+        function toggleTransientTrackProgress(isChecked) {
+            state.transientGoal.trackProgress = !!isChecked;
+            saveStateToLocalStorage();
+            renderTransientGoal();
+            renderCalculatorSummary();
+        }
+
+        function toggleTransientComplementary(isChecked) {
+            state.transientGoal.isComplementary = !!isChecked;
+            saveStateToLocalStorage();
+            renderTransientGoal();
+            renderCalculatorSummary();
+        }
+
         function toggleTransientTarget() {
             state.transientGoal.active = !state.transientGoal.active;
             saveStateToLocalStorage();
@@ -3424,6 +3601,7 @@
         function clearTransientGoal() {
             state.transientGoal.cost = { orbs: 0, flames: 0, crystals: 0, stars: 0 };
             state.transientGoal.creatures = { netherling: 0, demon: 0, mountain: 0 };
+            state.transientGoal.progress = { netherling: 0, demon: 0, mountain: 0 };
             saveStateToLocalStorage();
             renderTransientGoal();
             renderCalculatorSummary();
@@ -3442,8 +3620,49 @@
                 name: "",
                 description: "",
                 cost: { ...tg.cost },
-                creatures: { ...tg.creatures }
+                creatures: { ...tg.creatures },
+                trackProgress: tg.trackProgress !== false,
+                isComplementary: !!tg.isComplementary
             }, true);
+        }
+
+        function adjustTransientGoalProgress(creatureKey, delta) {
+            const tg = state.transientGoal;
+            if (!tg || !tg.creatures || !tg.creatures[creatureKey]) return;
+            if (!tg.progress) tg.progress = { netherling: 0, demon: 0, mountain: 0 };
+
+            if (delta > 0) {
+                let othersComplete = true;
+                ['netherling', 'demon', 'mountain'].forEach(k => {
+                    if (k === creatureKey) return;
+                    const tgt = tg.creatures[k] || 0;
+                    if (tgt > 0 && (tg.progress[k] || 0) < tgt) {
+                        othersComplete = false;
+                    }
+                });
+
+                if (othersComplete && ((tg.progress[creatureKey] || 0) + 1) >= tg.creatures[creatureKey]) {
+                    const tgObj = {
+                        id: 'transient',
+                        name: 'Quick Target',
+                        isTransient: true,
+                        cost: tg.cost,
+                        creatures: tg.creatures,
+                        progress: tg.progress,
+                        isComplementary: tg.isComplementary
+                    };
+                    openGoalCompleteConfirmModal([tgObj], { type: 'transient_step', creatureKey });
+                    return;
+                }
+
+                tg.progress[creatureKey] = Math.min(tg.creatures[creatureKey], (tg.progress[creatureKey] || 0) + 1);
+            } else if (delta < 0) {
+                tg.progress[creatureKey] = Math.max(0, (tg.progress[creatureKey] || 0) - 1);
+            }
+
+            saveStateToLocalStorage();
+            renderTransientGoal();
+            renderCalculatorSummary();
         }
 
         // Render Goals Checklist Grid
@@ -3818,6 +4037,15 @@
                 if (!goal.progress) goal.progress = { netherling: 0, demon: 0, mountain: 0 };
                 goal.progress[key] = Math.max(0, Math.min(goal.creatures[key], (goal.progress[key] || 0) + multiplier));
             });
+
+            // Quick Target progress tracking
+            const tg = state.transientGoal;
+            if (tg && tg.active && tg.trackProgress !== false && tg.creatures && (tg.creatures[key] > 0)) {
+                if (!excludeIds.has('transient')) {
+                    if (!tg.progress) tg.progress = { netherling: 0, demon: 0, mountain: 0 };
+                    tg.progress[key] = Math.max(0, Math.min(tg.creatures[key], (tg.progress[key] || 0) + multiplier));
+                }
+            }
         }
 
         function checkSummonWouldCompleteGoals(key, multiplier) {
@@ -3841,15 +4069,52 @@
                     completingGoals.push(goal);
                 }
             });
+
+            // Check if Quick Target would complete
+            const tg = state.transientGoal;
+            if (tg && tg.active && tg.trackProgress !== false && tg.creatures && (tg.creatures[key] > 0)) {
+                const prog = tg.progress || { netherling: 0, demon: 0, mountain: 0 };
+                let othersComplete = true;
+                ['netherling', 'demon', 'mountain'].forEach(k => {
+                    if (k === key) return;
+                    const tgt = tg.creatures[k] || 0;
+                    if (tgt > 0 && (prog[k] || 0) < tgt) {
+                        othersComplete = false;
+                    }
+                });
+
+                if (othersComplete && ((prog[key] || 0) + multiplier) >= tg.creatures[key]) {
+                    completingGoals.push({
+                        id: 'transient',
+                        name: 'Quick Target',
+                        isTransient: true,
+                        cost: tg.cost,
+                        creatures: tg.creatures,
+                        progress: tg.progress,
+                        isComplementary: tg.isComplementary
+                    });
+                }
+            }
+
             return completingGoals;
         }
 
         function completeAndResetGoal(goal) {
+            if (goal.isTransient) {
+                state.transientGoal.active = false;
+                state.transientGoal.progress = { netherling: 0, demon: 0, mountain: 0 };
+                if (state.autoDeductOnAchieve && state.transientGoal.cost && !state.transientGoal.isComplementary) {
+                    deductGoalCosts([state.transientGoal]);
+                }
+                showToast("Quick Target completed!");
+                return;
+            }
+
             state.completedGoals[goal.id] = true;
             state.selectedGoals[goal.id] = false;
             goal.progress = { netherling: 0, demon: 0, mountain: 0 };
             
-            if (state.autoDeductOnAchieve && goal.cost) {
+            if (state.autoDeductOnAchieve && goal.cost && !goal.isComplementary) {
                 deductGoalCosts([goal]);
             }
             showToast(`Goal achieved: "${goal.name}"!`);
@@ -3888,6 +4153,10 @@
                 if (goal && goal.progress) {
                     goal.progress[action.creatureKey] = Math.min(goal.creatures[action.creatureKey], (goal.progress[action.creatureKey] || 0) + 1);
                 }
+            } else if (action.type === 'transient_step') {
+                if (state.transientGoal && state.transientGoal.progress) {
+                    state.transientGoal.progress[action.creatureKey] = Math.min(state.transientGoal.creatures[action.creatureKey], (state.transientGoal.progress[action.creatureKey] || 0) + 1);
+                }
             }
 
             completingGoals.forEach(goal => {
@@ -3914,6 +4183,7 @@
             renderInventory();
             renderCalculatorSummary();
             renderGoalsList();
+            renderTransientGoal();
             
             const creature = CREATURES_DATA[key];
             const actionText = multiplier > 0 ? "Summoned" : "Undid summon of";
