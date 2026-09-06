@@ -72,6 +72,7 @@ Idle Apocalypse Nether Costs/
           mountain: false
       },
       hideCompleted: false, // UI filter
+      autoDeductOnAchieve: false, // Auto-deduct costs from inventory on achieve
       activeCategory: "All",// Category tab filter ("All", "Creatures", "Scrolls", "DDD", "Lesley", "Custom")
       searchQuery: "",      // Checklist search text
       modifiersExpanded: true,
@@ -81,7 +82,7 @@ Idle Apocalypse Nether Costs/
           cost: { orbs: 0, flames: 0, crystals: 0, stars: 0 },
           creatures: { netherling: 0, demon: 0, mountain: 0 }
       },
-      customGoals: []       // Reusable saved custom goals
+      customGoals: []       // Reusable saved custom goals with progress tracking & complementary settings
   };
   ```
 - **Persistence Engine**: State is serialized to `localStorage` under key `idle_apoc_nether_costs_state_v2`. Backward compatibility is maintained via `sanitizeAndMergeState(parsed)`.
@@ -111,7 +112,10 @@ $$\text{Drop Yield}(c) = \text{BaseDrop}(c, \text{Level}) + \text{PieLevel} + (\
 ### 2. Top-Down Deficit & Summon Cascade
 1. **Target Goal & Creature Aggregation**:
    - Sum `orbs`, `flames`, `crystals`, `stars` across all selected standard goals, saved custom goals, and active Quick Target.
-   - Sum minimum target creature requirements `targetNetherlings`, `targetDemons`, `targetMountains` across active targets.
+   - Sum remaining target creature requirements across active targets:
+     For each creature $c$:
+     $$\text{Remaining Target}(c) = \max(0, \text{Target}(c) - (\text{TrackProgress} ? \text{Progress}(c) : 0))$$
+     This guarantees that as creatures are summoned via `+Summon`, the remaining creature requirement decrements in real time, preventing resource requirement spikes.
 2. **Stars Deficit $\rightarrow$ Mountain Summons**:
    $$\text{Star Deficit} = \max(0, \text{Target Stars} - \text{OnHand Stars})$$
    $$\text{Mountains For Stars} = \lceil \text{Star Deficit} / \text{Mountain Yield} \rceil$$
@@ -159,33 +163,41 @@ $$\text{Drop Yield}(c) = \text{BaseDrop}(c, \text{Level}) + \text{PieLevel} + (\
    - `Export`: Downloads current state as `nether_costs_backup.json`.
    - `Import`: Loads state from a JSON backup file.
    - `Reset`: Clears state with user confirmation.
-2. **Creature Action Buttons (`+` / `-`)**:
+2. **Creature Action Buttons (`+` / `-`) & Live Progress Tracking**:
    - Located inside each creature card in **Creature Summons & Yields** (unified inside Nether Requirements).
-   - `+` (Summon): Deducts creature costs and adds drop yields to on-hand inventory.
-   - `-` (Undo): Refunds creature costs and deducts drop yields from on-hand inventory.
+   - `+` (Summon): Deducts creature costs and adds drop yields to on-hand inventory. When tracked custom goals are active, simultaneously increments creature progress on all active tracked goals.
+   - `-` (Undo): Refunds creature costs and deducts drop yields from on-hand inventory, and decrements progress on tracked custom goals.
    - Dynamic `title` tooltips and descriptive `aria-label`s list exact costs and yields based on current modifier state.
-   - `.creature-title-label` specifies `min-height: 2.4rem` and `<br>` after creature name to keep cards and buttons aligned across desktop and mobile screens.
-3. **Upgrades & Modifiers Panel**:
+3. **Custom Goal Real-Time Tracking & Steppers**:
+   - **Live Progress Bars & Steppers**: Goal cards with creature requirements feature integrated progress bars (`role="progressbar"`) and `[-]` / `[+]` stepper buttons for fine-tuning.
+   - **Simultaneous Multi-Goal Dispatch**: When multiple active custom goals require the same creature type, summoning increments progress across all of them concurrently.
+   - **Goal Completion Confirmation Modal (`#goalCompleteConfirmModal`)**: When a summon or stepper action would bring the final creature requirement of a tracked custom goal to 100%, a native confirmation modal appears prompting the user to confirm completion and reset progress.
+   - **Complementary / Surplus Goals**: Custom goals can be designated as complementary, meaning creature drops are surplus byproducts and are not consumed/deducted upon completion.
+4. **Auto-Deduct on Goal Achievement**:
+   - Accessible checkbox toggle in the checklist toolbar: `[ ] Auto-deduct on achieve`.
+   - When checking a goal as achieved: automatically subtracts resource costs from on-hand inventory down to 0 (floored at 0, displaying a warning toast if inventory was insufficient).
+   - When unchecking (undo): refunds the exact resource cost back to inventory.
+   - Creature summon costs are not double-deducted on custom goal completion since summon materials were already deducted live.
+5. **Upgrades & Modifiers Panel**:
    - **Nether Pie & Bounty**: Sliders and toggles to dynamically adjust creature drop rates.
-   - **Creature Upgrade Levels**: Segmented pill selectors (`[1][2][3]` for Netherlings & Demons, `[1][2]` for Mountains) with real-time base drop badges (e.g. `Base: +5 Flames`).
-   - **Shiny Skins (Golden Upgrades)**: Checkbox toggle (`✨ Shiny (+3)`) for each creature, granting an additional +3 to cumulative drop yields when checked (unchecked by default).
-   - **Bidirectional Goal Synchronization**:
-     - Adjusting levels in the panel automatically marks prerequisite checklist goals (`netherling_lvl_1`, `netherling_lvl_2`, `netherling_lvl_3`, etc.) as Achieved and clears active targets on them. Lowering levels unachieves higher tiers.
-     - Conversely, checking/unchecking goals in the checklist automatically reflects on the segmented pill selectors in real time.
-4. **Action Plan, Sequential Roadmap & Deficits Summary**:
+   - **Creature Upgrade Levels**: Segmented pill selectors (`[1][2][3]` for Netherlings & Demons, `[1][2]` for Mountains) with real-time base drop badges.
+   - **Shiny Skins (Golden Upgrades)**: Checkbox toggle (`✨ Shiny (+3)`) for each creature, granting an additional +3 to cumulative drop yields when checked.
+   - **Bidirectional Goal Synchronization**: Syncs creature levels bidirectionally between modifiers panel and checklist goals.
+6. **Action Plan, Sequential Roadmap & Deficits Summary**:
    - **Renamed Deficits Header**: Labeled `Additional resources needed for goal(s):` displaying four real-time deficit counters.
    - **Prominent Status Banners**:
-     - **Goal Not Yet Reachable** (`deficits.orbs > 0`): High-visibility warning banner stating: *"You still need X Nether Orbs to meet your goal(s)."* with an encouraging note on collecting the required Orbs to fuel the summon chain.
-     - **Goal Achievable!** (`deficits.orbs === 0` with summons needed): High-visibility success banner indicating all summons can be safely performed.
-     - **Goal Ready to Claim!** (`deficits.orbs === 0` with 0 summons needed): High-visibility success banner stating resources are already completely covered by on-hand inventory.
+     - **Goal Not Yet Reachable** (`deficits.orbs > 0`): High-visibility warning banner.
+     - **Goal Achievable!** (`deficits.orbs === 0` with summons needed): High-visibility success banner.
+     - **Goal Ready to Claim!** (`deficits.orbs === 0` with 0 summons needed): High-visibility success banner.
+
    - **Chronological Action Roadmap**: Numbered sequential steps guiding the player from lowest tier to highest tier (Step 1: Netherlings $\rightarrow$ Step 2: Demons $\rightarrow$ Step 3: Mountains $\rightarrow$ Final Step: Claim Goal).
    - **Collapsible Detailed Math Breakdown**: Text toggle button (`Show/Hide Detailed Math Breakdown`) revealing step-by-step arithmetic rewritten in natural human-friendly language without dry "Deficit:" labels. Remembers expanded/collapsed preference across sessions in `localStorage`.
-5. **Custom Goals & Controls**:
+7. **Custom Goals & Controls**:
    - **Quick Target**: Collapsible card above checklist for immediate calculations without saving. Features Target toggle, Clear button, and "Save as Goal..." shortcut (which cleanly untargets and clears Quick Target to prevent double-counting).
    - **Saved Custom Goals**: Reusable user-defined goals filtered under `"Custom"` category tab. Supports creating via "+ Add Custom Goal" button or saving transient inputs. Includes individual editing and deletion with confirmation.
    - **Dual Cost & Creature Badges**: Goal cards display non-zero resource badges (Orbs, Flames, Crystals, Stars) and non-zero creature badges (Netherlings, Demons, Mountains).
-   - **Responsive Search & Filter Toolbar**: Full-width search input with wrapped `.search-actions` ("+ Add Custom Goal" and "Hide Completed" side-by-side) on mobile viewports (<600px) with `white-space: nowrap;` to prevent layout overflow.
-6. **Modern CSS & Accessibility (A11y)**:
+   - **Responsive Search & Filter Toolbar**: Full-width search input with wrapped `.search-actions` ("+ Add Custom Goal", "Hide Completed", and "Auto-deduct on achieve" side-by-side).
+8. **Modern CSS & Accessibility (A11y)**:
    - **`color-scheme: dark`**: Informs UA inputs, native scrollbars, and browser UI of the dark fantasy theme.
    - **Standard Scrollbars**: `scrollbar-color: #2b1f3c #09070c;` and `scrollbar-width: thin;` with `@supports not (scrollbar-color: auto)` fallback for legacy WebKit.
    - **Typography Layout**: `text-wrap: balance;` on headings (`h1-h4`) and `text-wrap: pretty;` on instructional body copy.
@@ -200,13 +212,13 @@ $$\text{Drop Yield}(c) = \text{BaseDrop}(c, \text{Level}) + \text{PieLevel} + (\
 
 ### Versioning Format & Lifecycle
 Follow Semantic Versioning (`MAJOR.MINOR.PATCH`):
-- **Pre-Releases**: `vX.Y.Z-beta.N` (e.g., `v1.1.2-beta.1`) used on feature/dev iterations during testing phases.
-- **Production Releases**: Clean `vX.Y.Z` (e.g., `v1.1.1`) used for official, non-beta production releases merged to `main`.
+- **Pre-Releases**: `vX.Y.Z-beta.N` (e.g., `v1.3.0-beta.1`) used on feature/dev iterations during testing phases.
+- **Production Releases**: Clean `vX.Y.Z` (e.g., `v1.3.0`) used for official, non-beta production releases merged to `main`.
 
 ### Embedded Version Single Source of Truth
 The version string is declared in JavaScript at the top of the `<script>` tag in `nether_costs.html`:
 ```javascript
-const APP_VERSION = "v1.2.0";
+const APP_VERSION = "v1.3.0-beta.1";
 ```
 On page load (`DOMContentLoaded`), this value is assigned to the header element `<span id="app-version">`.
 
