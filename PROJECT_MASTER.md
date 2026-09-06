@@ -206,7 +206,7 @@ Follow Semantic Versioning (`MAJOR.MINOR.PATCH`):
 ### Embedded Version Single Source of Truth
 The version string is declared in JavaScript at the top of the `<script>` tag in `nether_costs.html`:
 ```javascript
-const APP_VERSION = "v1.1.1";
+const APP_VERSION = "v1.2.0";
 ```
 On page load (`DOMContentLoaded`), this value is assigned to the header element `<span id="app-version">`.
 
