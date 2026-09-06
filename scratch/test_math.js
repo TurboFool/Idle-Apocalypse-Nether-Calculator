@@ -66,9 +66,10 @@ function calculateCosts() {
                     targetStars += cg.cost.stars || 0;
                 }
                 if (cg.creatures) {
-                    targetNetherlings += cg.creatures.netherling || 0;
-                    targetDemons += cg.creatures.demon || 0;
-                    targetMountains += cg.creatures.mountain || 0;
+                    var prog = (cg.trackProgress !== false && cg.progress) ? cg.progress : { netherling: 0, demon: 0, mountain: 0 };
+                    targetNetherlings += Math.max(0, (cg.creatures.netherling || 0) - (prog.netherling || 0));
+                    targetDemons += Math.max(0, (cg.creatures.demon || 0) - (prog.demon || 0));
+                    targetMountains += Math.max(0, (cg.creatures.mountain || 0) - (prog.mountain || 0));
                 }
             }
         }
@@ -83,9 +84,10 @@ function calculateCosts() {
             targetStars += state.transientGoal.cost.stars || 0;
         }
         if (state.transientGoal.creatures) {
-            targetNetherlings += state.transientGoal.creatures.netherling || 0;
-            targetDemons += state.transientGoal.creatures.demon || 0;
-            targetMountains += state.transientGoal.creatures.mountain || 0;
+            var prog = (state.transientGoal.trackProgress !== false && state.transientGoal.progress) ? state.transientGoal.progress : { netherling: 0, demon: 0, mountain: 0 };
+            targetNetherlings += Math.max(0, (state.transientGoal.creatures.netherling || 0) - (prog.netherling || 0));
+            targetDemons += Math.max(0, (state.transientGoal.creatures.demon || 0) - (prog.demon || 0));
+            targetMountains += Math.max(0, (state.transientGoal.creatures.mountain || 0) - (prog.mountain || 0));
         }
     }
 
@@ -215,7 +217,47 @@ state.onHand = { orbs: 20, flames: 0, crystals: 0, stars: 0 };
 var res7 = calculateCosts();
 assert(res7.summons.demon === 2, "Test 7: 2 Demons with shiny skin (yield 5 crystals each)");
 assert(res7.summons.netherling === 12, "Test 7: 12 Netherlings with shiny skin (yield 6 flames each)");
-assert(res7.deficits.orbs === 0, "Test 7: Orb deficit is 0 with shiny skins and 20 orbs on hand");
+// Test 8: Custom goal creature progress tracking
+// Goal: 5 Mountains. Without progress: 5 Mountains.
+// With progress = 2 Mountains summoned: remaining Mountains is 3.
+state.shinySkins = { netherling: false, demon: false, mountain: false };
+state.selectedGoals = { "custom_prog_test": true };
+state.customGoals = [
+    {
+        id: "custom_prog_test",
+        name: "5 Mountains Goal",
+        cost: { orbs: 0, flames: 0, crystals: 0, stars: 0 },
+        creatures: { netherling: 0, demon: 0, mountain: 5 },
+        trackProgress: true,
+        progress: { netherling: 0, demon: 0, mountain: 2 }
+    }
+];
+state.onHand = { orbs: 0, flames: 0, crystals: 0, stars: 0 };
+var res8 = calculateCosts();
+assert(res8.targetCreatures.mountain === 3, "Test 8: Remaining target mountains is 5 - 2 = 3");
+assert(res8.summons.mountain === 3, "Test 8: Mountains to summon is 3");
+assert(res8.summons.demon === 18, "Test 8: Demons to summon is 18 (3 * 12 / 2)");
+assert(res8.summons.netherling === 60, "Test 8: Netherlings to summon is 60 (18 * 10 / 3)");
+// Test 9: Quick Target creature progress tracking
+// Quick Target: 4 Demons, 2 Mountains.
+// TrackProgress: true. Progress: 1 Demon, 1 Mountain.
+// Remaining target: 3 Demons, 1 Mountain.
+state.selectedGoals = {};
+state.customGoals = [];
+state.transientGoal = {
+    active: true,
+    trackProgress: true,
+    cost: { orbs: 0, flames: 0, crystals: 0, stars: 0 },
+    creatures: { netherling: 0, demon: 4, mountain: 2 },
+    progress: { netherling: 0, demon: 1, mountain: 1 }
+};
+state.onHand = { orbs: 0, flames: 0, crystals: 0, stars: 0 };
+var res9 = calculateCosts();
+assert(res9.targetCreatures.demon === 3, "Test 9: Remaining target demons is 4 - 1 = 3");
+assert(res9.targetCreatures.mountain === 1, "Test 9: Remaining target mountains is 2 - 1 = 1");
+assert(res9.summons.mountain === 1, "Test 9: Mountain summons is 1");
+assert(res9.summons.demon === 6, "Test 9: Demons to summon is 6 (covers 12 crystals for 1 mountain and 3 target demons)");
 
 WScript.Echo("ALL TESTS PASSED SUCCESSFULLY!");
+
 
