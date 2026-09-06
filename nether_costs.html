@@ -1882,11 +1882,44 @@
             max-height: 85vh;
             max-height: 85dvh;
             overflow-y: auto;
+            overflow-x: hidden;
             overscroll-behavior: contain;
             -webkit-overflow-scrolling: touch;
             box-sizing: border-box;
             color: var(--text-color);
             margin: 0;
+        }
+
+        .modal-checkbox-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            font-size: 0.75rem;
+            color: var(--text-main);
+            white-space: normal;
+            line-height: 1.4;
+            cursor: pointer;
+            user-select: none;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .modal-checkbox-row input {
+            display: none;
+        }
+        .modal-checkbox-row .checkbox-custom {
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        .modal-checkbox-row input:checked + .checkbox-custom {
+            background: var(--accent-purple);
+            border-color: #a78bfa;
+            box-shadow: 0 0 6px rgba(139, 92, 246, 0.4);
+        }
+        .modal-checkbox-row input:checked + .checkbox-custom::after {
+            content: "\2713";
+            color: #fff;
+            font-size: 0.65rem;
+            font-weight: bold;
         }
 
         @media (max-width: 480px) {
@@ -2357,16 +2390,16 @@
             </div>
 
             <div class="form-section-title" style="margin-top: 14px;">Goal Options</div>
-            <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px;">
-                <label class="checkbox-container" style="font-size: 0.75rem; color: var(--text-main);">
+            <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px;">
+                <label class="modal-checkbox-row">
                     <input type="checkbox" id="customGoalTrackProgress" checked>
                     <span class="checkbox-custom"></span>
-                    <span><strong>Track summon progress</strong> (updates live when you use + / - summon buttons)</span>
+                    <span><strong>Track summon progress</strong> &ndash; updates live when you use <strong>+ / &minus;</strong> creature summon buttons</span>
                 </label>
-                <label class="checkbox-container" style="font-size: 0.75rem; color: var(--text-main);">
+                <label class="modal-checkbox-row">
                     <input type="checkbox" id="customGoalComplementary">
                     <span class="checkbox-custom"></span>
-                    <span><strong>Complementary Goal</strong> (creature drops are surplus byproduct and not consumed upon completion)</span>
+                    <span><strong>Complementary Goal</strong> &ndash; creature drops are surplus byproduct and not consumed upon completion</span>
                 </label>
             </div>
 
@@ -3561,7 +3594,7 @@
                         <div class="goal-actions">
                             <div style="display: flex; gap: 6px; align-items: center;">
                                 <button class="goal-btn-target ${isSelected && !isCompleted ? 'active' : ''}" 
-                                    onclick="toggleGoalSelected('${goal.id}')" ${isCompleted ? 'disabled' : ''}
+                                    onclick="toggleGoalSelected('${goal.id}')" ${!isCustom && isCompleted ? 'disabled' : ''}
                                     aria-label="Set ${goal.name} as target" aria-pressed="${isSelected && !isCompleted ? 'true' : 'false'}">
                                     <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>
                                     Target
@@ -3979,7 +4012,18 @@
         }
 
         function toggleGoalSelected(id) {
-            state.selectedGoals[id] = !state.selectedGoals[id];
+            const wasCompleted = !!state.completedGoals[id];
+            if (wasCompleted) {
+                // If goal is already completed (e.g. an achieved custom goal being re-targeted),
+                // automatically uncheck Achieved so it transitions back to an active target
+                toggleGoalCompleted(id);
+                state.selectedGoals[id] = true;
+                const goal = (state.customGoals || []).find(g => g.id === id) || TARGETS_DATA.find(g => g.id === id);
+                const name = goal ? goal.name : id;
+                showToast(`Re-targeted "${name}"!`);
+            } else {
+                state.selectedGoals[id] = !state.selectedGoals[id];
+            }
             saveStateToLocalStorage();
             renderGoalsList();
             renderCalculatorSummary();

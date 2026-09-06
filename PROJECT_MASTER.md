@@ -173,6 +173,7 @@ $$\text{Drop Yield}(c) = \text{BaseDrop}(c, \text{Level}) + \text{PieLevel} + (\
    - **Simultaneous Multi-Goal Dispatch**: When multiple active custom goals require the same creature type, summoning increments progress across all of them concurrently.
    - **Goal Completion Confirmation Modal (`#goalCompleteConfirmModal`)**: When a summon or stepper action would bring the final creature requirement of a tracked custom goal to 100%, a native confirmation modal appears prompting the user to confirm completion and reset progress.
    - **Complementary / Surplus Goals**: Custom goals can be designated as complementary, meaning creature drops are surplus byproducts and are not consumed/deducted upon completion.
+   - **Seamless Re-Targeting**: Clicking "Target" on an already-achieved custom goal automatically unchecks Achieved (refunding any auto-deducted costs if enabled) and re-activates the goal as an active target.
 4. **Auto-Deduct on Goal Achievement**:
    - Accessible checkbox toggle in the checklist toolbar: `[ ] Auto-deduct on achieve`.
    - When checking a goal as achieved: automatically subtracts resource costs from on-hand inventory down to 0 (floored at 0, displaying a warning toast if inventory was insufficient).
@@ -195,6 +196,7 @@ $$\text{Drop Yield}(c) = \text{BaseDrop}(c, \text{Level}) + \text{PieLevel} + (\
 7. **Custom Goals & Controls**:
    - **Quick Target**: Collapsible card above checklist for immediate calculations without saving. Features Target toggle, Clear button, and "Save as Goal..." shortcut (which cleanly untargets and clears Quick Target to prevent double-counting).
    - **Saved Custom Goals**: Reusable user-defined goals filtered under `"Custom"` category tab. Supports creating via "+ Add Custom Goal" button or saving transient inputs. Includes individual editing and deletion with confirmation.
+   - **Modal Form Layout**: Options checkboxes styled with `.modal-checkbox-row` (`white-space: normal; align-items: flex-start;`) and `.modal-dialog` with `overflow-x: hidden;` preventing text clipping and horizontal scrollbars.
    - **Dual Cost & Creature Badges**: Goal cards display non-zero resource badges (Orbs, Flames, Crystals, Stars) and non-zero creature badges (Netherlings, Demons, Mountains).
    - **Responsive Search & Filter Toolbar**: Full-width search input with wrapped `.search-actions` ("+ Add Custom Goal", "Hide Completed", and "Auto-deduct on achieve" side-by-side).
 8. **Modern CSS & Accessibility (A11y)**:
