@@ -66,6 +66,11 @@ Idle Apocalypse Nether Costs/
       selectedGoals: {},    // Map goal ID -> boolean
       pieLevel: 0,          // Nether Pie level (0-3)
       bountyEnabled: false, // Bounty upgrade (+1 drop)
+      shinySkins: {         // Golden creature skin upgrades (+3 drop yield each)
+          netherling: false,
+          demon: false,
+          mountain: false
+      },
       hideCompleted: false, // UI filter
       activeCategory: "All",// Category tab filter ("All", "Creatures", "Scrolls", "DDD", "Lesley", "Custom")
       searchQuery: "",      // Checklist search text
@@ -94,11 +99,12 @@ The core engine `calculateCosts()` computes resource requirements using top-down
 
 ### 1. Dynamic Drop Rates Calculation
 For each creature type $c$:
-$$\text{Drop Yield}(c) = \text{BaseDrop}(c, \text{Level}) + \text{PieLevel} + (\text{BountyEnabled} ? 1 : 0)$$
+$$\text{Drop Yield}(c) = \text{BaseDrop}(c, \text{Level}) + \text{PieLevel} + (\text{BountyEnabled} ? 1 : 0) + (\text{ShinySkin}(c) ? 3 : 0)$$
 
 - **Netherling Base Drops**: Lvl 1: 3, Lvl 2: 5, Lvl 3: 7 (Drops: Flames)
 - **Nether Demon Base Drops**: Lvl 1: 2, Lvl 2: 3, Lvl 3: 4 (Drops: Crystals)
 - **Nether Mountain Base Drops**: Lvl 1: 1, Lvl 2: 2 (Drops: Stars)
+- **Shiny Skin Bonus**: +3 to drop yield for each creature with shiny skin enabled.
 
 *Note: Creature levels automatically upgrade when the user marks their respective level goals as "Achieved" in the checklist.*
 
@@ -162,6 +168,7 @@ $$\text{Drop Yield}(c) = \text{BaseDrop}(c, \text{Level}) + \text{PieLevel} + (\
 3. **Upgrades & Modifiers Panel**:
    - **Nether Pie & Bounty**: Sliders and toggles to dynamically adjust creature drop rates.
    - **Creature Upgrade Levels**: Segmented pill selectors (`[1][2][3]` for Netherlings & Demons, `[1][2]` for Mountains) with real-time base drop badges (e.g. `Base: +5 Flames`).
+   - **Shiny Skins (Golden Upgrades)**: Checkbox toggle (`✨ Shiny (+3)`) for each creature, granting an additional +3 to cumulative drop yields when checked (unchecked by default).
    - **Bidirectional Goal Synchronization**:
      - Adjusting levels in the panel automatically marks prerequisite checklist goals (`netherling_lvl_1`, `netherling_lvl_2`, `netherling_lvl_3`, etc.) as Achieved and clears active targets on them. Lowering levels unachieves higher tiers.
      - Conversely, checking/unchecking goals in the checklist automatically reflects on the segmented pill selectors in real time.
@@ -199,7 +206,7 @@ Follow Semantic Versioning (`MAJOR.MINOR.PATCH`):
 ### Embedded Version Single Source of Truth
 The version string is declared in JavaScript at the top of the `<script>` tag in `nether_costs.html`:
 ```javascript
-const APP_VERSION = "v1.1.1";
+const APP_VERSION = "v1.2.0";
 ```
 On page load (`DOMContentLoaded`), this value is assigned to the header element `<span id="app-version">`.
 

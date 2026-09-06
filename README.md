@@ -8,7 +8,7 @@ A premium, self-contained, and offline-ready companion tool for the mobile game 
 
 - **Cascading Summon Engine**: Automatically computes how many of each creature you need to summon to cover resource costs, counting downstream requirements (e.g., how many Netherlings are needed to produce the Flames for Demon summons, and how many Demons are needed to produce the Crystals for Mountain summons).
 - **Action Plan & Sequential Roadmap**: Context-aware status banners ("Goal Achievable!" vs "You still need X Nether Orbs to meet your goal") paired with a chronological, step-by-step roadmap detailing the exact order and yields of creature summons needed to reach your target.
-- **Two-Way Creature Upgrade Levels**: Select creature levels (`[1][2][3]`) directly in the Upgrades & Modifiers panel with instant bidirectional sync to checklist goals.
+- **Two-Way Creature Upgrade Levels & Shiny Skins**: Select creature levels (`[1][2][3]`) directly in the Upgrades & Modifiers panel with instant bidirectional sync to checklist goals, plus toggleable **Shiny Skins** (+3 drop yield each) for Netherlings, Demons, and Mountains.
 - **Custom Goals Engine**:
   - **Quick Target**: Collapsible card for spur-of-the-moment calculations. Supports specifying custom resource pools (Orbs, Flames, Crystals, Stars) and/or creature summons (Netherlings, Demons, Mountains) with instant Target toggling, Clear, and "Save as Goal..." shortcut (which cleanly untargets and clears Quick Target).
   - **Saved Custom Goals**: Reusable custom targets categorized under the **Custom** tab. Create, target, achieve, edit, and delete custom goals with persistent local storage.
