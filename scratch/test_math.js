@@ -4,6 +4,7 @@ var state = {
     selectedGoals: { "scroll_plenty": true },
     pieLevel: 0,
     bountyEnabled: false,
+    shinySkins: { netherling: false, demon: false, mountain: false },
     transientGoal: {
         active: false,
         collapsed: true,
@@ -29,7 +30,8 @@ function getCreatureDrop(creatureKey) {
     var baseDrop = creature.baseDrops[currentLevel];
     var pieBonus = state.pieLevel || 0;
     var bountyBonus = state.bountyEnabled ? 1 : 0;
-    return baseDrop + pieBonus + bountyBonus;
+    var shinyBonus = (state.shinySkins && state.shinySkins[creatureKey]) ? 3 : 0;
+    return baseDrop + pieBonus + bountyBonus + shinyBonus;
 }
 
 function calculateCosts() {
@@ -192,4 +194,28 @@ assert(res5.summons.demon === 6, "Test 5: Demon summons is 6");
 assert(res5.summons.netherling === 20, "Test 5: Netherling summons is 20");
 assert(res5.deficits.orbs === 53, "Test 5: Total orb deficit is 53");
 
+// Test 6: Shiny Skin standalone drops (+3 yield per creature)
+state.shinySkins = { netherling: true, demon: true, mountain: true };
+assert(getCreatureDrop("netherling") === 6, "Test 6: Netherling Lvl 1 drop with Shiny Skin is 3 + 3 = 6");
+assert(getCreatureDrop("demon") === 5, "Test 6: Demon Lvl 1 drop with Shiny Skin is 2 + 3 = 5");
+assert(getCreatureDrop("mountain") === 4, "Test 6: Mountain Lvl 1 drop with Shiny Skin is 1 + 3 = 4");
+
+// Test 7: Cascade calculation with Shiny Skins enabled on Scroll of Plenty
+// Target: 50 flames, 10 crystals. OnHand: 20 orbs.
+// Demons: need 10 crystals. Demon drop = 5. Demons needed = 2.
+// Demon cost: 2 * 10 = 20 flames, 2 * 3 = 6 orbs.
+// Flames total needed: 50 + 20 = 70. Netherling drop = 6. Netherlings needed = ceil(70 / 6) = 12.
+// Netherling orb cost: 12 * 1 = 12 orbs.
+// Total orbs needed: 6 + 12 = 18 orbs.
+// OnHand orbs = 20, so orb deficit is 0! (versus 29 without shiny skins)
+state.selectedGoals = { "scroll_plenty": true };
+state.customGoals = [];
+state.transientGoal.active = false;
+state.onHand = { orbs: 20, flames: 0, crystals: 0, stars: 0 };
+var res7 = calculateCosts();
+assert(res7.summons.demon === 2, "Test 7: 2 Demons with shiny skin (yield 5 crystals each)");
+assert(res7.summons.netherling === 12, "Test 7: 12 Netherlings with shiny skin (yield 6 flames each)");
+assert(res7.deficits.orbs === 0, "Test 7: Orb deficit is 0 with shiny skins and 20 orbs on hand");
+
 WScript.Echo("ALL TESTS PASSED SUCCESSFULLY!");
+

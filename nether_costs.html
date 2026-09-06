@@ -404,6 +404,65 @@
             box-shadow: 0 0 8px rgba(168, 85, 247, 0.6);
         }
 
+        .creature-level-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .shiny-skin-toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.70rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            cursor: pointer;
+            user-select: none;
+            padding: 3px 6px;
+            border-radius: 4px;
+            border: 1px solid transparent;
+            transition: all 0.2s ease;
+        }
+
+        .shiny-skin-toggle:hover {
+            color: #fde047;
+            background: rgba(234, 179, 8, 0.08);
+            border-color: rgba(234, 179, 8, 0.25);
+        }
+
+        .shiny-skin-toggle:has(input:checked) {
+            color: #facc15;
+            background: rgba(234, 179, 8, 0.15);
+            border-color: rgba(250, 204, 21, 0.45);
+            box-shadow: 0 0 8px rgba(234, 179, 8, 0.3);
+        }
+
+        .shiny-skin-toggle input[type="checkbox"] {
+            accent-color: #eab308;
+            width: 14px;
+            height: 14px;
+            cursor: pointer;
+            margin: 0;
+        }
+
+        .shiny-skin-toggle input[type="checkbox"]:focus-visible {
+            outline: 2px solid #facc15;
+            outline-offset: 2px;
+        }
+
+        @media (max-width: 480px) {
+            .creature-level-row {
+                flex-wrap: wrap;
+                gap: 8px;
+                padding: 8px 10px;
+            }
+            .creature-level-actions {
+                width: 100%;
+                justify-content: space-between;
+            }
+        }
+
         .modifier-box {
             background: rgba(13, 10, 18, 0.6);
             border: 1px solid rgba(168, 85, 247, 0.1);
@@ -1921,10 +1980,16 @@
                                         <span class="level-base-badge" id="netherlingBaseDropBadge">Base: +3 Flames</span>
                                     </div>
                                 </div>
-                                <div class="level-pill-group" role="group" aria-label="Netherling level selector">
-                                    <button type="button" class="level-pill-btn active" id="btnNetherlingLvl1" onclick="setCreatureLevel('netherling', 1)" aria-label="Netherling Level 1" aria-pressed="true">1</button>
-                                    <button type="button" class="level-pill-btn" id="btnNetherlingLvl2" onclick="setCreatureLevel('netherling', 2)" aria-label="Netherling Level 2" aria-pressed="false">2</button>
-                                    <button type="button" class="level-pill-btn" id="btnNetherlingLvl3" onclick="setCreatureLevel('netherling', 3)" aria-label="Netherling Level 3" aria-pressed="false">3</button>
+                                <div class="creature-level-actions">
+                                    <div class="level-pill-group" role="group" aria-label="Netherling level selector">
+                                        <button type="button" class="level-pill-btn active" id="btnNetherlingLvl1" onclick="setCreatureLevel('netherling', 1)" aria-label="Netherling Level 1" aria-pressed="true">1</button>
+                                        <button type="button" class="level-pill-btn" id="btnNetherlingLvl2" onclick="setCreatureLevel('netherling', 2)" aria-label="Netherling Level 2" aria-pressed="false">2</button>
+                                        <button type="button" class="level-pill-btn" id="btnNetherlingLvl3" onclick="setCreatureLevel('netherling', 3)" aria-label="Netherling Level 3" aria-pressed="false">3</button>
+                                    </div>
+                                    <label class="shiny-skin-toggle" title="Netherling Shiny Skin (+3 Flames yield)">
+                                        <input type="checkbox" id="chkShinyNetherling" onchange="toggleShinySkin('netherling', this.checked)">
+                                        <span>✨ Shiny (+3)</span>
+                                    </label>
                                 </div>
                             </div>
                             <!-- Nether Demon -->
@@ -1936,10 +2001,16 @@
                                         <span class="level-base-badge" id="demonBaseDropBadge">Base: +2 Crystals</span>
                                     </div>
                                 </div>
-                                <div class="level-pill-group" role="group" aria-label="Nether Demon level selector">
-                                    <button type="button" class="level-pill-btn active" id="btnDemonLvl1" onclick="setCreatureLevel('demon', 1)" aria-label="Nether Demon Level 1" aria-pressed="true">1</button>
-                                    <button type="button" class="level-pill-btn" id="btnDemonLvl2" onclick="setCreatureLevel('demon', 2)" aria-label="Nether Demon Level 2" aria-pressed="false">2</button>
-                                    <button type="button" class="level-pill-btn" id="btnDemonLvl3" onclick="setCreatureLevel('demon', 3)" aria-label="Nether Demon Level 3" aria-pressed="false">3</button>
+                                <div class="creature-level-actions">
+                                    <div class="level-pill-group" role="group" aria-label="Nether Demon level selector">
+                                        <button type="button" class="level-pill-btn active" id="btnDemonLvl1" onclick="setCreatureLevel('demon', 1)" aria-label="Nether Demon Level 1" aria-pressed="true">1</button>
+                                        <button type="button" class="level-pill-btn" id="btnDemonLvl2" onclick="setCreatureLevel('demon', 2)" aria-label="Nether Demon Level 2" aria-pressed="false">2</button>
+                                        <button type="button" class="level-pill-btn" id="btnDemonLvl3" onclick="setCreatureLevel('demon', 3)" aria-label="Nether Demon Level 3" aria-pressed="false">3</button>
+                                    </div>
+                                    <label class="shiny-skin-toggle" title="Nether Demon Shiny Skin (+3 Crystals yield)">
+                                        <input type="checkbox" id="chkShinyDemon" onchange="toggleShinySkin('demon', this.checked)">
+                                        <span>✨ Shiny (+3)</span>
+                                    </label>
                                 </div>
                             </div>
                             <!-- Nether Mountain -->
@@ -1951,9 +2022,15 @@
                                         <span class="level-base-badge" id="mountainBaseDropBadge">Base: +1 Star</span>
                                     </div>
                                 </div>
-                                <div class="level-pill-group" role="group" aria-label="Nether Mountain level selector">
-                                    <button type="button" class="level-pill-btn active" id="btnMountainLvl1" onclick="setCreatureLevel('mountain', 1)" aria-label="Nether Mountain Level 1" aria-pressed="true">1</button>
-                                    <button type="button" class="level-pill-btn" id="btnMountainLvl2" onclick="setCreatureLevel('mountain', 2)" aria-label="Nether Mountain Level 2" aria-pressed="false">2</button>
+                                <div class="creature-level-actions">
+                                    <div class="level-pill-group" role="group" aria-label="Nether Mountain level selector">
+                                        <button type="button" class="level-pill-btn active" id="btnMountainLvl1" onclick="setCreatureLevel('mountain', 1)" aria-label="Nether Mountain Level 1" aria-pressed="true">1</button>
+                                        <button type="button" class="level-pill-btn" id="btnMountainLvl2" onclick="setCreatureLevel('mountain', 2)" aria-label="Nether Mountain Level 2" aria-pressed="false">2</button>
+                                    </div>
+                                    <label class="shiny-skin-toggle" title="Nether Mountain Shiny Skin (+3 Stars yield)">
+                                        <input type="checkbox" id="chkShinyMountain" onchange="toggleShinySkin('mountain', this.checked)">
+                                        <span>✨ Shiny (+3)</span>
+                                    </label>
                                 </div>
                             </div>
                         </div>
@@ -2186,7 +2263,7 @@
         
         <div class="instr-section">
             <h4>1. Modifiers &amp; Creature Levels</h4>
-            <p>Configure your <strong>Nether Pie</strong> level (0&ndash;3), toggle <strong>Bounty</strong> (+1 drop yield), and select your <strong>Creature Upgrade Levels</strong> (1&ndash;3 for Netherling &amp; Demon, 1&ndash;2 for Mountain). Creature levels sync bidirectionally with checklist goals and dynamically update drop yields.</p>
+            <p>Configure your <strong>Nether Pie</strong> level (0&ndash;3), toggle <strong>Bounty</strong> (+1 drop yield), select your <strong>Creature Upgrade Levels</strong> (1&ndash;3 for Netherling &amp; Demon, 1&ndash;2 for Mountain), and toggle each creature's <strong>Shiny Skin</strong> (+3 drop yield). Creature levels sync bidirectionally with checklist goals and dynamically update drop yields.</p>
         </div>
 
         <div class="instr-section">
@@ -2259,7 +2336,7 @@
 
     <!-- JS Core Engine -->
     <script>
-        const APP_VERSION = "v1.1.1";
+        const APP_VERSION = "v1.2.0-beta.1";
 
         // --- 1. Base64 Icons Database ---
         const ICONS = {
@@ -2360,6 +2437,7 @@
             selectedGoals: {},    // Maps goal ID -> boolean (Current target calculator)
             pieLevel: 0,          // Modifiers: Pie Level (0-3)
             bountyEnabled: false, // Modifiers: Bounty (+1)
+            shinySkins: { netherling: false, demon: false, mountain: false }, // Shiny Skin (+3 each)
             hideCompleted: false, // UI Filters
             activeCategory: "All",
             searchQuery: "",
@@ -2389,6 +2467,11 @@
                 selectedGoals: typeof parsed?.selectedGoals === 'object' && parsed.selectedGoals !== null ? { ...parsed.selectedGoals } : {},
                 pieLevel: Math.max(0, Math.min(3, parseInt(parsed?.pieLevel) || 0)),
                 bountyEnabled: !!parsed?.bountyEnabled,
+                shinySkins: {
+                    netherling: !!parsed?.shinySkins?.netherling,
+                    demon: !!parsed?.shinySkins?.demon,
+                    mountain: !!parsed?.shinySkins?.mountain
+                },
                 hideCompleted: !!parsed?.hideCompleted,
                 activeCategory: typeof parsed?.activeCategory === 'string' ? parsed.activeCategory : "All",
                 searchQuery: typeof parsed?.searchQuery === 'string' ? parsed.searchQuery : "",
@@ -2459,6 +2542,7 @@
                 }
                 state.pieLevel = 0;
                 state.bountyEnabled = false;
+                state.shinySkins = { netherling: false, demon: false, mountain: false };
                 state.hideCompleted = false;
                 state.activeCategory = "All";
                 state.searchQuery = "";
@@ -2530,10 +2614,12 @@
             const baseDrop = creature.baseDrops[level];
             const pieBonus = state.pieLevel;
             const bountyBonus = state.bountyEnabled ? 1 : 0;
+            const shinyBonus = (state.shinySkins && state.shinySkins[creatureKey]) ? 3 : 0;
             
             return {
                 level: level,
-                drop: baseDrop + pieBonus + bountyBonus
+                shiny: !!(state.shinySkins && state.shinySkins[creatureKey]),
+                drop: baseDrop + pieBonus + bountyBonus + shinyBonus
             };
         }
 
@@ -2838,6 +2924,14 @@
             if (mountainBadge) {
                 mountainBadge.innerText = `Base: +${CREATURES_DATA.mountain.baseDrops[mountainStats.level]} Star${CREATURES_DATA.mountain.baseDrops[mountainStats.level] > 1 ? 's' : ''}`;
             }
+
+            // Sync Shiny Skin Checkboxes
+            const chkNetherling = document.getElementById("chkShinyNetherling");
+            if (chkNetherling) chkNetherling.checked = !!(state.shinySkins && state.shinySkins.netherling);
+            const chkDemon = document.getElementById("chkShinyDemon");
+            if (chkDemon) chkDemon.checked = !!(state.shinySkins && state.shinySkins.demon);
+            const chkMountain = document.getElementById("chkShinyMountain");
+            if (chkMountain) chkMountain.checked = !!(state.shinySkins && state.shinySkins.mountain);
         }
 
         // Initialize dynamic icon sources for transient and modal elements
@@ -3591,6 +3685,17 @@
                 showToast(`Nether Mountain set to Level ${level} (+${CREATURES_DATA.mountain.baseDrops[level]} Star${level > 1 ? 's' : ''} base)`);
             }
 
+            saveStateToLocalStorage();
+            renderAll();
+        }
+
+        function toggleShinySkin(creatureKey, isChecked) {
+            if (!state.shinySkins) {
+                state.shinySkins = { netherling: false, demon: false, mountain: false };
+            }
+            state.shinySkins[creatureKey] = !!isChecked;
+            const creatureName = CREATURES_DATA[creatureKey] ? CREATURES_DATA[creatureKey].name : creatureKey;
+            showToast(`${creatureName} Shiny Skin ${isChecked ? 'enabled (+3 drop yield)' : 'disabled'}.`);
             saveStateToLocalStorage();
             renderAll();
         }
