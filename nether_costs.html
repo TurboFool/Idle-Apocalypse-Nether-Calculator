@@ -562,7 +562,7 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            min-height: 95px;
+            min-height: 108px;
             position: relative;
             transition: box-shadow 0.3s;
         }
@@ -674,45 +674,89 @@
             object-fit: contain;
         }
 
+        .card-input-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 6px 0;
+            width: 100%;
+        }
+
         .card-controls {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 6px;
-            margin-top: 8px;
+            gap: 5px;
+            width: 100%;
         }
 
         .card-btn {
+            flex: 1;
             background: rgba(139, 92, 246, 0.15);
             border: 1px solid rgba(168, 85, 247, 0.15);
             color: #fff;
-            font-size: 0.65rem;
+            font-size: 0.68rem;
             font-weight: 800;
-            width: 32px;
-            height: 32px;
+            height: 28px;
+            padding: 0;
             border-radius: 6px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
             transition: all 0.15s;
+            user-select: none;
+            min-width: 0;
         }
 
         .card-btn:hover {
             background: var(--accent-purple);
+            border-color: #a78bfa;
             box-shadow: 0 0 8px rgba(139, 92, 246, 0.3);
         }
 
+        .card-btn:active {
+            transform: scale(0.96);
+        }
+
         .inv-input {
-            flex: 1;
             width: 100%;
-            background: transparent;
-            border: none;
+            background: rgba(0, 0, 0, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 6px;
             color: #fff;
             text-align: center;
-            font-size: 1.15rem;
+            font-size: 1.25rem;
             font-weight: 800;
+            padding: 3px 6px;
             outline: none;
+            box-sizing: border-box;
+            transition: border-color 0.2s, box-shadow 0.2s, background-color 0.2s;
+        }
+
+        .inv-input:focus-visible,
+        .inv-input:focus {
+            background: rgba(0, 0, 0, 0.45);
+            border-color: var(--accent-purple);
+            box-shadow: 0 0 8px rgba(139, 92, 246, 0.35);
+        }
+
+        /* Color accents when focused by resource type */
+        .inv-orb .inv-input:focus {
+            border-color: var(--color-orb);
+            box-shadow: 0 0 8px var(--glow-orb);
+        }
+        .inv-flame .inv-input:focus {
+            border-color: var(--color-flame);
+            box-shadow: 0 0 8px var(--glow-flame);
+        }
+        .inv-crystal .inv-input:focus {
+            border-color: var(--color-crystal);
+            box-shadow: 0 0 8px var(--glow-crystal);
+        }
+        .inv-star .inv-input:focus {
+            border-color: var(--color-star);
+            box-shadow: 0 0 8px var(--glow-star);
         }
 
         /* Remove arrows from number input */
@@ -1958,16 +2002,16 @@
                 gap: 12px;
             }
             .card-btn {
-                width: 36px;
-                height: 36px;
-                font-size: 0.75rem;
+                height: 34px;
+                font-size: 0.78rem;
             }
             .creature-btn {
                 height: 36px;
                 font-size: 0.85rem;
             }
             .inv-input {
-                font-size: 1.3rem;
+                font-size: 1.35rem;
+                padding: 4px 8px;
             }
         }
 
@@ -2637,7 +2681,7 @@
 
     <!-- JS Core Engine -->
     <script>
-        const APP_VERSION = "v1.3.0";
+        const APP_VERSION = "v1.3.1";
 
         // --- 1. Base64 Icons Database ---
         const ICONS = {
@@ -3172,11 +3216,13 @@
                         <span>${item.label}</span>
                         <img class="resource-icon" src="${item.icon}" alt="${item.label}">
                     </div>
+                    <div class="card-input-row">
+                        <input type="number" inputmode="numeric" min="0" step="1" pattern="[0-9]*" class="inv-input mono-num" value="${state.onHand[item.key]}" 
+                            onfocus="this.select()" onchange="setInventory('${item.key}', this.value)" aria-label="On-hand ${item.label}">
+                    </div>
                     <div class="card-controls">
                         <button class="card-btn" onclick="updateInventory('${item.key}', -10)" title="-10" aria-label="Decrease ${item.label} by 10">-10</button>
                         <button class="card-btn" onclick="updateInventory('${item.key}', -1)" title="-1" aria-label="Decrease ${item.label} by 1">-1</button>
-                        <input type="number" inputmode="numeric" min="0" step="1" pattern="[0-9]*" class="inv-input mono-num" value="${state.onHand[item.key]}" 
-                            onchange="setInventory('${item.key}', this.value)" aria-label="On-hand ${item.label}">
                         <button class="card-btn" onclick="updateInventory('${item.key}', 1)" title="+1" aria-label="Increase ${item.label} by 1">+1</button>
                         <button class="card-btn" onclick="updateInventory('${item.key}', 10)" title="+10" aria-label="Increase ${item.label} by 10">+10</button>
                     </div>

@@ -214,6 +214,7 @@ $$\text{Drop Yield}(c) = \text{BaseDrop}(c, \text{Level}) + \text{PieLevel} + (\
    - **Keyboard Navigation**: Glowing `:focus-visible` ring across all interactive buttons, inputs, and tabs.
    - **Screen Reader Announcements**: `#toastNotification` configured with `role="status"` and `aria-live="polite"`.
    - **Mobile Inputs**: On-hand inventory numeric fields specify `type="number"`, `inputmode="numeric"`, `step="1"`, `min="0"`, and `pattern="[0-9]*"`.
+   - **On-Hand Inventory Card Layout**: Inventory cards utilize a dedicated full-width input row (`.card-input-row`) above a balanced stepper button row (`[-10] [-1] [+1] [+10]`), completely preventing digit truncation or clipping for 3-, 4-, and 5-digit counts across all display scales and desktop viewports. Inputs include resource-matched focus rings, glowing accents, and `onfocus="this.select()"` for quick edits.
 
 ---
 
@@ -221,13 +222,13 @@ $$\text{Drop Yield}(c) = \text{BaseDrop}(c, \text{Level}) + \text{PieLevel} + (\
 
 ### Versioning Format & Lifecycle
 Follow Semantic Versioning (`MAJOR.MINOR.PATCH`):
-- **Pre-Releases**: `vX.Y.Z-beta.N` (e.g., `v1.3.0-beta.1`) used on feature/dev iterations during testing phases.
-- **Production Releases**: Clean `vX.Y.Z` (e.g., `v1.3.0`) used for official, non-beta production releases merged to `main`.
+- **Pre-Releases**: `vX.Y.Z-beta.N` (e.g., `v1.3.2-beta.1`) used on feature/dev iterations during testing phases.
+- **Production Releases**: Clean `vX.Y.Z` (e.g., `v1.3.1`) used for official, non-beta production releases merged to `main`.
 
 ### Embedded Version Single Source of Truth
 The version string is declared in JavaScript at the top of the `<script>` tag in `nether_costs.html`:
 ```javascript
-const APP_VERSION = "v1.3.0";
+const APP_VERSION = "v1.3.1";
 ```
 On page load (`DOMContentLoaded`), this value is assigned to the header element `<span id="app-version">`.
 
