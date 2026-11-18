@@ -32,6 +32,7 @@ This calculator automates the entire cascade math, tracks on-hand inventory, fac
 Idle Apocalypse Nether Costs/
 ├── GEMINI.md                 # Antigravity agent & project guidelines configuration
 ├── nether_costs.html         # Single-file application (HTML + CSS + JS + Base64 WebP Assets)
+├── lesleys_place.html        # Standalone beta preview of Lesley's Place Planner (pending full integration)
 ├── README.md                 # Public repository README
 ├── PROJECT_MASTER.md         # Master technical specification & developer guide (this document)
 ├── assets/                   # Source WebP icons for game items
@@ -302,6 +303,25 @@ If game icon WebP images in `assets/` are replaced or updated:
 - Always consult `modern-web-guidance` (`npx.cmd -y modern-web-guidance@latest search "<query>"`) prior to web UI implementations.
 - Changes must be targeted to the `dev` branch only, unless explicit release merge to `main` is requested.
 - `PROJECT_MASTER.md` must be updated on all functional, mathematical, and UI changes.
+
+---
+
+## 🗺️ 7. Roadmap & Upcoming Integration
+
+### Lesley's Place Planner (`lesleys_place.html`)
+The **Lesley's Place Planner** (developed in `TurboFool/lesleys_place_planner`, currently `v0.1.0-beta.1`) is hosted in the repository root alongside `nether_costs.html` for public beta testing prior to full integration into this project.
+
+- **Current Beta Scope (`lesleys_place.html`)**:
+  - **Doomsday Device (DDD) & Tear Multiplier**: Tracks DDD count with automatic $\min(\max(1, \text{DDD}), 10)$ Tear Trade multiplier (plus manual `x1`–`x10` override) and an "Activate DDD (New Run)" reset flow.
+  - **Tear Trades**: 7 sequential trade chains (Soul, Time, Nether, Champion, Dark Energy, Apocalypse Damage, Gem; 167 base Tears total) with cascading Planned / Completed state tracking.
+  - **Pies & Casseroles**: 21 Pies across 5 categories (18,277 total Tears) with sequential level unlocking, `# Shinies` requirement status badges, and `Auto-deduct Tears on Purchase`.
+  - **Shiny Skins**: 27 Skins (2,055 total Tears) with Planned / Owned tracking, search/filter controls, and auto-deduct support.
+  - **Budget & Persistence**: Real-time Tears Budget & Affordability summary, JSON Export/Import, and `localStorage` persistence (`idle_apoc_lesleys_place_state_v1`).
+- **Planned Post-Beta Integration Milestones**:
+  1. **Unified Navigation**: Link `nether_costs.html` and `lesleys_place.html` as sibling pages within a shared navigation header.
+  2. **Shared Visual Assets**: Embed matching WebP/SVG icons from `assets/` into `lesleys_place.html` using the same Base64 Data URI architecture.
+  3. **PWA & Offline Caching**: Register `lesleys_place.html` in `sw.js` and `manifest.json` for full offline PWA support.
+  4. **Cross-Tool Modifier Sync (Optional)**: Evaluate syncing shared progression (e.g., Shiny Skins and Nether Pie levels) between `idle_apoc_nether_costs_state_v2` and `idle_apoc_lesleys_place_state_v1`.
 
 ---
 

@@ -1,0 +1,2081 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#0d0a12">
+    <title>Idle Apocalypse - Lesley's Place Planner</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            color-scheme: dark;
+            --bg-color: #0d0a12;
+            --panel-bg: #14101e;
+            --card-bg: #1b1528;
+            --card-hover: #231b34;
+            --panel-border: rgba(168, 85, 247, 0.22);
+            --text-color: #f3f1f7;
+            --text-muted: #bdaecf;
+            --accent-purple: #8b5cf6;
+            --accent-purple-bright: #a855f7;
+            --color-tear: #38bdf8;
+            --glow-tear: rgba(56, 189, 248, 0.35);
+            --color-gold: #eab308;
+            --glow-gold: rgba(234, 179, 8, 0.35);
+            --color-green: #22c55e;
+            --color-amber: #f59e0b;
+            --color-red: #ef4444;
+            --scrollbar-thumb: #2b1f3c;
+            --scrollbar-track: #09070c;
+            scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+            scrollbar-width: thin;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.5;
+            padding-bottom: 48px;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4, .font-fantasy {
+            font-family: 'Cinzel', Georgia, serif;
+            letter-spacing: 0.04em;
+            text-wrap: balance;
+        }
+
+        .mono-num {
+            font-family: 'Space Mono', ui-monospace, SFMono-Regular, monospace;
+        }
+
+        :focus-visible {
+            outline: 2px solid var(--accent-purple);
+            outline-offset: 2px;
+        }
+
+        /* Header */
+        .header {
+            border-bottom: 2px solid rgba(139, 92, 246, 0.25);
+            background-color: rgba(20, 16, 30, 0.95);
+            backdrop-filter: blur(8px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 12px 20px;
+        }
+
+        .header-inner {
+            max-width: 1440px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .title-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .title-group h1 {
+            font-size: clamp(1.1rem, 2.2vw, 1.5rem);
+            font-weight: 800;
+            background: linear-gradient(135deg, #f3f1f7 0%, #38bdf8 55%, #a855f7 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .version-badge {
+            font-size: 0.72rem;
+            padding: 2px 8px;
+            border-radius: 999px;
+            background: rgba(139, 92, 246, 0.18);
+            border: 1px solid rgba(139, 92, 246, 0.4);
+            color: #d8b4fe;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        /* Mobile Hovering Budget Bar (inside sticky header) */
+        .mobile-budget-bar {
+            display: none;
+        }
+
+        @media (max-width: 980px) {
+            .header {
+                padding: 10px 12px;
+            }
+
+            .header-inner {
+                gap: 8px;
+            }
+
+            .mobile-budget-bar {
+                display: grid;
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+                gap: 6px;
+                max-width: 1440px;
+                margin: 8px auto 0;
+                padding-top: 8px;
+                border-top: 1px solid rgba(139, 92, 246, 0.2);
+            }
+
+            .mob-stat {
+                background: rgba(255, 255, 255, 0.04);
+                border: 1px solid rgba(255, 255, 255, 0.07);
+                border-radius: 8px;
+                padding: 4px 8px;
+                min-width: 0;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+
+            .mob-stat.ok {
+                background: rgba(34, 197, 94, 0.09);
+                border-color: rgba(34, 197, 94, 0.3);
+            }
+
+            .mob-stat.short {
+                background: rgba(239, 68, 68, 0.09);
+                border-color: rgba(239, 68, 68, 0.3);
+            }
+
+            .mob-stat-label {
+                font-size: 0.65rem;
+                color: var(--text-muted);
+                text-transform: uppercase;
+                letter-spacing: 0.03em;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                max-width: 100%;
+            }
+
+            .mob-stat-val {
+                font-size: 0.82rem;
+                line-height: 1.25;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                max-width: 100%;
+            }
+        }
+
+        @media (max-width: 520px) {
+            .header-actions .btn-sm {
+                padding: 4px 7px;
+                font-size: 0.72rem;
+            }
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 7px 12px;
+            border-radius: 8px;
+            border: 1px solid var(--panel-border);
+            background: var(--card-bg);
+            color: var(--text-color);
+            font-family: inherit;
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.15s, border-color 0.15s, transform 0.1s;
+        }
+
+        .btn:hover:not(:disabled) {
+            background: var(--card-hover);
+            border-color: rgba(168, 85, 247, 0.5);
+        }
+
+        .btn:active:not(:disabled) {
+            transform: translateY(1px);
+        }
+
+        .btn:disabled {
+            opacity: 0.45;
+            cursor: not-allowed;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #7c3aed, #6d28d9);
+            border-color: rgba(168, 85, 247, 0.6);
+            color: #fff;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+        }
+
+        .btn-danger {
+            border-color: rgba(239, 68, 68, 0.35);
+            color: #fca5a5;
+        }
+
+        .btn-danger:hover:not(:disabled) {
+            background: rgba(239, 68, 68, 0.15);
+            border-color: rgba(239, 68, 68, 0.65);
+        }
+
+        .btn-sm {
+            padding: 4px 9px;
+            font-size: 0.75rem;
+            border-radius: 6px;
+        }
+
+        /* Main Layout */
+        .main-container {
+            max-width: 1440px;
+            margin: 20px auto 0;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 360px 1fr;
+            gap: 20px;
+            align-items: start;
+        }
+
+        @media (max-width: 980px) {
+            .main-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .left-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            position: sticky;
+            top: 76px;
+        }
+
+        @media (max-width: 980px) {
+            .left-panel {
+                position: static;
+            }
+        }
+
+        .panel-card {
+            background: var(--panel-bg);
+            border: 1px solid var(--panel-border);
+            border-radius: 14px;
+            padding: 16px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+        }
+
+        .panel-title {
+            font-size: 0.95rem;
+            font-weight: 800;
+            color: #e9d5ff;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+        }
+
+        /* Form Controls */
+        .input-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .input-row label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        input[type="number"], select, input[type="text"] {
+            background: #0d0a12;
+            border: 1px solid rgba(168, 85, 247, 0.35);
+            border-radius: 8px;
+            color: var(--text-color);
+            padding: 6px 10px;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.88rem;
+        }
+
+        input[type="text"] {
+            font-family: inherit;
+        }
+
+        input[type="number"]:focus, select:focus, input[type="text"]:focus {
+            border-color: var(--color-tear);
+            outline: none;
+        }
+
+        .num-input-sm {
+            width: 96px;
+            text-align: right;
+        }
+
+        .multiplier-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(56, 189, 248, 0.14);
+            border: 1px solid rgba(56, 189, 248, 0.45);
+            color: var(--color-tear);
+            font-weight: 700;
+            font-size: 0.85rem;
+        }
+
+        .toggle-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            padding: 6px 0;
+            cursor: pointer;
+        }
+
+        .toggle-row input[type="checkbox"] {
+            accent-color: var(--accent-purple);
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+        }
+
+        /* Summary Grid */
+        .summary-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .summary-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 10px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 0.85rem;
+        }
+
+        .summary-item.highlight {
+            background: rgba(56, 189, 248, 0.08);
+            border-color: rgba(56, 189, 248, 0.28);
+        }
+
+        .summary-item.balance-ok {
+            background: rgba(34, 197, 94, 0.1);
+            border-color: rgba(34, 197, 94, 0.35);
+        }
+
+        .summary-item.balance-short {
+            background: rgba(239, 68, 68, 0.1);
+            border-color: rgba(239, 68, 68, 0.35);
+        }
+
+        .val-tear { color: var(--color-tear); font-weight: 700; }
+        .val-gold { color: var(--color-gold); font-weight: 700; }
+        .val-green { color: var(--color-green); font-weight: 700; }
+        .val-red { color: #f87171; font-weight: 700; }
+        .val-amber { color: var(--color-amber); font-weight: 700; }
+
+        .divider {
+            height: 1px;
+            background: rgba(168, 85, 247, 0.18);
+            margin: 10px 0;
+        }
+
+        .action-stack {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
+        .action-stack .btn {
+            flex: 1;
+        }
+
+        /* Right Panel & Tabs */
+        .section-tabs {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+        }
+
+        .tab-btn {
+            padding: 10px 16px;
+            border-radius: 10px;
+            border: 1px solid var(--panel-border);
+            background: var(--panel-bg);
+            color: var(--text-muted);
+            font-family: 'Cinzel', serif;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.15s;
+        }
+
+        .tab-btn:hover {
+            color: var(--text-color);
+            border-color: rgba(168, 85, 247, 0.5);
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, rgba(124, 58, 237, 0.35), rgba(56, 189, 248, 0.18));
+            border-color: var(--accent-purple-bright);
+            color: #fff;
+            box-shadow: 0 0 16px rgba(139, 92, 246, 0.25);
+        }
+
+        .tab-count {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.72rem;
+            padding: 2px 7px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--color-tear);
+        }
+
+        .filter-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 16px;
+            padding: 12px 14px;
+            background: var(--panel-bg);
+            border: 1px solid var(--panel-border);
+            border-radius: 12px;
+        }
+
+        .pill-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .filter-pill {
+            padding: 5px 11px;
+            border-radius: 999px;
+            border: 1px solid rgba(168, 85, 247, 0.25);
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--text-muted);
+            font-size: 0.78rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .filter-pill:hover {
+            color: var(--text-color);
+            border-color: rgba(168, 85, 247, 0.5);
+        }
+
+        .filter-pill.active {
+            background: rgba(139, 92, 246, 0.28);
+            border-color: var(--accent-purple);
+            color: #fff;
+        }
+
+        /* Trade Chains Grid */
+        .chains-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+            gap: 16px;
+        }
+
+        @media (max-width: 500px) {
+            .chains-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .chain-card {
+            background: var(--panel-bg);
+            border: 1px solid var(--panel-border);
+            border-radius: 14px;
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .chain-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.15);
+            padding-bottom: 8px;
+        }
+
+        .chain-header h3 {
+            font-size: 0.98rem;
+            color: #e9d5ff;
+        }
+
+        .chain-stats {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .tier-list {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .tier-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            padding: 7px 10px;
+            border-radius: 8px;
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 0.82rem;
+            transition: border-color 0.15s, background 0.15s;
+        }
+
+        .tier-row.is-planned {
+            border-color: rgba(56, 189, 248, 0.45);
+            background: rgba(56, 189, 248, 0.08);
+        }
+
+        .tier-row.is-completed {
+            border-color: rgba(34, 197, 94, 0.4);
+            background: rgba(34, 197, 94, 0.08);
+            opacity: 0.85;
+        }
+
+        .tier-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            min-width: 0;
+            flex: 1;
+        }
+
+        .tier-idx {
+            color: var(--text-muted);
+            font-size: 0.72rem;
+            width: 20px;
+            flex-shrink: 0;
+        }
+
+        .tier-cost {
+            font-weight: 600;
+            color: var(--text-color);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .tier-reward {
+            font-size: 0.78rem;
+            color: var(--color-tear);
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .tier-controls {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            flex-shrink: 0;
+        }
+
+        .state-btn {
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            background: rgba(255, 255, 255, 0.04);
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.12s;
+        }
+
+        .state-btn:hover {
+            border-color: rgba(255, 255, 255, 0.3);
+            color: #fff;
+        }
+
+        .state-btn.plan-active {
+            background: rgba(56, 189, 248, 0.22);
+            border-color: var(--color-tear);
+            color: #7dd3fc;
+        }
+
+        .state-btn.done-active {
+            background: rgba(34, 197, 94, 0.24);
+            border-color: var(--color-green);
+            color: #86efac;
+        }
+
+        /* Pies Grid */
+        .pies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 16px;
+        }
+
+        @media (max-width: 500px) {
+            .pies-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .pie-desc {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .shiny-req {
+            font-size: 0.7rem;
+            padding: 2px 6px;
+            border-radius: 5px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .shiny-met {
+            background: rgba(34, 197, 94, 0.16);
+            color: #86efac;
+            border: 1px solid rgba(34, 197, 94, 0.35);
+        }
+
+        .shiny-planned-met {
+            background: rgba(56, 189, 248, 0.16);
+            color: #7dd3fc;
+            border: 1px solid rgba(56, 189, 248, 0.35);
+        }
+
+        .shiny-unmet {
+            background: rgba(245, 158, 11, 0.16);
+            color: #fcd34d;
+            border: 1px solid rgba(245, 158, 11, 0.4);
+        }
+
+        /* Shiny Skins Grid */
+        .skins-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        @media (max-width: 760px) {
+            .skins-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 480px) {
+            .skins-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .skin-card {
+            background: var(--panel-bg);
+            border: 1px solid var(--panel-border);
+            border-radius: 12px;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            transition: border-color 0.15s;
+        }
+
+        .skin-card.is-planned {
+            border-color: rgba(56, 189, 248, 0.55);
+            background: rgba(56, 189, 248, 0.06);
+        }
+
+        .skin-card.is-owned {
+            border-color: rgba(234, 179, 8, 0.55);
+            background: rgba(234, 179, 8, 0.07);
+        }
+
+        .skin-top {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 8px;
+        }
+
+        .skin-name {
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: #fef08a;
+        }
+
+        .skin-drop {
+            font-size: 0.76rem;
+            color: var(--text-muted);
+        }
+
+        .skin-bottom {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            margin-top: auto;
+        }
+
+        /* Toast */
+        .toast-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 999;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .toast {
+            background: #1f1730;
+            border: 1px solid var(--accent-purple);
+            color: var(--text-color);
+            padding: 10px 16px;
+            border-radius: 10px;
+            font-size: 0.84rem;
+            font-weight: 600;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            animation: slideIn 0.2s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(12px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner">
+            <div class="title-group">
+                <h1>Lesley's Place Planner</h1>
+                <span id="app-version" class="version-badge mono-num"></span>
+            </div>
+            <div class="header-actions">
+                <button class="btn btn-sm" id="btn-export" title="Export state to JSON">Export JSON</button>
+                <button class="btn btn-sm" id="btn-import" title="Import state from JSON">Import JSON</button>
+                <input type="file" id="import-file" accept=".json" class="hidden">
+                <button class="btn btn-sm btn-danger" id="btn-reset-all" title="Reset all saved data">Reset All</button>
+            </div>
+        </div>
+        <div class="mobile-budget-bar" aria-label="Budget summary">
+            <div class="mob-stat">
+                <span class="mob-stat-label">On Hand</span>
+                <span id="mob-on-hand" class="mob-stat-val mono-num val-tear">0</span>
+            </div>
+            <div class="mob-stat">
+                <span class="mob-stat-label">Planned</span>
+                <span id="mob-planned" class="mob-stat-val mono-num val-gold">0</span>
+            </div>
+            <div id="mob-surplus-pill" class="mob-stat ok">
+                <span id="mob-surplus-label" class="mob-stat-label">Surplus</span>
+                <span id="mob-surplus" class="mob-stat-val mono-num val-green">+0</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-container">
+        <!-- Left Panel: DDD, Multiplier, Tears Budget -->
+        <aside class="left-panel">
+            <section class="panel-card">
+                <div class="panel-title">
+                    <span>Doomsday Device (DDD)</span>
+                    <span id="multiplier-badge" class="multiplier-pill mono-num">x1</span>
+                </div>
+
+                <div class="input-row">
+                    <label for="ddd-count">Current DDD Count</label>
+                    <input type="number" id="ddd-count" class="num-input-sm" min="1" step="1" value="1">
+                </div>
+
+                <div class="input-row">
+                    <label for="multiplier-override">Multiplier Mode</label>
+                    <select id="multiplier-override">
+                        <option value="auto">Auto</option>
+                        <option value="1">Manual: x1</option>
+                        <option value="2">Manual: x2</option>
+                        <option value="3">Manual: x3</option>
+                        <option value="4">Manual: x4</option>
+                        <option value="5">Manual: x5</option>
+                        <option value="6">Manual: x6</option>
+                        <option value="7">Manual: x7</option>
+                        <option value="8">Manual: x8</option>
+                        <option value="9">Manual: x9</option>
+                        <option value="10">Manual: x10</option>
+                    </select>
+                </div>
+
+                <div class="action-stack">
+                    <button class="btn btn-primary" id="btn-activate-ddd" title="Increment DDD count, clear trades, keep Tears/Pies/Skins">Activate DDD (New Run)</button>
+                    <button class="btn" id="btn-reset-trades" title="Clear planned and completed trades only">Reset Trades</button>
+                </div>
+            </section>
+
+            <section class="panel-card">
+                <div class="panel-title">
+                    <span>Dimension Tears Budget</span>
+                </div>
+
+                <div class="input-row">
+                    <label for="tears-on-hand">Tears on Hand</label>
+                    <input type="number" id="tears-on-hand" class="num-input-sm" min="0" step="1" value="0">
+                </div>
+
+                <label class="toggle-row">
+                    <span>Auto-deduct Tears on Purchase</span>
+                    <input type="checkbox" id="auto-deduct-toggle">
+                </label>
+
+                <div class="divider"></div>
+
+                <div class="summary-list">
+                    <div class="summary-item">
+                        <span>Earned (Completed Trades)</span>
+                        <span id="sum-earned-trades" class="mono-num val-green">0</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>Expected (Remaining Planned)</span>
+                        <span id="sum-planned-trades" class="mono-num val-tear">0</span>
+                    </div>
+                    <div class="summary-item highlight">
+                        <span>Projected Total Tears</span>
+                        <span id="sum-projected-tears" class="mono-num val-tear">0</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>Planned Purchases (Pies + Skins)</span>
+                        <span id="sum-planned-cost" class="mono-num val-gold">0</span>
+                    </div>
+                    <div id="balance-row" class="summary-item balance-ok">
+                        <span id="balance-label">Projected Balance</span>
+                        <span id="sum-projected-balance" class="mono-num">0</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>Current Affordability (On Hand)</span>
+                        <span id="sum-current-balance" class="mono-num">0</span>
+                    </div>
+                </div>
+
+                <div class="divider"></div>
+
+                <div class="summary-list">
+                    <div class="summary-item">
+                        <span>Shiny Skins Owned</span>
+                        <span id="sum-skins-owned" class="mono-num val-gold">0 / 27</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>Shiny Skins After Plan</span>
+                        <span id="sum-skins-projected" class="mono-num val-tear">0 / 27</span>
+                    </div>
+                </div>
+            </section>
+        </aside>
+
+        <!-- Right Panel: Trades, Pies, Shiny Skins -->
+        <section>
+            <nav class="section-tabs" role="tablist">
+                <button class="tab-btn active" data-tab="trades" role="tab">
+                    Tear Trades <span id="badge-trades" class="tab-count">0</span>
+                </button>
+                <button class="tab-btn" data-tab="pies" role="tab">
+                    Pies &amp; Casseroles <span id="badge-pies" class="tab-count">0</span>
+                </button>
+                <button class="tab-btn" data-tab="skins" role="tab">
+                    Shiny Skins <span id="badge-skins" class="tab-count">0</span>
+                </button>
+            </nav>
+
+            <!-- Trades Tab -->
+            <div id="tab-trades">
+                <div class="filter-bar">
+                    <div class="pill-group" id="trade-category-pills"></div>
+                    <label class="toggle-row" style="padding:0;">
+                        <span>Hide Completed</span>
+                        <input type="checkbox" id="hide-completed-trades">
+                    </label>
+                </div>
+                <div id="trades-container" class="chains-grid"></div>
+            </div>
+
+            <!-- Pies Tab -->
+            <div id="tab-pies" class="hidden">
+                <div class="filter-bar">
+                    <div class="pill-group" id="pie-category-pills"></div>
+                    <label class="toggle-row" style="padding:0;">
+                        <span>Hide Maxed</span>
+                        <input type="checkbox" id="hide-maxed-pies">
+                    </label>
+                </div>
+                <div id="pies-container" class="pies-grid"></div>
+            </div>
+
+            <!-- Shiny Skins Tab -->
+            <div id="tab-skins" class="hidden">
+                <div class="filter-bar">
+                    <div class="pill-group" id="skin-filter-pills"></div>
+                    <input type="text" id="skin-search" placeholder="Search skins or drops..." style="width: 220px;">
+                </div>
+                <div id="skins-container" class="skins-grid"></div>
+            </div>
+        </section>
+    </main>
+
+    <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+    <script>
+        const APP_VERSION = "v0.1.0-beta.1";
+        const STORAGE_KEY = "idle_apoc_lesleys_place_state_v1";
+
+        // ==========================================
+        // GAME DATA (Source: Idle Apocalypse Wiki)
+        // ==========================================
+        const TRADE_CHAINS = [
+            {
+                id: "soul",
+                name: "Soul Trades",
+                category: "Soul",
+                tiers: [
+                    { cost: "1m Souls", tears: 1 },
+                    { cost: "10m Souls", tears: 1 },
+                    { cost: "25m Souls", tears: 1 },
+                    { cost: "100m Souls", tears: 1 },
+                    { cost: "250m Souls", tears: 1 },
+                    { cost: "500m Souls", tears: 2 },
+                    { cost: "1b Souls", tears: 2 },
+                    { cost: "2.5b Souls", tears: 2 },
+                    { cost: "5b Souls", tears: 2 },
+                    { cost: "10b Souls", tears: 3 },
+                    { cost: "25b Souls", tears: 3 },
+                    { cost: "50b Souls", tears: 3 },
+                    { cost: "100b Souls", tears: 3 },
+                    { cost: "250b Souls", tears: 4 },
+                    { cost: "500b Souls", tears: 5 }
+                ]
+            },
+            {
+                id: "time",
+                name: "Time Trades",
+                category: "Time",
+                tiers: [
+                    { cost: "500 Time Orbs", tears: 1 },
+                    { cost: "50 Space Ore", tears: 1 },
+                    { cost: "10 Star Crystals", tears: 1 },
+                    { cost: "1,500 Time Orbs", tears: 2 },
+                    { cost: "150 Space Ore", tears: 2 },
+                    { cost: "50 Star Crystals", tears: 2 },
+                    { cost: "5,000 Time Orbs", tears: 3 },
+                    { cost: "250 Space Ore", tears: 3 },
+                    { cost: "100 Star Crystals", tears: 3 },
+                    { cost: "10,000 Time Orbs", tears: 4 },
+                    { cost: "1,000 Space Ore", tears: 4 },
+                    { cost: "500 Star Crystals", tears: 4 }
+                ]
+            },
+            {
+                id: "nether",
+                name: "Nether Trades",
+                category: "Nether",
+                tiers: [
+                    { cost: "100 Nether Flame", tears: 1 },
+                    { cost: "25 Nether Crystal", tears: 1 },
+                    { cost: "5 Nether Star", tears: 1 },
+                    { cost: "200 Nether Flame", tears: 2 },
+                    { cost: "50 Nether Crystal", tears: 2 },
+                    { cost: "10 Nether Star", tears: 2 },
+                    { cost: "300 Nether Flame", tears: 3 },
+                    { cost: "75 Nether Crystal", tears: 3 },
+                    { cost: "25 Nether Star", tears: 3 },
+                    { cost: "500 Nether Flame", tears: 4 },
+                    { cost: "100 Nether Crystal", tears: 4 },
+                    { cost: "50 Nether Star", tears: 4 }
+                ]
+            },
+            {
+                id: "champion",
+                name: "Champion Trades",
+                category: "Champion",
+                tiers: [
+                    { cost: "Stage 250", tears: 1 },
+                    { cost: "10 Crown", tears: 1 },
+                    { cost: "Stage 500", tears: 1 },
+                    { cost: "50 Necklace", tears: 1 },
+                    { cost: "1 Ankh", tears: 2 },
+                    { cost: "Stage 1,200", tears: 2 },
+                    { cost: "100 Necklace", tears: 2 },
+                    { cost: "Stage 1,500", tears: 3 },
+                    { cost: "30 Crown", tears: 3 },
+                    { cost: "Stage 1,800", tears: 4 },
+                    { cost: "2 Ankh", tears: 5 }
+                ]
+            },
+            {
+                id: "de",
+                name: "Dark Energy Trades",
+                category: "Dark Energy",
+                tiers: [
+                    { cost: "1m Dark Energy", tears: 1 },
+                    { cost: "1b Dark Energy", tears: 1 },
+                    { cost: "5b Dark Energy", tears: 1 },
+                    { cost: "10b Dark Energy", tears: 1 },
+                    { cost: "50b Dark Energy", tears: 2 },
+                    { cost: "100b Dark Energy", tears: 2 },
+                    { cost: "500b Dark Energy", tears: 3 },
+                    { cost: "1t Dark Energy", tears: 3 },
+                    { cost: "5t Dark Energy", tears: 4 },
+                    { cost: "10t Dark Energy", tears: 5 }
+                ]
+            },
+            {
+                id: "apoc",
+                name: "Apocalypse Damage Trades",
+                category: "Apocalypse",
+                tiers: [
+                    { cost: "250m Apoc Damage", tears: 1 },
+                    { cost: "500m Apoc Damage", tears: 2 },
+                    { cost: "1b Apoc Damage", tears: 3 },
+                    { cost: "2.5b Apoc Damage", tears: 4 },
+                    { cost: "5b Apoc Damage", tears: 5 }
+                ]
+            },
+            {
+                id: "gems",
+                name: "Gem Trades",
+                category: "Gems",
+                tiers: [
+                    { cost: "500 Gems", tears: 2 },
+                    { cost: "1,000 Gems", tears: 3 },
+                    { cost: "2,000 Gems", tears: 5 }
+                ]
+            }
+        ];
+
+        const PIES = [
+            // General Pies
+            {
+                id: "pie_of_plenty", name: "Pie of Plenty", category: "General",
+                desc: "Producer floors produce more resources.",
+                levels: [
+                    { shinies: 0, bonus: "+1", cost: 1 },
+                    { shinies: 3, bonus: "+2", cost: 5 },
+                    { shinies: 6, bonus: "+3", cost: 50 },
+                    { shinies: 10, bonus: "+4", cost: 100 },
+                    { shinies: 15, bonus: "+5", cost: 250 }
+                ]
+            },
+            {
+                id: "industrial_pie", name: "Industrial Pie", category: "General",
+                desc: "Converter floors produce more resources.",
+                levels: [
+                    { shinies: 0, bonus: "+1", cost: 3 },
+                    { shinies: 4, bonus: "+2", cost: 8 },
+                    { shinies: 8, bonus: "+3", cost: 75 },
+                    { shinies: 12, bonus: "+4", cost: 150 },
+                    { shinies: 16, bonus: "+5", cost: 300 }
+                ]
+            },
+            {
+                id: "juicy_pie", name: "Juicy Pie", category: "General",
+                desc: "The Juicer produces more resources.",
+                levels: [
+                    { shinies: 0, bonus: "+1", cost: 10 },
+                    { shinies: 4, bonus: "+2", cost: 25 },
+                    { shinies: 8, bonus: "+3", cost: 200 }
+                ]
+            },
+            {
+                id: "monster_pie", name: "Monster Pie", category: "General",
+                desc: "Creatures drop more unique resources.",
+                levels: [
+                    { shinies: 0, bonus: "+1", cost: 5 },
+                    { shinies: 5, bonus: "+2", cost: 10 },
+                    { shinies: 10, bonus: "+3", cost: 100 },
+                    { shinies: 15, bonus: "+4", cost: 200 },
+                    { shinies: 20, bonus: "+5", cost: 400 }
+                ]
+            },
+            {
+                id: "magic_casserole", name: "Magic Casserole", category: "General",
+                desc: "Spells cool down faster.",
+                levels: [
+                    { shinies: 5, bonus: "-10%", cost: 15 },
+                    { shinies: 8, bonus: "-15%", cost: 25 },
+                    { shinies: 11, bonus: "-20%", cost: 100 },
+                    { shinies: 14, bonus: "-25%", cost: 300 }
+                ]
+            },
+            {
+                id: "slow_cooked_pie", name: "Slow Cooked Pie", category: "General",
+                desc: "Increases Offline Time.",
+                levels: [
+                    { shinies: 0, bonus: "+4H", cost: 5 },
+                    { shinies: 3, bonus: "+8H", cost: 15 },
+                    { shinies: 5, bonus: "+12H", cost: 25 },
+                    { shinies: 8, bonus: "+18H", cost: 75 },
+                    { shinies: 12, bonus: "+24H", cost: 150 }
+                ]
+            },
+            {
+                id: "quick_casserole", name: "Quick Casserole", category: "General",
+                desc: "The Tower works faster offline.",
+                levels: [
+                    { shinies: 0, bonus: "+25%", cost: 10 },
+                    { shinies: 10, bonus: "+50%", cost: 100 },
+                    { shinies: 14, bonus: "+100%", cost: 500 },
+                    { shinies: 18, bonus: "+200%", cost: 750 }
+                ]
+            },
+            // Idol Pies
+            {
+                id: "idol_pie", name: "Idol Pie", category: "Idol",
+                desc: "Idols gain more damage each second.",
+                levels: [
+                    { shinies: 0, bonus: "+1%", cost: 25 },
+                    { shinies: 0, bonus: "+2%", cost: 50 },
+                    { shinies: 0, bonus: "+3%", cost: 100 },
+                    { shinies: 0, bonus: "+4%", cost: 250 },
+                    { shinies: 0, bonus: "+5%", cost: 750 }
+                ]
+            },
+            {
+                id: "idol_casserole", name: "Idol Casserole", category: "Idol",
+                desc: "Idols last longer during the Apocalypse.",
+                levels: [
+                    { shinies: 0, bonus: "+1s", cost: 50 },
+                    { shinies: 5, bonus: "+2s", cost: 100 },
+                    { shinies: 10, bonus: "+3s", cost: 200 },
+                    { shinies: 0, bonus: "+4s", cost: 400 },
+                    { shinies: 0, bonus: "+5s", cost: 1000 }
+                ]
+            },
+            // Token Pies
+            {
+                id: "damage_pie", name: "Damage Pie", category: "Token",
+                desc: "Combat Tokens give a bigger boost.",
+                levels: [
+                    { shinies: 0, bonus: "+0.5%", cost: 2 },
+                    { shinies: 0, bonus: "+1%", cost: 15 },
+                    { shinies: 10, bonus: "+1.5%", cost: 30 },
+                    { shinies: 13, bonus: "+2%", cost: 75 },
+                    { shinies: 16, bonus: "+2.5%", cost: 300 },
+                    { shinies: 19, bonus: "+3%", cost: 600 }
+                ]
+            },
+            {
+                id: "dark_energy_pie", name: "Dark Energy Pie", category: "Token",
+                desc: "Dark Energy Tokens give a bigger boost.",
+                levels: [
+                    { shinies: 0, bonus: "+0.5%", cost: 2 },
+                    { shinies: 0, bonus: "+1%", cost: 15 },
+                    { shinies: 10, bonus: "+1.5%", cost: 30 },
+                    { shinies: 13, bonus: "+2%", cost: 75 },
+                    { shinies: 16, bonus: "+2.5%", cost: 300 },
+                    { shinies: 19, bonus: "+3%", cost: 600 }
+                ]
+            },
+            {
+                id: "soul_pie", name: "Soul Pie", category: "Token",
+                desc: "Soul Tokens give a bigger boost.",
+                levels: [
+                    { shinies: 0, bonus: "+0.5%", cost: 5 },
+                    { shinies: 8, bonus: "+1%", cost: 25 },
+                    { shinies: 12, bonus: "+1.5%", cost: 50 },
+                    { shinies: 15, bonus: "+2%", cost: 100 },
+                    { shinies: 18, bonus: "+2.5%", cost: 500 },
+                    { shinies: 22, bonus: "+3%", cost: 1000 }
+                ]
+            },
+            {
+                id: "apocalypse_pie", name: "Apocalypse Pie", category: "Token",
+                desc: "Apocalypse Tokens give a bigger boost.",
+                levels: [
+                    { shinies: 0, bonus: "+0.5%", cost: 5 },
+                    { shinies: 8, bonus: "+1%", cost: 25 },
+                    { shinies: 12, bonus: "+1.5%", cost: 50 },
+                    { shinies: 15, bonus: "+2%", cost: 100 },
+                    { shinies: 18, bonus: "+2.5%", cost: 500 },
+                    { shinies: 22, bonus: "+3%", cost: 1000 }
+                ]
+            },
+            // Time Pies
+            {
+                id: "dragon_pie", name: "Dragon Pie", category: "Time",
+                desc: "Time creatures drop more resources.",
+                levels: [
+                    { shinies: 10, bonus: "+1", cost: 50 },
+                    { shinies: 15, bonus: "+2", cost: 250 },
+                    { shinies: 20, bonus: "+3", cost: 500 }
+                ]
+            },
+            {
+                id: "dragon_casserole", name: "Dragon Casserole", category: "Time",
+                desc: "Time creatures spawn faster.",
+                levels: [
+                    { shinies: 5, bonus: "-10%", cost: 25 },
+                    { shinies: 9, bonus: "-15%", cost: 75 },
+                    { shinies: 14, bonus: "-20%", cost: 150 },
+                    { shinies: 18, bonus: "-25%", cost: 300 }
+                ]
+            },
+            {
+                id: "woolly_pie", name: "Woolly Pie", category: "Time",
+                desc: "Increase the impact of Red Wool.",
+                levels: [
+                    { shinies: 10, bonus: "+0.25%", cost: 100 },
+                    { shinies: 20, bonus: "+0.5%", cost: 500 },
+                    { shinies: 25, bonus: "+0.75%", cost: 1000 }
+                ]
+            },
+            // Nether Pies
+            {
+                id: "nether_pie", name: "Nether Pie", category: "Nether",
+                desc: "Nether creatures drop more resources.",
+                levels: [
+                    { shinies: 15, bonus: "+1", cost: 75 },
+                    { shinies: 20, bonus: "+2", cost: 300 },
+                    { shinies: 25, bonus: "+3", cost: 1000 }
+                ]
+            },
+            {
+                id: "nether_casserole", name: "Nether Casserole", category: "Nether",
+                desc: "Nether creatures spawn faster.",
+                levels: [
+                    { shinies: 7, bonus: "-10%", cost: 40 },
+                    { shinies: 12, bonus: "-15%", cost: 100 },
+                    { shinies: 17, bonus: "-20%", cost: 250 },
+                    { shinies: 20, bonus: "-25%", cost: 400 }
+                ]
+            },
+            {
+                id: "netherling_pie", name: "Netherling Pie", category: "Nether",
+                desc: "Increase Netherlings death boost.",
+                levels: [
+                    { shinies: 2, bonus: "+250%", cost: 3 },
+                    { shinies: 4, bonus: "+500%", cost: 10 },
+                    { shinies: 8, bonus: "+750%", cost: 20 },
+                    { shinies: 12, bonus: "+1000%", cost: 50 },
+                    { shinies: 16, bonus: "+1250%", cost: 100 }
+                ]
+            },
+            {
+                id: "nether_demon_pie", name: "Nether Demon Pie", category: "Nether",
+                desc: "Increase Nether Demons death boost.",
+                levels: [
+                    { shinies: 3, bonus: "+250%", cost: 5 },
+                    { shinies: 6, bonus: "+500%", cost: 15 },
+                    { shinies: 12, bonus: "+750%", cost: 25 },
+                    { shinies: 18, bonus: "+1000%", cost: 75 },
+                    { shinies: 22, bonus: "+1250%", cost: 150 }
+                ]
+            },
+            {
+                id: "nether_mountain_pie", name: "Nether Mountain Pie", category: "Nether",
+                desc: "Increase Nether Mountains death boost.",
+                levels: [
+                    { shinies: 5, bonus: "+250%", cost: 8 },
+                    { shinies: 10, bonus: "+500%", cost: 20 },
+                    { shinies: 15, bonus: "+750%", cost: 40 },
+                    { shinies: 20, bonus: "+1000%", cost: 100 },
+                    { shinies: 25, bonus: "+1250%", cost: 250 }
+                ]
+            }
+        ];
+
+        const SHINY_SKINS = [
+            { id: "gremlin", name: "Shiny Gremlin", drop: "Slime +3", cost: 5 },
+            { id: "spider", name: "Shiny Spider", drop: "Hide +3", cost: 5 },
+            { id: "zombie", name: "Shiny Zombie", drop: "Rotten Flesh +3", cost: 5 },
+            { id: "ent", name: "Shiny Ent", drop: "Wood +3", cost: 10 },
+            { id: "imp", name: "Shiny Imp", drop: "Hellfire +3", cost: 10 },
+            { id: "mechanical_eye", name: "Shiny Mechanical Eye", drop: "Clockwork +3", cost: 10 },
+            { id: "skeleton_mage", name: "Shiny Skeleton Mage", drop: "Magic Orb +3", cost: 20 },
+            { id: "orc_mage", name: "Shiny Orc Mage", drop: "Cracked Orb +3", cost: 20 },
+            { id: "blood_bat", name: "Shiny Blood Bat", drop: "Wings +3", cost: 20 },
+            { id: "iron_golem", name: "Shiny Iron Golem", drop: "Power Crystal +3", cost: 30 },
+            { id: "satyr", name: "Shiny Satyr", drop: "Horns +3", cost: 30 },
+            { id: "vine_monster", name: "Shiny Vine Monster", drop: "Tendrils +3", cost: 30 },
+            { id: "lich", name: "Shiny Lich", drop: "Magic Staff +3", cost: 50 },
+            { id: "ogre", name: "Shiny Ogre", drop: "Ogre Hair +3", cost: 50 },
+            { id: "basilisk", name: "Shiny Basilisk", drop: "Eye +3", cost: 50 },
+            { id: "dryad", name: "Shiny Dryad", drop: "Voice Box +3", cost: 70 },
+            { id: "warbot", name: "Shiny Warbot", drop: "Battery +3", cost: 70 },
+            { id: "succubus", name: "Shiny Succubus", drop: "Liquid Love +3", cost: 70 },
+            { id: "thingy", name: "Shiny The Thingy", drop: "Thingy Meat +3", cost: 100 },
+            { id: "it", name: "Shiny It", drop: "Guitar +3", cost: 100 },
+            { id: "her", name: "Shiny Her", drop: "Doll +3", cost: 100 },
+            { id: "mummy", name: "Shiny Mummy", drop: "Time Orbs +3", cost: 125 },
+            { id: "troll", name: "Shiny Troll", drop: "Space Ore +3", cost: 150 },
+            { id: "dragon", name: "Shiny Dragon", drop: "Star Crystals +3", cost: 175 },
+            { id: "netherling", name: "Shiny Netherling", drop: "Nether Flame +3", cost: 200 },
+            { id: "nether_demon", name: "Shiny Nether Demon", drop: "Nether Crystal +3", cost: 250 },
+            { id: "nether_mountain", name: "Shiny Nether Mountain", drop: "Nether Star +3", cost: 300 }
+        ];
+
+        // ==========================================
+        // STATE MANAGEMENT
+        // ==========================================
+        function getDefaultState() {
+            return {
+                dddCount: 1,
+                multiplierOverride: "auto",
+                tearsOnHand: 0,
+                autoDeductOnPurchase: true,
+                // tradeState[chainId] = { planned: number (0..N), completed: number (0..N) }
+                trades: {},
+                // pies[pieId] = { owned: number (0..L), planned: number (0..L) }
+                pies: {},
+                // skins[skinId] = { owned: boolean, planned: boolean }
+                skins: {},
+                ui: {
+                    activeTab: "trades",
+                    tradeCategory: "All",
+                    hideCompletedTrades: false,
+                    pieCategory: "All",
+                    hideMaxedPies: false,
+                    skinFilter: "All",
+                    skinSearch: ""
+                }
+            };
+        }
+
+        function sanitizeAndMergeState(parsed) {
+            const def = getDefaultState();
+            const src = (parsed && typeof parsed === "object") ? parsed : {};
+
+            const s = {
+                dddCount: Math.max(1, parseInt(src.dddCount, 10) || 1),
+                multiplierOverride: src.multiplierOverride === "auto" || (Number(src.multiplierOverride) >= 1 && Number(src.multiplierOverride) <= 10)
+                    ? String(src.multiplierOverride)
+                    : "auto",
+                tearsOnHand: Math.max(0, parseInt(src.tearsOnHand, 10) || 0),
+                autoDeductOnPurchase: typeof src.autoDeductOnPurchase === "boolean" ? src.autoDeductOnPurchase : true,
+                trades: {},
+                pies: {},
+                skins: {},
+                ui: { ...def.ui, ...(src.ui && typeof src.ui === "object" ? src.ui : {}) }
+            };
+
+            for (const chain of TRADE_CHAINS) {
+                const raw = src.trades?.[chain.id];
+                const maxLen = chain.tiers.length;
+                const completed = Math.min(maxLen, Math.max(0, parseInt(raw?.completed, 10) || 0));
+                const planned = Math.min(maxLen, Math.max(completed, parseInt(raw?.planned, 10) || 0));
+                s.trades[chain.id] = { planned, completed };
+            }
+
+            for (const pie of PIES) {
+                const raw = src.pies?.[pie.id];
+                const maxLen = pie.levels.length;
+                const owned = Math.min(maxLen, Math.max(0, parseInt(raw?.owned, 10) || 0));
+                const planned = Math.min(maxLen, Math.max(owned, parseInt(raw?.planned, 10) || 0));
+                s.pies[pie.id] = { owned, planned };
+            }
+
+            for (const skin of SHINY_SKINS) {
+                const raw = src.skins?.[skin.id];
+                const owned = Boolean(raw?.owned);
+                const planned = owned ? false : Boolean(raw?.planned);
+                s.skins[skin.id] = { owned, planned };
+            }
+
+            return s;
+        }
+
+        let state = loadState();
+
+        function loadState() {
+            try {
+                const raw = localStorage.getItem(STORAGE_KEY);
+                return raw ? sanitizeAndMergeState(JSON.parse(raw)) : sanitizeAndMergeState(null);
+            } catch {
+                return sanitizeAndMergeState(null);
+            }
+        }
+
+        function saveState() {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+            } catch (e) {
+                console.error("Failed to save state:", e);
+            }
+        }
+
+        // ==========================================
+        // CALCULATIONS
+        // ==========================================
+        function getMultiplier() {
+            if (state.multiplierOverride !== "auto") {
+                return Math.min(10, Math.max(1, parseInt(state.multiplierOverride, 10) || 1));
+            }
+            return Math.min(10, Math.max(1, state.dddCount));
+        }
+
+        function calculateSummary() {
+            const mult = getMultiplier();
+            let earnedFromTrades = 0;
+            let expectedFromPlannedTrades = 0;
+
+            for (const chain of TRADE_CHAINS) {
+                const st = state.trades[chain.id];
+                for (let i = 0; i < chain.tiers.length; i++) {
+                    const tears = chain.tiers[i].tears * mult;
+                    if (i < st.completed) {
+                        earnedFromTrades += tears;
+                    } else if (i < st.planned) {
+                        expectedFromPlannedTrades += tears;
+                    }
+                }
+            }
+
+            let plannedPiesCost = 0;
+            let plannedPiesCount = 0;
+            for (const pie of PIES) {
+                const st = state.pies[pie.id];
+                for (let i = st.owned; i < st.planned; i++) {
+                    plannedPiesCost += pie.levels[i].cost;
+                    plannedPiesCount++;
+                }
+            }
+
+            let ownedSkinsCount = 0;
+            let plannedSkinsCount = 0;
+            let plannedSkinsCost = 0;
+            for (const skin of SHINY_SKINS) {
+                const st = state.skins[skin.id];
+                if (st.owned) ownedSkinsCount++;
+                else if (st.planned) {
+                    plannedSkinsCount++;
+                    plannedSkinsCost += skin.cost;
+                }
+            }
+
+            const projectedTotalTears = state.tearsOnHand + expectedFromPlannedTrades;
+            const totalPlannedCost = plannedPiesCost + plannedSkinsCost;
+            const projectedBalance = projectedTotalTears - totalPlannedCost;
+            const currentBalance = state.tearsOnHand - totalPlannedCost;
+
+            return {
+                mult,
+                earnedFromTrades,
+                expectedFromPlannedTrades,
+                projectedTotalTears,
+                plannedPiesCost,
+                plannedPiesCount,
+                plannedSkinsCost,
+                plannedSkinsCount,
+                totalPlannedCost,
+                projectedBalance,
+                currentBalance,
+                ownedSkinsCount,
+                projectedSkinsCount: ownedSkinsCount + plannedSkinsCount
+            };
+        }
+
+        // ==========================================
+        // MUTATION HANDLERS
+        // ==========================================
+        function toggleTradePlan(chainId, tierIndex) {
+            const st = state.trades[chainId];
+            const tierNum = tierIndex + 1;
+            if (tierNum <= st.completed) return; // Already completed
+
+            if (st.planned >= tierNum) {
+                // Unplan this tier and higher
+                st.planned = Math.max(st.completed, tierNum - 1);
+            } else {
+                // Plan up to this tier
+                st.planned = tierNum;
+            }
+            saveState();
+            renderAll();
+        }
+
+        function toggleTradeComplete(chainId, tierIndex) {
+            const chain = TRADE_CHAINS.find(c => c.id === chainId);
+            const st = state.trades[chainId];
+            const mult = getMultiplier();
+            const tierNum = tierIndex + 1;
+
+            if (st.completed >= tierNum) {
+                // Uncomplete this tier and higher -> subtract tears from onHand
+                let delta = 0;
+                for (let i = tierNum - 1; i < st.completed; i++) {
+                    delta += chain.tiers[i].tears * mult;
+                }
+                st.completed = tierNum - 1;
+                state.tearsOnHand = Math.max(0, state.tearsOnHand - delta);
+                showToast(`Uncompleted ${chain.name} #${tierNum} (-${delta} Tears)`);
+            } else {
+                // Complete up to this tier -> add newly completed tears to onHand
+                let delta = 0;
+                for (let i = st.completed; i < tierNum; i++) {
+                    delta += chain.tiers[i].tears * mult;
+                }
+                st.completed = tierNum;
+                if (st.planned < tierNum) st.planned = tierNum;
+                state.tearsOnHand += delta;
+                showToast(`Completed ${chain.name} #${tierNum} (+${delta} Tears)`);
+            }
+            saveState();
+            renderAll();
+        }
+
+        function togglePiePlan(pieId, lvlIndex) {
+            const st = state.pies[pieId];
+            const lvlNum = lvlIndex + 1;
+            if (lvlNum <= st.owned) return;
+
+            if (st.planned >= lvlNum) {
+                st.planned = Math.max(st.owned, lvlNum - 1);
+            } else {
+                st.planned = lvlNum;
+            }
+            saveState();
+            renderAll();
+        }
+
+        function togglePieOwned(pieId, lvlIndex) {
+            const pie = PIES.find(p => p.id === pieId);
+            const st = state.pies[pieId];
+            const lvlNum = lvlIndex + 1;
+
+            if (st.owned >= lvlNum) {
+                // Un-own this level and higher
+                let refund = 0;
+                for (let i = lvlNum - 1; i < st.owned; i++) {
+                    refund += pie.levels[i].cost;
+                }
+                st.owned = lvlNum - 1;
+                if (state.autoDeductOnPurchase) {
+                    state.tearsOnHand += refund;
+                    showToast(`Removed ${pie.name} Lvl ${lvlNum}+ (+${refund} Tears refunded)`);
+                }
+            } else {
+                // Own up to this level
+                let cost = 0;
+                for (let i = st.owned; i < lvlNum; i++) {
+                    cost += pie.levels[i].cost;
+                }
+                st.owned = lvlNum;
+                if (st.planned < lvlNum) st.planned = lvlNum;
+                if (state.autoDeductOnPurchase) {
+                    state.tearsOnHand = Math.max(0, state.tearsOnHand - cost);
+                    showToast(`Purchased ${pie.name} Lvl ${lvlNum} (-${cost} Tears)`);
+                } else {
+                    showToast(`Marked ${pie.name} Lvl ${lvlNum} Owned`);
+                }
+            }
+            saveState();
+            renderAll();
+        }
+
+        function toggleSkinPlan(skinId) {
+            const st = state.skins[skinId];
+            if (st.owned) return;
+            st.planned = !st.planned;
+            saveState();
+            renderAll();
+        }
+
+        function toggleSkinOwned(skinId) {
+            const skin = SHINY_SKINS.find(s => s.id === skinId);
+            const st = state.skins[skinId];
+            if (st.owned) {
+                st.owned = false;
+                if (state.autoDeductOnPurchase) {
+                    state.tearsOnHand += skin.cost;
+                    showToast(`Removed ${skin.name} (+${skin.cost} Tears refunded)`);
+                }
+            } else {
+                st.owned = true;
+                st.planned = false;
+                if (state.autoDeductOnPurchase) {
+                    state.tearsOnHand = Math.max(0, state.tearsOnHand - skin.cost);
+                    showToast(`Purchased ${skin.name} (-${skin.cost} Tears)`);
+                } else {
+                    showToast(`Marked ${skin.name} Owned`);
+                }
+            }
+            saveState();
+            renderAll();
+        }
+
+        // ==========================================
+        // RENDERING
+        // ==========================================
+        function renderAll() {
+            const summary = calculateSummary();
+            renderLeftPanel(summary);
+            renderTabs(summary);
+            renderTrades(summary);
+            renderPies(summary);
+            renderSkins();
+        }
+
+        function renderLeftPanel(summary) {
+            document.getElementById("ddd-count").value = state.dddCount;
+            document.getElementById("multiplier-override").value = state.multiplierOverride;
+            document.getElementById("multiplier-badge").textContent = `x${summary.mult}`;
+            document.getElementById("tears-on-hand").value = state.tearsOnHand;
+            document.getElementById("auto-deduct-toggle").checked = state.autoDeductOnPurchase;
+
+            document.getElementById("sum-earned-trades").textContent = summary.earnedFromTrades.toLocaleString();
+            document.getElementById("sum-planned-trades").textContent = `+${summary.expectedFromPlannedTrades.toLocaleString()}`;
+            document.getElementById("sum-projected-tears").textContent = summary.projectedTotalTears.toLocaleString();
+            document.getElementById("sum-planned-cost").textContent = summary.totalPlannedCost.toLocaleString();
+
+            const balRow = document.getElementById("balance-row");
+            const balLabel = document.getElementById("balance-label");
+            const balVal = document.getElementById("sum-projected-balance");
+            if (summary.projectedBalance >= 0) {
+                balRow.className = "summary-item balance-ok";
+                balLabel.textContent = "Projected Surplus";
+                balVal.className = "mono-num val-green";
+                balVal.textContent = `+${summary.projectedBalance.toLocaleString()}`;
+            } else {
+                balRow.className = "summary-item balance-short";
+                balLabel.textContent = "Projected Deficit";
+                balVal.className = "mono-num val-red";
+                balVal.textContent = summary.projectedBalance.toLocaleString();
+            }
+
+            const curBalEl = document.getElementById("sum-current-balance");
+            curBalEl.textContent = (summary.currentBalance >= 0 ? "+" : "") + summary.currentBalance.toLocaleString();
+            curBalEl.className = `mono-num ${summary.currentBalance >= 0 ? "val-green" : "val-amber"}`;
+
+            document.getElementById("sum-skins-owned").textContent = `${summary.ownedSkinsCount} / ${SHINY_SKINS.length}`;
+            document.getElementById("sum-skins-projected").textContent = `${summary.projectedSkinsCount} / ${SHINY_SKINS.length}`;
+
+            // Mobile hovering budget bar
+            document.getElementById("mob-on-hand").textContent = state.tearsOnHand.toLocaleString();
+            document.getElementById("mob-planned").textContent = summary.totalPlannedCost.toLocaleString();
+            const mobPill = document.getElementById("mob-surplus-pill");
+            const mobLabel = document.getElementById("mob-surplus-label");
+            const mobVal = document.getElementById("mob-surplus");
+            if (summary.projectedBalance >= 0) {
+                mobPill.className = "mob-stat ok";
+                mobLabel.textContent = "Surplus";
+                mobVal.className = "mob-stat-val mono-num val-green";
+                mobVal.textContent = `+${summary.projectedBalance.toLocaleString()}`;
+            } else {
+                mobPill.className = "mob-stat short";
+                mobLabel.textContent = "Deficit";
+                mobVal.className = "mob-stat-val mono-num val-red";
+                mobVal.textContent = summary.projectedBalance.toLocaleString();
+            }
+        }
+
+        function renderTabs(summary) {
+            document.querySelectorAll(".tab-btn").forEach(btn => {
+                btn.classList.toggle("active", btn.dataset.tab === state.ui.activeTab);
+            });
+            document.getElementById("tab-trades").classList.toggle("hidden", state.ui.activeTab !== "trades");
+            document.getElementById("tab-pies").classList.toggle("hidden", state.ui.activeTab !== "pies");
+            document.getElementById("tab-skins").classList.toggle("hidden", state.ui.activeTab !== "skins");
+
+            document.getElementById("badge-trades").textContent = `+${summary.expectedFromPlannedTrades}`;
+            document.getElementById("badge-pies").textContent = `${summary.plannedPiesCount} (${summary.plannedPiesCost})`;
+            document.getElementById("badge-skins").textContent = `${summary.plannedSkinsCount} (${summary.plannedSkinsCost})`;
+        }
+
+        function renderTrades(summary) {
+            const cats = ["All", ...TRADE_CHAINS.map(c => c.category)];
+            const pillsEl = document.getElementById("trade-category-pills");
+            pillsEl.innerHTML = cats.map(cat =>
+                `<button class="filter-pill ${state.ui.tradeCategory === cat ? "active" : ""}" data-trade-cat="${cat}">${cat}</button>`
+            ).join("");
+            document.getElementById("hide-completed-trades").checked = state.ui.hideCompletedTrades;
+
+            const container = document.getElementById("trades-container");
+            const mult = summary.mult;
+
+            const filteredChains = TRADE_CHAINS.filter(c => state.ui.tradeCategory === "All" || c.category === state.ui.tradeCategory);
+
+            container.innerHTML = filteredChains.map(chain => {
+                const st = state.trades[chain.id];
+                let earned = 0, planned = 0, maxTears = 0;
+                chain.tiers.forEach((t, idx) => {
+                    const val = t.tears * mult;
+                    maxTears += val;
+                    if (idx < st.completed) earned += val;
+                    else if (idx < st.planned) planned += val;
+                });
+
+                const rowsHtml = chain.tiers.map((t, idx) => {
+                    const isCompleted = idx < st.completed;
+                    const isPlanned = !isCompleted && idx < st.planned;
+                    if (state.ui.hideCompletedTrades && isCompleted) return "";
+
+                    const rowClass = isCompleted ? "is-completed" : (isPlanned ? "is-planned" : "");
+                    const tearsMult = t.tears * mult;
+                    return `
+                        <div class="tier-row ${rowClass}">
+                            <div class="tier-info">
+                                <span class="tier-idx mono-num">#${idx + 1}</span>
+                                <span class="tier-cost" title="${t.cost}">${t.cost}</span>
+                            </div>
+                            <span class="tier-reward mono-num">+${tearsMult}</span>
+                            <div class="tier-controls">
+                                <button class="state-btn ${isPlanned ? "plan-active" : ""}"
+                                    data-action="trade-plan" data-chain="${chain.id}" data-idx="${idx}"
+                                    ${isCompleted ? "disabled" : ""}>Plan</button>
+                                <button class="state-btn ${isCompleted ? "done-active" : ""}"
+                                    data-action="trade-done" data-chain="${chain.id}" data-idx="${idx}">Done</button>
+                            </div>
+                        </div>
+                    `;
+                }).join("");
+
+                return `
+                    <div class="chain-card">
+                        <div class="chain-header">
+                            <h3>${chain.name}</h3>
+                            <span class="chain-stats mono-num">Done: ${earned} | Plan: +${planned} | Max: ${maxTears}</span>
+                        </div>
+                        <div class="tier-list">
+                            ${rowsHtml || '<div style="color:var(--text-muted);font-size:0.8rem;padding:6px;">All trades completed in this chain!</div>'}
+                        </div>
+                    </div>
+                `;
+            }).join("");
+        }
+
+        function renderPies(summary) {
+            const cats = ["All", "General", "Idol", "Token", "Time", "Nether"];
+            document.getElementById("pie-category-pills").innerHTML = cats.map(cat =>
+                `<button class="filter-pill ${state.ui.pieCategory === cat ? "active" : ""}" data-pie-cat="${cat}">${cat}</button>`
+            ).join("");
+            document.getElementById("hide-maxed-pies").checked = state.ui.hideMaxedPies;
+
+            const filteredPies = PIES.filter(p => {
+                if (state.ui.pieCategory !== "All" && p.category !== state.ui.pieCategory) return false;
+                if (state.ui.hideMaxedPies && state.pies[p.id].owned >= p.levels.length) return false;
+                return true;
+            });
+
+            document.getElementById("pies-container").innerHTML = filteredPies.map(pie => {
+                const st = state.pies[pie.id];
+                const currentBonus = st.owned > 0 ? pie.levels[st.owned - 1].bonus : "None";
+
+                const levelsHtml = pie.levels.map((lvl, idx) => {
+                    const isOwned = idx < st.owned;
+                    const isPlanned = !isOwned && idx < st.planned;
+                    const rowClass = isOwned ? "is-completed" : (isPlanned ? "is-planned" : "");
+
+                    let shinyBadge = "";
+                    if (lvl.shinies > 0 && !isOwned) {
+                        if (summary.ownedSkinsCount >= lvl.shinies) {
+                            shinyBadge = `<span class="shiny-req shiny-met" title="Shiny requirement met by owned skins">${lvl.shinies}★</span>`;
+                        } else if (summary.projectedSkinsCount >= lvl.shinies) {
+                            shinyBadge = `<span class="shiny-req shiny-planned-met" title="Shiny requirement met after planned skins">${lvl.shinies}★ (Plan)</span>`;
+                        } else {
+                            shinyBadge = `<span class="shiny-req shiny-unmet" title="Requires ${lvl.shinies} Shiny Skins">${lvl.shinies}★ Need</span>`;
+                        }
+                    } else if (lvl.shinies > 0) {
+                        shinyBadge = `<span class="shiny-req shiny-met">${lvl.shinies}★</span>`;
+                    }
+
+                    return `
+                        <div class="tier-row ${rowClass}">
+                            <div class="tier-info">
+                                <span class="tier-idx mono-num">L${idx + 1}</span>
+                                <span class="tier-cost mono-num">${lvl.bonus}</span>
+                                ${shinyBadge}
+                            </div>
+                            <span class="tier-reward mono-num val-gold">${lvl.cost} Tears</span>
+                            <div class="tier-controls">
+                                <button class="state-btn ${isPlanned ? "plan-active" : ""}"
+                                    data-action="pie-plan" data-pie="${pie.id}" data-idx="${idx}"
+                                    ${isOwned ? "disabled" : ""}>Plan</button>
+                                <button class="state-btn ${isOwned ? "done-active" : ""}"
+                                    data-action="pie-owned" data-pie="${pie.id}" data-idx="${idx}">Owned</button>
+                            </div>
+                        </div>
+                    `;
+                }).join("");
+
+                return `
+                    <div class="chain-card">
+                        <div class="chain-header">
+                            <div>
+                                <h3>${pie.name}</h3>
+                                <div class="pie-desc">${pie.desc}</div>
+                            </div>
+                            <span class="chain-stats mono-num">Lvl ${st.owned}/${pie.levels.length} (${currentBonus})</span>
+                        </div>
+                        <div class="tier-list">${levelsHtml}</div>
+                    </div>
+                `;
+            }).join("");
+        }
+
+        function renderSkins() {
+            const filters = ["All", "Unowned", "Planned", "Owned"];
+            document.getElementById("skin-filter-pills").innerHTML = filters.map(f =>
+                `<button class="filter-pill ${state.ui.skinFilter === f ? "active" : ""}" data-skin-filter="${f}">${f}</button>`
+            ).join("");
+            document.getElementById("skin-search").value = state.ui.skinSearch;
+
+            const q = state.ui.skinSearch.trim().toLowerCase();
+            const filtered = SHINY_SKINS.filter(skin => {
+                const st = state.skins[skin.id];
+                if (state.ui.skinFilter === "Unowned" && st.owned) return false;
+                if (state.ui.skinFilter === "Planned" && !st.planned) return false;
+                if (state.ui.skinFilter === "Owned" && !st.owned) return false;
+                if (q && !skin.name.toLowerCase().includes(q) && !skin.drop.toLowerCase().includes(q)) return false;
+                return true;
+            });
+
+            document.getElementById("skins-container").innerHTML = filtered.map(skin => {
+                const st = state.skins[skin.id];
+                const cardClass = st.owned ? "is-owned" : (st.planned ? "is-planned" : "");
+                return `
+                    <div class="skin-card ${cardClass}">
+                        <div class="skin-top">
+                            <div>
+                                <div class="skin-name">${skin.name}</div>
+                                <div class="skin-drop">${skin.drop}</div>
+                            </div>
+                            <span class="mono-num val-gold" style="font-size:0.82rem;">${skin.cost} Tears</span>
+                        </div>
+                        <div class="skin-bottom">
+                            <span style="font-size:0.72rem;color:var(--text-muted);">${st.owned ? "Owned" : (st.planned ? "Planned" : "Available")}</span>
+                            <div class="tier-controls">
+                                <button class="state-btn ${st.planned ? "plan-active" : ""}"
+                                    data-action="skin-plan" data-skin="${skin.id}"
+                                    ${st.owned ? "disabled" : ""}>Plan</button>
+                                <button class="state-btn ${st.owned ? "done-active" : ""}"
+                                    data-action="skin-owned" data-skin="${skin.id}">Owned</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join("");
+        }
+
+        // ==========================================
+        // TOAST & EVENTS
+        // ==========================================
+        function showToast(msg) {
+            const container = document.getElementById("toast-container");
+            const el = document.createElement("div");
+            el.className = "toast";
+            el.textContent = msg;
+            container.appendChild(el);
+            setTimeout(() => el.remove(), 2800);
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            document.getElementById("app-version").textContent = APP_VERSION;
+            renderAll();
+
+            // Left panel inputs
+            document.getElementById("ddd-count").addEventListener("change", (e) => {
+                state.dddCount = Math.max(1, parseInt(e.target.value, 10) || 1);
+                saveState();
+                renderAll();
+            });
+
+            document.getElementById("multiplier-override").addEventListener("change", (e) => {
+                state.multiplierOverride = e.target.value;
+                saveState();
+                renderAll();
+            });
+
+            document.getElementById("tears-on-hand").addEventListener("input", (e) => {
+                state.tearsOnHand = Math.max(0, parseInt(e.target.value, 10) || 0);
+                saveState();
+                renderAll();
+            });
+
+            document.getElementById("auto-deduct-toggle").addEventListener("change", (e) => {
+                state.autoDeductOnPurchase = e.target.checked;
+                saveState();
+            });
+
+            document.getElementById("btn-activate-ddd").addEventListener("click", () => {
+                if (!confirm("Activate DDD for a new run? This will increment your DDD count and clear all Completed/Planned trades, while keeping your Tears on Hand, Pies, and Shiny Skins.")) return;
+                state.dddCount += 1;
+                for (const chain of TRADE_CHAINS) {
+                    state.trades[chain.id] = { planned: 0, completed: 0 };
+                }
+                saveState();
+                renderAll();
+                showToast(`DDD #${state.dddCount} activated! Multiplier is now x${getMultiplier()}.`);
+            });
+
+            document.getElementById("btn-reset-trades").addEventListener("click", () => {
+                if (!confirm("Reset all Planned and Completed trades for this run?")) return;
+                for (const chain of TRADE_CHAINS) {
+                    state.trades[chain.id] = { planned: 0, completed: 0 };
+                }
+                saveState();
+                renderAll();
+                showToast("All trades reset.");
+            });
+
+            // Tabs
+            document.querySelector(".section-tabs").addEventListener("click", (e) => {
+                const btn = e.target.closest(".tab-btn");
+                if (!btn) return;
+                state.ui.activeTab = btn.dataset.tab;
+                saveState();
+                renderAll();
+            });
+
+            // Filter delegation
+            document.getElementById("trade-category-pills").addEventListener("click", (e) => {
+                const pill = e.target.closest("[data-trade-cat]");
+                if (!pill) return;
+                state.ui.tradeCategory = pill.dataset.tradeCat;
+                saveState();
+                renderAll();
+            });
+
+            document.getElementById("hide-completed-trades").addEventListener("change", (e) => {
+                state.ui.hideCompletedTrades = e.target.checked;
+                saveState();
+                renderAll();
+            });
+
+            document.getElementById("pie-category-pills").addEventListener("click", (e) => {
+                const pill = e.target.closest("[data-pie-cat]");
+                if (!pill) return;
+                state.ui.pieCategory = pill.dataset.pieCat;
+                saveState();
+                renderAll();
+            });
+
+            document.getElementById("hide-maxed-pies").addEventListener("change", (e) => {
+                state.ui.hideMaxedPies = e.target.checked;
+                saveState();
+                renderAll();
+            });
+
+            document.getElementById("skin-filter-pills").addEventListener("click", (e) => {
+                const pill = e.target.closest("[data-skin-filter]");
+                if (!pill) return;
+                state.ui.skinFilter = pill.dataset.skinFilter;
+                saveState();
+                renderAll();
+            });
+
+            document.getElementById("skin-search").addEventListener("input", (e) => {
+                state.ui.skinSearch = e.target.value;
+                saveState();
+                renderSkins();
+            });
+
+            // Action delegation for trades, pies, skins
+            document.getElementById("trades-container").addEventListener("click", (e) => {
+                const btn = e.target.closest("[data-action]");
+                if (!btn) return;
+                const idx = parseInt(btn.dataset.idx, 10);
+                if (btn.dataset.action === "trade-plan") toggleTradePlan(btn.dataset.chain, idx);
+                if (btn.dataset.action === "trade-done") toggleTradeComplete(btn.dataset.chain, idx);
+            });
+
+            document.getElementById("pies-container").addEventListener("click", (e) => {
+                const btn = e.target.closest("[data-action]");
+                if (!btn) return;
+                const idx = parseInt(btn.dataset.idx, 10);
+                if (btn.dataset.action === "pie-plan") togglePiePlan(btn.dataset.pie, idx);
+                if (btn.dataset.action === "pie-owned") togglePieOwned(btn.dataset.pie, idx);
+            });
+
+            document.getElementById("skins-container").addEventListener("click", (e) => {
+                const btn = e.target.closest("[data-action]");
+                if (!btn) return;
+                if (btn.dataset.action === "skin-plan") toggleSkinPlan(btn.dataset.skin);
+                if (btn.dataset.action === "skin-owned") toggleSkinOwned(btn.dataset.skin);
+            });
+
+            // Export / Import / Reset All
+            document.getElementById("btn-export").addEventListener("click", () => {
+                const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement("a");
+                a.href = url;
+                a.download = `lesleys_place_backup_${new Date().toISOString().slice(0, 10)}.json`;
+                a.click();
+                URL.revokeObjectURL(url);
+                showToast("Exported backup JSON.");
+            });
+
+            document.getElementById("btn-import").addEventListener("click", () => {
+                document.getElementById("import-file").click();
+            });
+
+            document.getElementById("import-file").addEventListener("change", (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = (ev) => {
+                    try {
+                        state = sanitizeAndMergeState(JSON.parse(ev.target.result));
+                        saveState();
+                        renderAll();
+                        showToast("Imported backup JSON.");
+                    } catch {
+                        showToast("Invalid JSON backup file.");
+                    }
+                };
+                reader.readAsText(file);
+                e.target.value = "";
+            });
+
+            document.getElementById("btn-reset-all").addEventListener("click", () => {
+                if (!confirm("Reset EVERYTHING (DDD count, Tears, Trades, Pies, and Shiny Skins)?")) return;
+                state = sanitizeAndMergeState(null);
+                saveState();
+                renderAll();
+                showToast("All data reset.");
+            });
+        });
+    </script>
+</body>
+</html>

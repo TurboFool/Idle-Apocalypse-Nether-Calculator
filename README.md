@@ -83,7 +83,15 @@ For security-conscious users, the repository includes verification scripts in th
 │   ├── test_math.js         # JScript runner verifying cascade math calculations
 │   └── verify_base64.ps1    # Security verification script
 ├── nether_costs.html        # The self-contained, fully-compiled application
+├── lesleys_place.html       # Standalone beta preview of Lesley's Place Planner
 ├── GEMINI.md                # Antigravity developer rules & multi-device git policies
 ├── PROJECT_MASTER.md        # Master technical specification & developer guide
 └── README.md                # Project documentation
 ```
+
+---
+
+## 🗺️ Roadmap & Beta Preview
+
+- **Lesley's Place Planner (Beta)**: [lesleys_place.html](lesleys_place.html) is currently included in the repository root for beta testing. It provides a standalone planner for **Dimension Tears**, **Doomsday Device (DDD)** multipliers, **Tear Trades**, **Pies & Casseroles**, and **Shiny Skins**.
+- **Upcoming Integration**: Once beta testing is complete, Lesley's Place Planner will be integrated directly into this suite with shared navigation alongside `nether_costs.html`, matching Base64-embedded icons, and full offline PWA caching via `sw.js`.
