@@ -4099,6 +4099,7 @@
         const STORAGE_KEY = "idle_apoc_endgame_state_v1";
         const LEGACY_NETHER_STORAGE_KEY = "idle_apoc_nether_costs_state_v2";
         const LEGACY_LESLEY_STORAGE_KEY = "idle_apoc_lesleys_place_state_v1";
+        const ENABLE_LEGACY_MIGRATION_BANNER = false; // Set true when releasing v2.0.0 to main
         const NEW_CANONICAL_URL = "https://idleplanner.turbofool.com";
         const LEGACY_HOSTNAMES = ["idle-apocalypse-nether-calculator.pages.dev"];
 
@@ -6269,6 +6270,7 @@
         }
 
         function checkLegacyDomainBanner() {
+            if (!ENABLE_LEGACY_MIGRATION_BANNER) return;
             try {
                 if (localStorage.getItem("idle_apoc_legacy_banner_dismissed") === "1") return;
                 const host = (window.location.hostname || "").toLowerCase();
