@@ -2694,7 +2694,69 @@
 
         @media (max-width: 980px) {
             #lesley-view .section-tabs {
-                display: none;
+                gap: 6px;
+                margin-bottom: 12px;
+            }
+
+            #lp-mobile-header-ext {
+                overflow: hidden;
+                max-height: 90px;
+                opacity: 1;
+                transform: translateY(0);
+                transition: max-height 0.22s ease, opacity 0.18s ease, transform 0.22s ease, margin-top 0.22s ease;
+            }
+
+            #lp-mobile-header-ext.scroll-hidden {
+                max-height: 0;
+                opacity: 0;
+                transform: translateY(-8px);
+                margin-top: 0 !important;
+                pointer-events: none;
+            }
+        }
+
+        /* Floating Scroll-to-Top Button (Mobile) */
+        .scroll-to-top-btn {
+            display: none;
+        }
+
+        @media (max-width: 980px) {
+            .scroll-to-top-btn {
+                position: fixed;
+                bottom: 18px;
+                right: 18px;
+                z-index: 95;
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+                padding: 9px 14px;
+                border-radius: 999px;
+                border: 1px solid rgba(168, 85, 247, 0.55);
+                background: rgba(20, 16, 30, 0.94);
+                backdrop-filter: blur(8px);
+                color: #f3f1f7;
+                font-family: inherit;
+                font-size: 0.8rem;
+                font-weight: 700;
+                cursor: pointer;
+                box-shadow: 0 6px 20px rgba(0, 0, 0, 0.55), 0 0 14px rgba(139, 92, 246, 0.3);
+                opacity: 0;
+                transform: translateY(16px);
+                pointer-events: none;
+                transition: opacity 0.2s ease, transform 0.2s ease;
+            }
+
+            .scroll-to-top-btn.visible {
+                opacity: 1;
+                transform: translateY(0);
+                pointer-events: auto;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            #lp-mobile-header-ext,
+            .scroll-to-top-btn {
+                transition: none;
             }
         }
 
@@ -2798,22 +2860,22 @@
         }
 
         @media (max-width: 980px) {
-            #lp-mobile-header-ext .mobile-tab-bar .tab-group, #lesley-view .mobile-tab-bar .tab-group {
+            #lesley-view .section-tabs .tab-group {
                 padding: 4px;
                 border-radius: 9px;
                 gap: 3px;
             }
 
-            #lp-mobile-header-ext .mobile-tab-bar .tab-group-label, #lesley-view .mobile-tab-bar .tab-group-label {
+            #lesley-view .section-tabs .tab-group-label {
                 font-size: 0.56rem;
                 padding: 0 2px;
             }
 
-            #lp-mobile-header-ext .mobile-tab-bar .tab-group-buttons, #lesley-view .mobile-tab-bar .tab-group-buttons {
+            #lesley-view .section-tabs .tab-group-buttons {
                 gap: 4px;
             }
 
-            #lp-mobile-header-ext .mobile-tab-bar .tab-btn, #lesley-view .mobile-tab-bar .tab-btn {
+            #lesley-view .section-tabs .tab-btn {
                 padding: 5px 6px;
                 font-size: 0.72rem;
                 gap: 4px;
@@ -2821,7 +2883,7 @@
                 line-height: 1.15;
             }
 
-            #lp-mobile-header-ext .mobile-tab-bar .tab-count, #lesley-view .mobile-tab-bar .tab-count {
+            #lesley-view .section-tabs .tab-count {
                 font-size: 0.62rem;
                 padding: 1px 5px;
             }
@@ -3222,30 +3284,6 @@
                 <span id="lp-mob-drawer-label" class="mob-stat-val mono-num">x1 ▾</span>
             </button>
         </div>
-        <nav class="mobile-tab-bar" role="tablist" aria-label="Shop sections">
-            <div class="tab-group tab-group-earn">
-                <span class="tab-group-label">Earn</span>
-                <div class="tab-group-buttons">
-                    <button class="tab-btn active" data-tab="trades" role="tab">
-                        <span>Tear Trades</span>
-                        <span data-badge="trades" class="tab-count">+0</span>
-                    </button>
-                </div>
-            </div>
-            <div class="tab-group tab-group-spend">
-                <span class="tab-group-label">Spend</span>
-                <div class="tab-group-buttons">
-                    <button class="tab-btn" data-tab="pies" role="tab">
-                        <span>Pies</span>
-                        <span data-badge="pies" class="tab-count">0 (0)</span>
-                    </button>
-                    <button class="tab-btn" data-tab="skins" role="tab">
-                        <span>Shiny Skins</span>
-                        <span data-badge="skins" class="tab-count">0 (0)</span>
-                    </button>
-                </div>
-            </div>
-        </nav>
         </div>
     </header>
 
@@ -3922,6 +3960,12 @@
             <button class="btn-cancel" onclick="closeInstructions()" type="button" style="padding: 8px 22px; font-weight: 700;">Close</button>
         </div>
     </dialog>
+
+    <!-- Floating Mobile Scroll-to-Top Button -->
+    <button type="button" id="scrollToTopBtn" class="scroll-to-top-btn" onclick="scrollToTop()" aria-label="Scroll to top">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="18 15 12 9 6 15"/></svg>
+        Top
+    </button>
 
     <!-- Toast Notification Banner -->
     <div class="toast" id="toastNotification" role="status" aria-live="polite">
@@ -6060,6 +6104,13 @@
             if (lockBtn) {
                 lockBtn.classList.toggle("hidden", !appState.lesleysUnlocked);
             }
+            const budgetExt = document.getElementById("lp-mobile-header-ext");
+            if (budgetExt) budgetExt.classList.remove("scroll-hidden");
+        }
+
+        function scrollToTop() {
+            const prefersReduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+            window.scrollTo({ top: 0, behavior: prefersReduced ? "auto" : "smooth" });
         }
 
         function switchModule(target) {
@@ -7291,7 +7342,54 @@
                 renderLpAll();
             }
             document.querySelector("#lesley-view .section-tabs").addEventListener("click", handleLpTabClick);
-            document.querySelector("#lp-mobile-header-ext .mobile-tab-bar").addEventListener("click", handleLpTabClick);
+
+            // Smart scroll-direction behavior on mobile:
+            // - Scroll down (>=15px): slide out On Hand/Planned/Surplus/DDD bar (unless drawer open) & hide Scroll-to-Top
+            // - Scroll up (>=15px) while away from top: show both and keep visible until scrolling down again
+            let lastScrollY = window.scrollY || 0;
+            let scrollDeltaAcc = 0;
+            let lastScrollDir = 0; // 1 = down, -1 = up
+            const SCROLL_THRESHOLD = 15;
+
+            function updateMobileScrollUI() {
+                const currentY = window.scrollY || 0;
+                const budgetExt = document.getElementById("lp-mobile-header-ext");
+                const topBtn = document.getElementById("scrollToTopBtn");
+                const drawerOpen = document.getElementById("lp-left-panel")?.classList.contains("mobile-open");
+
+                if (currentY < 60) {
+                    if (budgetExt) budgetExt.classList.remove("scroll-hidden");
+                    if (topBtn) topBtn.classList.remove("visible");
+                    lastScrollY = currentY;
+                    scrollDeltaAcc = 0;
+                    lastScrollDir = 0;
+                    return;
+                }
+
+                const diff = currentY - lastScrollY;
+                lastScrollY = currentY;
+                if (diff === 0) return;
+
+                const dir = diff > 0 ? 1 : -1;
+                if (dir !== lastScrollDir) {
+                    scrollDeltaAcc = 0;
+                    lastScrollDir = dir;
+                }
+                scrollDeltaAcc += Math.abs(diff);
+
+                if (scrollDeltaAcc >= SCROLL_THRESHOLD) {
+                    if (dir === 1) {
+                        if (budgetExt && !drawerOpen) budgetExt.classList.add("scroll-hidden");
+                        if (topBtn) topBtn.classList.remove("visible");
+                    } else {
+                        if (budgetExt) budgetExt.classList.remove("scroll-hidden");
+                        if (topBtn) topBtn.classList.add("visible");
+                    }
+                    scrollDeltaAcc = 0;
+                }
+            }
+
+            window.addEventListener("scroll", updateMobileScrollUI, { passive: true });
 
             document.getElementById("lp-trade-category-pills").addEventListener("click", (e) => {
                 const pill = e.target.closest("[data-trade-cat]");

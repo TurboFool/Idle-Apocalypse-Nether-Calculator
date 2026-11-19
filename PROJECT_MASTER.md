@@ -314,7 +314,7 @@ The **Lesley's Place Planner** (developed in `TurboFool/lesleys_place_planner`, 
 
 - **Current Beta Scope (`lesleys_place.html`)**:
   - **Doomsday Device (DDD) & Tear Multiplier**: Tracks DDD count with automatic $\min(\max(1, \text{DDD}), 10)$ Tear Trade multiplier and an "Activate DDD (New Run)" reset flow.
-  - **Earn / Spend Navigation & Mobile UX**: Full-width 2-group segmented bar distinguishing **Earn** (`Tear Trades`) from **Spend** (`Pies & Casseroles`, `Shiny Skins`), pinned in the mobile top bar (`<= 980px`) alongside a hovering budget bar and a collapsible `DDD & Plan` drawer.
+  - **Earn / Spend Navigation & Mobile UX**: Full-width 2-group segmented bar distinguishing **Earn** (`Tear Trades`) from **Spend** (`Pies & Casseroles`, `Shiny Skins`) positioned at the top of the scrolling panel above filters. On mobile (`<= 980px`), the sticky `On Hand / Planned / Surplus / DDD & Plan` bar slides out of view when scrolling down (`>= 15px` threshold, unless the DDD drawer is open) and reappears when scrolling up alongside a floating **Top** scroll-to-top button across both modes.
   - **Tear Trades**: 7 sequential trade chains (Soul, Time, Nether, Champion, Dark Energy, Apocalypse Damage, Gem; 167 base Tears total) with cascading Planned / Completed state tracking.
   - **Pies & Casseroles**: 21 Pies across 5 categories (18,277 total Tears) with sequential level unlocking, `# Shinies` requirement status badges, and `Auto-deduct Tears on Purchase`.
   - **Shiny Skins**: 27 Skins (2,055 total Tears) with Planned / Owned tracking, search/filter controls, and auto-deduct support.
