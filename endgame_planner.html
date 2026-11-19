@@ -2510,7 +2510,7 @@
             flex-direction: column;
             gap: 16px;
             position: sticky;
-            top: 76px;
+            top: calc(var(--app-header-h, 76px) + 12px);
         }
 
         @media (max-width: 980px) {
@@ -7274,17 +7274,37 @@
                 renderLpAll();
             });
 
+            function syncHeaderHeightVars() {
+                const header = document.querySelector(".app-header");
+                if (!header) return;
+                const h = Math.ceil(header.offsetHeight);
+                const bottom = Math.ceil(Math.max(h, header.getBoundingClientRect().bottom));
+                document.documentElement.style.setProperty("--app-header-h", `${h}px`);
+                document.documentElement.style.setProperty("--mobile-header-h", `${bottom}px`);
+            }
+
+            const appHeaderEl = document.querySelector(".app-header");
+            if (appHeaderEl && typeof ResizeObserver !== "undefined") {
+                new ResizeObserver(syncHeaderHeightVars).observe(appHeaderEl);
+            }
+            syncHeaderHeightVars();
+
             function setLpMobileDrawer(open) {
                 const panel = document.getElementById("lp-left-panel");
                 const btn = document.getElementById("lp-btn-mobile-drawer");
-                const header = document.querySelector(".app-header");
-                if (header) {
-                    document.documentElement.style.setProperty("--mobile-header-h", `${header.offsetHeight}px`);
+                if (open) {
+                    const budgetExt = document.getElementById("lp-mobile-header-ext");
+                    if (budgetExt) budgetExt.classList.remove("scroll-hidden");
                 }
+                syncHeaderHeightVars();
                 panel.classList.toggle("mobile-open", open);
                 btn.classList.toggle("open", open);
                 btn.setAttribute("aria-expanded", String(open));
                 document.getElementById("lp-mob-drawer-label").textContent = `x${getMultiplier()} ${open ? "▴" : "▾"}`;
+                if (open) {
+                    requestAnimationFrame(syncHeaderHeightVars);
+                    setTimeout(syncHeaderHeightVars, 240);
+                }
             }
 
             document.getElementById("lp-btn-mobile-drawer").addEventListener("click", () => {
@@ -7299,10 +7319,8 @@
             window.addEventListener("resize", () => {
                 if (window.innerWidth > 980) {
                     setLpMobileDrawer(false);
-                } else if (document.getElementById("lp-left-panel").classList.contains("mobile-open")) {
-                    const header = document.querySelector(".app-header");
-                    if (header) document.documentElement.style.setProperty("--mobile-header-h", `${header.offsetHeight}px`);
                 }
+                syncHeaderHeightVars();
             });
 
             document.getElementById("lp-tears-on-hand").addEventListener("input", (e) => {
