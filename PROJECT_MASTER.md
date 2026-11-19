@@ -318,11 +318,31 @@ The **Lesley's Place Planner** (developed in `TurboFool/lesleys_place_planner`, 
   - **Pies & Casseroles**: 21 Pies across 5 categories (18,277 total Tears) with sequential level unlocking, `# Shinies` requirement status badges, and `Auto-deduct Tears on Purchase`.
   - **Shiny Skins**: 27 Skins (2,055 total Tears) with Planned / Owned tracking, search/filter controls, and auto-deduct support.
   - **Budget & Persistence**: Real-time Tears Budget & Affordability summary, JSON Export/Import, and `localStorage` persistence (`idle_apoc_lesleys_place_state_v1`).
-- **Planned Post-Beta Integration Milestones**:
-  1. **Unified Navigation**: Link `nether_costs.html` and `lesleys_place.html` as sibling pages within a shared navigation header.
-  2. **Shared Visual Assets**: Embed matching WebP/SVG icons from `assets/` into `lesleys_place.html` using the same Base64 Data URI architecture.
-  3. **PWA & Offline Caching**: Register `lesleys_place.html` in `sw.js` and `manifest.json` for full offline PWA support.
-  4. **Cross-Tool Modifier Sync (Optional)**: Evaluate syncing shared progression (e.g., Shiny Skins and Nether Pie levels) between `idle_apoc_nether_costs_state_v2` and `idle_apoc_lesleys_place_state_v1`.
+- **Planned Post-Beta Integration Architecture & Decisions** (Agreed Gameplan):
+  1. **App Rename & Single-File Deliverable**:
+     - Rename the unified application to **Idle Apocalypse - Endgame Planner** (`endgame_planner.html`).
+     - Maintain 100% single-file self-contained architecture (zero external runtime JS/CSS dependencies, Base64-embedded assets) so users can continue to download and self-host a single `.html` file.
+  2. **Mode Switcher & Non-Disruptive Layout**:
+     - Add a persistent 2-tab mode switcher in the main header (`[Nether Calculator | Lesley's Place]`) with clear visual separation between the two tools.
+     - Default to **Nether Calculator** on first load, and remember the user's last active tab once Lesley's Place is unlocked.
+  3. **Spoiler Gate**:
+     - Treat Lesley's Place as an endgame spoiler. Clicking **Lesley's Place** before unlocking opens a native `<dialog>` spoiler confirmation modal.
+     - Confirming saves `lesleysUnlocked: true` in `localStorage` and enters the tab (with a subtle "Lock Spoiler" option in settings/footer if needed).
+  4. **Bidirectional Cross-Side Synchronization**:
+     - **Nether Trades (12 tiers)**: Bidirectional sync between `lesley_flames_100`..`lesley_stars_50` (Nether Calculator) and the `nether` Tear Trade chain (Lesley's Place).
+     - **Nether Pie (`0–3`)**: Bidirectional sync between `pieLevel` (Nether Calculator) and `nether_pie` owned level (Lesley's Place).
+     - **Nether Shiny Skins**: Bidirectional sync between `shinySkins` (`netherling`, `demon`, `mountain`) and Lesley's Place Shiny Skins (`netherling`, `nether_demon`, `nether_mountain`).
+     - **Activate DDD (New Run)**: Optionally prompts the user to also reset Nether Calculator run-specific state (on-hand resources, scrolls, trades, creature goals) while preserving permanent upgrades (Pies & Shiny Skins).
+  5. **Spoiler-Aware Instructions**:
+     - Keep Nether Calculator instructions unchanged by default.
+     - Once `lesleysUnlocked` is `true`, reveal a second **Lesley's Place Guide** tab/section inside `#instructionsModal` (auto-selecting whichever mode is currently active).
+  6. **Unified State & Backward-Compatible Backups**:
+     - Migrate to unified `localStorage` key `idle_apoc_endgame_state_v1` with automatic one-time migration from legacy `idle_apoc_nether_costs_state_v2`.
+     - Export unified JSON backups (`endgame_planner_backup.json`).
+     - Import auto-detects both unified backups and legacy `nether_costs` v2 backups (standalone Lesley's Place v1 beta backups do not require import support).
+  7. **CloudFlare URL, Alternate Domain & PWA Transition**:
+     - Point a new, simpler alternate domain on CloudFlare to the same repo/path (routing `/endgame` → `endgame_planner.html`), and update `manifest.json` and `sw.js` for the new entry point.
+     - Because `localStorage` and Service Workers are **origin-scoped** (not shared across domains), display a graceful transition banner on the legacy URL instructing existing web & PWA users to **Export** their backup, open the new URL (and re-install the PWA if desired), and **Import** their backup.
 
 ---
 
