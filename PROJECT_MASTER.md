@@ -342,7 +342,7 @@ The **Lesley's Place Planner** (developed in `TurboFool/lesleys_place_planner`, 
      - Export unified JSON backups (`endgame_planner_backup.json`).
      - Import auto-detects both unified backups and legacy `nether_costs` v2 backups (standalone Lesley's Place v1 beta backups do not require import support).
   7. **CloudFlare URL, Alternate Domain & PWA Transition (Single-Repo Option 2)**:
-     - Keep everything in this single repository and single CloudFlare Pages project, attaching the new simplified domain as a Custom Domain on CloudFlare Pages.
+     - Keep everything in this single repository and single CloudFlare Pages project, attaching the new simplified domain (`https://idleplanner.turbofool.com`) as a Custom Domain on CloudFlare Pages.
      - Serve `endgame_planner.html` as the single unified HTML file for `/endgame`, `/` (on the new domain, or via `_redirects`), and as a `200` rewrite for legacy `/nether_costs` and `/nether_costs.html` in CloudFlare `_redirects` (avoiding cross-origin redirects so existing users on the old domain keep access to their `localStorage`).
      - Update `manifest.json` (`name`, `short_name`, `start_url: "./endgame"`) and `sw.js` (`ASSETS_TO_CACHE` and `isNavigation` matching `/endgame`, `/endgame_planner.html`, `/nether_costs`, `/nether_costs.html`, and `/`) so existing installed PWAs on the old domain update cleanly without breaking offline caching.
      - In `endgame_planner.html`, check `window.location.hostname` against the legacy domain and display a dismissible migration banner instructing web & PWA users on the old domain to **Export** their backup, open the new domain (and re-install the PWA if desired), and **Import** their backup (since `localStorage` is origin-scoped).

@@ -2661,10 +2661,10 @@
             border-color: rgba(239, 68, 68, 0.35);
         }
 
-        #lesley-view .val-tear { color: var(--color-tear); font-weight: 700; }
-        #lesley-view .val-gold { color: var(--color-gold); font-weight: 700; }
-        #lesley-view .val-green { color: var(--color-green); font-weight: 700; }
-        #lesley-view .val-red { color: #f87171; font-weight: 700; }
+        #lp-mobile-header-ext .val-tear, #lesley-view .val-tear { color: var(--color-tear); font-weight: 700; }
+        #lp-mobile-header-ext .val-gold, #lesley-view .val-gold { color: var(--color-gold); font-weight: 700; }
+        #lp-mobile-header-ext .val-green, #lesley-view .val-green { color: var(--color-green); font-weight: 700; }
+        #lp-mobile-header-ext .val-red, #lesley-view .val-red { color: #f87171; font-weight: 700; }
         #lesley-view .val-amber { color: var(--color-amber); font-weight: 700; }
 
         #lesley-view .divider {
@@ -2698,7 +2698,7 @@
             }
         }
 
-        #lesley-view .tab-group {
+        #lp-mobile-header-ext .tab-group, #lesley-view .tab-group {
             display: flex;
             flex-direction: column;
             gap: 4px;
@@ -2709,19 +2709,19 @@
             min-width: 0;
         }
 
-        #lesley-view .tab-group-earn {
+        #lp-mobile-header-ext .tab-group-earn, #lesley-view .tab-group-earn {
             flex: 1;
             border-color: rgba(56, 189, 248, 0.28);
             background: linear-gradient(180deg, rgba(56, 189, 248, 0.06) 0%, var(--panel-bg) 100%);
         }
 
-        #lesley-view .tab-group-spend {
+        #lp-mobile-header-ext .tab-group-spend, #lesley-view .tab-group-spend {
             flex: 2;
             border-color: rgba(234, 179, 8, 0.26);
             background: linear-gradient(180deg, rgba(234, 179, 8, 0.05) 0%, var(--panel-bg) 100%);
         }
 
-        #lesley-view .tab-group-label {
+        #lp-mobile-header-ext .tab-group-label, #lesley-view .tab-group-label {
             font-size: 0.62rem;
             font-weight: 800;
             text-transform: uppercase;
@@ -2730,21 +2730,21 @@
             line-height: 1.1;
         }
 
-        #lesley-view .tab-group-earn .tab-group-label {
+        #lp-mobile-header-ext .tab-group-earn .tab-group-label, #lesley-view .tab-group-earn .tab-group-label {
             color: var(--color-tear);
         }
 
-        #lesley-view .tab-group-spend .tab-group-label {
+        #lp-mobile-header-ext .tab-group-spend .tab-group-label, #lesley-view .tab-group-spend .tab-group-label {
             color: var(--color-gold);
         }
 
-        #lesley-view .tab-group-buttons {
+        #lp-mobile-header-ext .tab-group-buttons, #lesley-view .tab-group-buttons {
             display: flex;
             gap: 6px;
             flex: 1;
         }
 
-        #lesley-view .tab-btn {
+        #lp-mobile-header-ext .tab-btn, #lesley-view .tab-btn {
             flex: 1;
             min-width: 0;
             padding: 8px 12px;
@@ -2764,26 +2764,26 @@
             white-space: nowrap;
         }
 
-        #lesley-view .tab-btn:hover {
+        #lp-mobile-header-ext .tab-btn:hover, #lesley-view .tab-btn:hover {
             color: var(--text-color);
             background: rgba(255, 255, 255, 0.06);
         }
 
-        #lesley-view .tab-group-earn .tab-btn.active {
+        #lp-mobile-header-ext .tab-group-earn .tab-btn.active, #lesley-view .tab-group-earn .tab-btn.active {
             background: linear-gradient(135deg, rgba(14, 165, 233, 0.28), rgba(56, 189, 248, 0.14));
             border-color: var(--color-tear);
             color: #fff;
             box-shadow: 0 0 14px rgba(56, 189, 248, 0.22);
         }
 
-        #lesley-view .tab-group-spend .tab-btn.active {
+        #lp-mobile-header-ext .tab-group-spend .tab-btn.active, #lesley-view .tab-group-spend .tab-btn.active {
             background: linear-gradient(135deg, rgba(124, 58, 237, 0.35), rgba(234, 179, 8, 0.18));
             border-color: var(--color-gold);
             color: #fff;
             box-shadow: 0 0 14px rgba(234, 179, 8, 0.2);
         }
 
-        #lesley-view .tab-count {
+        #lp-mobile-header-ext .tab-count, #lesley-view .tab-count {
             font-family: 'Space Mono', monospace;
             font-size: 0.7rem;
             padding: 2px 6px;
@@ -2793,7 +2793,7 @@
             white-space: nowrap;
         }
 
-        #lesley-view .tab-group-spend .tab-count {
+        #lp-mobile-header-ext .tab-group-spend .tab-count, #lesley-view .tab-group-spend .tab-count {
             color: #fde047;
         }
 
@@ -3136,7 +3136,7 @@
     <div id="legacyMigrationBanner" class="legacy-banner hidden" role="region" aria-label="Site migration notice">
         <span>
             <strong>We've moved!</strong> Idle Apocalypse - Endgame Planner is now at
-            <a id="newCanonicalLink" href="https://endgame.idleapoc.com" target="_blank" rel="noopener">endgame.idleapoc.com</a>.
+            <a id="newCanonicalLink" href="https://idleplanner.turbofool.com" target="_blank" rel="noopener">idleplanner.turbofool.com</a>.
             Click <strong>Export</strong>, open the new URL, and click <strong>Import</strong> to transfer your data.
         </span>
         <span class="legacy-banner-actions">
@@ -4055,7 +4055,7 @@
         const STORAGE_KEY = "idle_apoc_endgame_state_v1";
         const LEGACY_NETHER_STORAGE_KEY = "idle_apoc_nether_costs_state_v2";
         const LEGACY_LESLEY_STORAGE_KEY = "idle_apoc_lesleys_place_state_v1";
-        const NEW_CANONICAL_URL = "https://endgame.idleapoc.com";
+        const NEW_CANONICAL_URL = "https://idleplanner.turbofool.com";
         const LEGACY_HOSTNAMES = ["idle-apocalypse-nether-calculator.pages.dev"];
 
         let appState = {
