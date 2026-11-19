@@ -1,8 +1,8 @@
 {
-  "name": "Idle Apocalypse Nether Costs Calculator",
-  "short_name": "Nether Calc",
-  "description": "Calculates cascading summoning costs of Nether Creatures in Idle Apocalypse.",
-  "start_url": "./nether_costs",
+  "name": "Idle Apocalypse Endgame Planner",
+  "short_name": "Endgame Planner",
+  "description": "Endgame companion for Idle Apocalypse: cascading Nether Creature costs and Lesley's Place Tear planning.",
+  "start_url": "./endgame",
   "display": "standalone",
   "background_color": "#0d0a12",
   "theme_color": "#0d0a12",

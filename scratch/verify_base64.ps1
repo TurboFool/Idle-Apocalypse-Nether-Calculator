@@ -1,4 +1,4 @@
-$htmlContent = Get-Content -Path "nether_costs.html" -Raw
+$htmlContent = Get-Content -Path "endgame_planner.html" -Raw
 
 $assets = @{
     "orb" = "Nether_Orb_Icon.webp";

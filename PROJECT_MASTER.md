@@ -31,14 +31,15 @@ This calculator automates the entire cascade math, tracks on-hand inventory, fac
 ```text
 Idle Apocalypse Nether Costs/
 ├── GEMINI.md                 # Antigravity agent & project guidelines configuration
-├── nether_costs.html         # Single-file application (HTML + CSS + JS + Base64 WebP Assets)
-├── lesleys_place.html        # Standalone beta preview of Lesley's Place Planner (pending full integration)
+├── endgame_planner.html      # Unified single-file application (Nether + Lesley's Place + Base64 Assets)
+├── lesleys_place.html        # Standalone beta preview of Lesley's Place Planner (reference)
+├── _redirects                # CloudFlare Pages routing (/endgame, /, and legacy /nether_costs 200 rewrites)
 ├── README.md                 # Public repository README
 ├── PROJECT_MASTER.md         # Master technical specification & developer guide (this document)
 ├── assets/                   # Source WebP icons for game items
 │   ├── orb.webp
 │   ├── flame.webp
-├── manifest.json             # PWA web app manifest
+├── manifest.json             # PWA web app manifest (start_url: ./endgame)
 ├── sw.js                     # PWA Service Worker (Network-First navigation, Cache-First assets)
 │   ├── crystal.webp
 │   ├── star.webp

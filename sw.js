@@ -1,6 +1,7 @@
-const CACHE_NAME = 'nether-calc-cache-v1.3.1';
+const CACHE_NAME = 'endgame-planner-cache-v2.0.0-beta.1';
 const ASSETS_TO_CACHE = [
-  './nether_costs.html',
+  './endgame_planner.html',
+  './endgame',
   './nether_costs',
   './manifest.json',
   './assets/icon-192.png',
@@ -14,10 +15,8 @@ async function cacheAsset(cache, url) {
     if (!response.ok) {
       throw new Error(`Bad response status: ${response.status}`);
     }
-    
+
     let responseToCache = response;
-    // If the response is redirected, we must construct a new Response object
-    // without the redirected flag, because Cache.put() rejects redirected responses.
     if (response.redirected) {
       const body = await response.blob();
       responseToCache = new Response(body, {
@@ -26,7 +25,7 @@ async function cacheAsset(cache, url) {
         headers: response.headers
       });
     }
-    
+
     await cache.put(url, responseToCache);
   } catch (err) {
     console.warn(`[Service Worker] Failed to cache ${url}:`, err);
@@ -76,38 +75,33 @@ async function matchCacheKeys(keys) {
 // - Navigation/HTML requests: Network-First (ensures immediate updates, falls back to cache offline)
 // - Static assets (images, fonts, manifest): Cache-First (fast performance, falls back to network)
 self.addEventListener('fetch', (event) => {
-  // Only handle GET requests
   if (event.request.method !== 'GET') return;
 
   const url = new URL(event.request.url);
-  
-  // Create a list of candidate cache keys to check in order
+  const path = url.pathname;
+
+  const isLegacyOrAppHtml =
+    path === '/' ||
+    path.endsWith('/endgame') ||
+    path.endsWith('/endgame/') ||
+    path.endsWith('/endgame_planner.html') ||
+    path.endsWith('/nether_costs') ||
+    path.endsWith('/nether_costs/') ||
+    path.endsWith('/nether_costs.html');
+
   let cacheKeys = [event.request];
-  
-  if (url.pathname.endsWith('/nether_costs') || url.pathname.endsWith('/nether_costs/')) {
-    // If they request the clean URL, search for both the clean URL and the .html version in cache
+  if (isLegacyOrAppHtml) {
     cacheKeys = [
-      new URL('/nether_costs', url.origin).href,
-      new URL('/nether_costs.html', url.origin).href,
-      event.request
-    ];
-  } else if (url.pathname.endsWith('/nether_costs.html')) {
-    // If they request the .html version, search for both the .html version and the clean URL in cache
-    cacheKeys = [
-      new URL('/nether_costs.html', url.origin).href,
-      new URL('/nether_costs', url.origin).href,
-      event.request
+      event.request,
+      new URL('/endgame', url.origin).href,
+      new URL('/endgame_planner.html', url.origin).href,
+      new URL('/nether_costs', url.origin).href
     ];
   }
 
-  const isNavigation = event.request.mode === 'navigate' ||
-    url.pathname.endsWith('/nether_costs') ||
-    url.pathname.endsWith('/nether_costs/') ||
-    url.pathname.endsWith('/nether_costs.html') ||
-    url.pathname === '/';
+  const isNavigation = event.request.mode === 'navigate' || isLegacyOrAppHtml;
 
   if (isNavigation) {
-    // Network-First for HTML documents: try fresh copy, update cache, fallback to cache if offline
     event.respondWith(
       fetch(event.request)
         .then((networkResponse) => {
@@ -134,7 +128,6 @@ self.addEventListener('fetch', (event) => {
       }
 
       return fetch(event.request).then((networkResponse) => {
-        // If request is valid and HTTP/HTTPS, dynamically add it to the cache (e.g. Google Fonts)
         if (networkResponse && networkResponse.status === 200 && event.request.url.startsWith('http')) {
           const responseToCache = networkResponse.clone();
           caches.open(CACHE_NAME).then((cache) => {

@@ -82,8 +82,11 @@ For security-conscious users, the repository includes verification scripts in th
 │   ├── inject_base64.ps1    # Encodes assets/ and updates nether_costs.html
 │   ├── test_math.js         # JScript runner verifying cascade math calculations
 │   └── verify_base64.ps1    # Security verification script
-├── nether_costs.html        # The self-contained, fully-compiled application
+├── endgame_planner.html     # The self-contained, unified Endgame Planner application
 ├── lesleys_place.html       # Standalone beta preview of Lesley's Place Planner
+├── _redirects               # CloudFlare Pages routing & legacy /nether_costs 200 rewrites
+├── manifest.json            # PWA manifest
+├── sw.js                    # PWA Service Worker
 ├── GEMINI.md                # Antigravity developer rules & multi-device git policies
 ├── PROJECT_MASTER.md        # Master technical specification & developer guide
 └── README.md                # Project documentation
@@ -91,7 +94,6 @@ For security-conscious users, the repository includes verification scripts in th
 
 ---
 
-## 🗺️ Roadmap & Beta Preview
+## 🗺️ Roadmap & Integration Status
 
-- **Lesley's Place Planner (Beta)**: [lesleys_place.html](lesleys_place.html) is currently included in the repository root for beta testing. It provides a standalone planner for **Dimension Tears**, **Doomsday Device (DDD)** multipliers, **Tear Trades**, **Pies & Casseroles**, and **Shiny Skins**.
-- **Upcoming Integration**: Once beta testing is complete, Lesley's Place Planner will be integrated directly into this suite with shared navigation alongside `nether_costs.html`, matching Base64-embedded icons, and full offline PWA caching via `sw.js`.
+- **Unified Endgame Planner (`endgame_planner.html`, `v2.0.0-beta.1` on `dev`)**: Combines the **Nether Costs Calculator** and **Lesley's Place Planner** into a single self-contained offline file with a header mode switcher, a spoiler-gate confirmation for Lesley's Place, bidirectional sync (Nether Trades, Nether Pie, and Nether Shiny Skins), unified JSON backups (backward-compatible with legacy `nether_costs` v2 backups), and CloudFlare `_redirects` + PWA transition support.

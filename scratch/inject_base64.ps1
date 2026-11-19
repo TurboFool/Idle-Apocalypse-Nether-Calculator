@@ -1,4 +1,4 @@
-$htmlPath = "nether_costs.html"
+$htmlPath = "endgame_planner.html"
 $htmlContent = [System.IO.File]::ReadAllText($htmlPath, [System.Text.Encoding]::UTF8)
 
 
