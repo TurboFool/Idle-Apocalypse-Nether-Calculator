@@ -7275,7 +7275,7 @@
             });
 
             function syncHeaderHeightVars() {
-                const header = document.querySelector(".app-header");
+                const header = document.querySelector(".header");
                 if (!header) return;
                 const h = Math.ceil(header.offsetHeight);
                 const bottom = Math.ceil(Math.max(h, header.getBoundingClientRect().bottom));
@@ -7283,7 +7283,7 @@
                 document.documentElement.style.setProperty("--mobile-header-h", `${bottom}px`);
             }
 
-            const appHeaderEl = document.querySelector(".app-header");
+            const appHeaderEl = document.querySelector(".header");
             if (appHeaderEl && typeof ResizeObserver !== "undefined") {
                 new ResizeObserver(syncHeaderHeightVars).observe(appHeaderEl);
             }
