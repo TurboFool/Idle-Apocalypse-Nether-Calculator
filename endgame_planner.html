@@ -7343,22 +7343,38 @@
             }
             document.querySelector("#lesley-view .section-tabs").addEventListener("click", handleLpTabClick);
 
-            // Smart scroll-direction behavior on mobile:
-            // - Scroll down (>=15px): slide out On Hand/Planned/Surplus/DDD bar (unless drawer open) & hide Scroll-to-Top
-            // - Scroll up (>=15px) while away from top: show both and keep visible until scrolling down again
+            // Smart scroll-direction behavior on mobile with hysteresis & transition lockout
+            // to prevent sticky-header height shifts from causing scroll feedback loops.
             let lastScrollY = window.scrollY || 0;
             let scrollDeltaAcc = 0;
             let lastScrollDir = 0; // 1 = down, -1 = up
-            const SCROLL_THRESHOLD = 15;
+            let scrollLockUntil = 0;
+            const SCROLL_THRESHOLD = 20;
+
+            function setBudgetBarHidden(hidden) {
+                const budgetExt = document.getElementById("lp-mobile-header-ext");
+                if (!budgetExt) return;
+                const wasHidden = budgetExt.classList.contains("scroll-hidden");
+                if (wasHidden !== hidden) {
+                    budgetExt.classList.toggle("scroll-hidden", hidden);
+                    scrollLockUntil = Date.now() + 280;
+                    scrollDeltaAcc = 0;
+                }
+            }
 
             function updateMobileScrollUI() {
-                const currentY = window.scrollY || 0;
-                const budgetExt = document.getElementById("lp-mobile-header-ext");
+                const currentY = Math.max(0, window.scrollY || 0);
                 const topBtn = document.getElementById("scrollToTopBtn");
                 const drawerOpen = document.getElementById("lp-left-panel")?.classList.contains("mobile-open");
 
-                if (currentY < 60) {
-                    if (budgetExt) budgetExt.classList.remove("scroll-hidden");
+                if (Date.now() < scrollLockUntil) {
+                    lastScrollY = currentY;
+                    scrollDeltaAcc = 0;
+                    return;
+                }
+
+                if (currentY <= 30) {
+                    setBudgetBarHidden(false);
                     if (topBtn) topBtn.classList.remove("visible");
                     lastScrollY = currentY;
                     scrollDeltaAcc = 0;
@@ -7379,11 +7395,15 @@
 
                 if (scrollDeltaAcc >= SCROLL_THRESHOLD) {
                     if (dir === 1) {
-                        if (budgetExt && !drawerOpen) budgetExt.classList.add("scroll-hidden");
+                        if (currentY >= 120 && !drawerOpen) {
+                            setBudgetBarHidden(true);
+                        }
                         if (topBtn) topBtn.classList.remove("visible");
                     } else {
-                        if (budgetExt) budgetExt.classList.remove("scroll-hidden");
-                        if (topBtn) topBtn.classList.add("visible");
+                        setBudgetBarHidden(false);
+                        if (topBtn && currentY >= 120) {
+                            topBtn.classList.add("visible");
+                        }
                     }
                     scrollDeltaAcc = 0;
                 }
