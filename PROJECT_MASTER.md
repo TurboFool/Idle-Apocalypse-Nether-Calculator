@@ -309,10 +309,11 @@ If game icon WebP images in `assets/` are replaced or updated:
 ## 🗺️ 7. Roadmap & Upcoming Integration
 
 ### Lesley's Place Planner (`lesleys_place.html`)
-The **Lesley's Place Planner** (developed in `TurboFool/lesleys_place_planner`, currently `v0.1.0-beta.1`) is hosted in the repository root alongside `nether_costs.html` for public beta testing prior to full integration into this project.
+The **Lesley's Place Planner** (developed in `TurboFool/lesleys_place_planner`, currently `v0.1.0-beta.2`) is hosted in the repository root alongside `nether_costs.html` for public beta testing prior to full integration into this project.
 
 - **Current Beta Scope (`lesleys_place.html`)**:
-  - **Doomsday Device (DDD) & Tear Multiplier**: Tracks DDD count with automatic $\min(\max(1, \text{DDD}), 10)$ Tear Trade multiplier (plus manual `x1`–`x10` override) and an "Activate DDD (New Run)" reset flow.
+  - **Doomsday Device (DDD) & Tear Multiplier**: Tracks DDD count with automatic $\min(\max(1, \text{DDD}), 10)$ Tear Trade multiplier and an "Activate DDD (New Run)" reset flow.
+  - **Earn / Spend Navigation & Mobile UX**: Full-width 2-group segmented bar distinguishing **Earn** (`Tear Trades`) from **Spend** (`Pies & Casseroles`, `Shiny Skins`), pinned in the mobile top bar (`<= 980px`) alongside a hovering budget bar and a collapsible `DDD & Plan` drawer.
   - **Tear Trades**: 7 sequential trade chains (Soul, Time, Nether, Champion, Dark Energy, Apocalypse Damage, Gem; 167 base Tears total) with cascading Planned / Completed state tracking.
   - **Pies & Casseroles**: 21 Pies across 5 categories (18,277 total Tears) with sequential level unlocking, `# Shinies` requirement status badges, and `Auto-deduct Tears on Purchase`.
   - **Shiny Skins**: 27 Skins (2,055 total Tears) with Planned / Owned tracking, search/filter controls, and auto-deduct support.

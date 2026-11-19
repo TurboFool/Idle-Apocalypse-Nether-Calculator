@@ -115,39 +115,43 @@
             flex-wrap: wrap;
         }
 
-        /* Mobile Hovering Budget Bar (inside sticky header) */
-        .mobile-budget-bar {
+        /* Mobile Hovering Header Controls (inside sticky header) */
+        .mobile-budget-bar,
+        .mobile-tab-bar,
+        .mobile-drawer-close {
             display: none;
         }
 
         @media (max-width: 980px) {
             .header {
-                padding: 10px 12px;
+                padding: 8px 12px;
             }
 
             .header-inner {
-                gap: 8px;
+                gap: 6px;
             }
 
             .mobile-budget-bar {
                 display: grid;
-                grid-template-columns: repeat(3, minmax(0, 1fr));
+                grid-template-columns: repeat(3, minmax(0, 1fr)) auto;
                 gap: 6px;
                 max-width: 1440px;
                 margin: 8px auto 0;
                 padding-top: 8px;
                 border-top: 1px solid rgba(139, 92, 246, 0.2);
+                align-items: stretch;
             }
 
             .mob-stat {
                 background: rgba(255, 255, 255, 0.04);
                 border: 1px solid rgba(255, 255, 255, 0.07);
                 border-radius: 8px;
-                padding: 4px 8px;
+                padding: 4px 6px;
                 min-width: 0;
                 display: flex;
                 flex-direction: column;
                 align-items: center;
+                justify-content: center;
                 text-align: center;
             }
 
@@ -162,7 +166,7 @@
             }
 
             .mob-stat-label {
-                font-size: 0.65rem;
+                font-size: 0.62rem;
                 color: var(--text-muted);
                 text-transform: uppercase;
                 letter-spacing: 0.03em;
@@ -173,12 +177,50 @@
             }
 
             .mob-stat-val {
-                font-size: 0.82rem;
+                font-size: 0.8rem;
                 line-height: 1.25;
                 white-space: nowrap;
                 overflow: hidden;
                 text-overflow: ellipsis;
                 max-width: 100%;
+            }
+
+            .mob-drawer-btn {
+                background: rgba(139, 92, 246, 0.16);
+                border: 1px solid rgba(139, 92, 246, 0.45);
+                border-radius: 8px;
+                padding: 4px 10px;
+                color: #e9d5ff;
+                font-family: inherit;
+                cursor: pointer;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                transition: background 0.15s, border-color 0.15s;
+            }
+
+            .mob-drawer-btn.open {
+                background: rgba(139, 92, 246, 0.35);
+                border-color: var(--accent-purple-bright);
+                color: #fff;
+            }
+
+            .mobile-tab-bar {
+                display: flex;
+                align-items: stretch;
+                gap: 6px;
+                max-width: 1440px;
+                margin: 8px auto 0;
+                padding-top: 8px;
+                border-top: 1px solid rgba(139, 92, 246, 0.15);
+            }
+
+            .mobile-drawer-close {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding-bottom: 4px;
             }
         }
 
@@ -273,8 +315,28 @@
         }
 
         @media (max-width: 980px) {
+            .main-container {
+                margin-top: 12px;
+                padding: 0 12px;
+            }
+
             .left-panel {
-                position: static;
+                display: none;
+                position: fixed;
+                left: 0;
+                right: 0;
+                top: var(--mobile-header-h, 140px);
+                bottom: 0;
+                z-index: 95;
+                background: rgba(13, 10, 18, 0.96);
+                backdrop-filter: blur(10px);
+                padding: 14px 16px 36px;
+                overflow-y: auto;
+                border-top: 1px solid rgba(139, 92, 246, 0.3);
+            }
+
+            .left-panel.mobile-open {
+                display: flex;
             }
         }
 
@@ -423,49 +485,147 @@
             flex: 1;
         }
 
-        /* Right Panel & Tabs */
+        /* Right Panel & Segmented Earn / Spend Tabs */
         .section-tabs {
             display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
+            align-items: stretch;
+            gap: 10px;
             margin-bottom: 16px;
         }
 
-        .tab-btn {
-            padding: 10px 16px;
-            border-radius: 10px;
-            border: 1px solid var(--panel-border);
+        @media (max-width: 980px) {
+            .section-tabs {
+                display: none;
+            }
+        }
+
+        .tab-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
             background: var(--panel-bg);
+            border: 1px solid var(--panel-border);
+            border-radius: 12px;
+            padding: 6px;
+            min-width: 0;
+        }
+
+        .tab-group-earn {
+            flex: 1;
+            border-color: rgba(56, 189, 248, 0.28);
+            background: linear-gradient(180deg, rgba(56, 189, 248, 0.06) 0%, var(--panel-bg) 100%);
+        }
+
+        .tab-group-spend {
+            flex: 2;
+            border-color: rgba(234, 179, 8, 0.26);
+            background: linear-gradient(180deg, rgba(234, 179, 8, 0.05) 0%, var(--panel-bg) 100%);
+        }
+
+        .tab-group-label {
+            font-size: 0.62rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            padding: 0 4px;
+            line-height: 1.1;
+        }
+
+        .tab-group-earn .tab-group-label {
+            color: var(--color-tear);
+        }
+
+        .tab-group-spend .tab-group-label {
+            color: var(--color-gold);
+        }
+
+        .tab-group-buttons {
+            display: flex;
+            gap: 6px;
+            flex: 1;
+        }
+
+        .tab-btn {
+            flex: 1;
+            min-width: 0;
+            padding: 8px 12px;
+            border-radius: 8px;
+            border: 1px solid transparent;
+            background: rgba(255, 255, 255, 0.03);
             color: var(--text-muted);
             font-family: 'Cinzel', serif;
             font-weight: 700;
-            font-size: 0.9rem;
+            font-size: 0.86rem;
             cursor: pointer;
             display: inline-flex;
             align-items: center;
-            gap: 8px;
+            justify-content: center;
+            gap: 6px;
             transition: all 0.15s;
+            white-space: nowrap;
         }
 
         .tab-btn:hover {
             color: var(--text-color);
-            border-color: rgba(168, 85, 247, 0.5);
+            background: rgba(255, 255, 255, 0.06);
         }
 
-        .tab-btn.active {
-            background: linear-gradient(135deg, rgba(124, 58, 237, 0.35), rgba(56, 189, 248, 0.18));
-            border-color: var(--accent-purple-bright);
+        .tab-group-earn .tab-btn.active {
+            background: linear-gradient(135deg, rgba(14, 165, 233, 0.28), rgba(56, 189, 248, 0.14));
+            border-color: var(--color-tear);
             color: #fff;
-            box-shadow: 0 0 16px rgba(139, 92, 246, 0.25);
+            box-shadow: 0 0 14px rgba(56, 189, 248, 0.22);
+        }
+
+        .tab-group-spend .tab-btn.active {
+            background: linear-gradient(135deg, rgba(124, 58, 237, 0.35), rgba(234, 179, 8, 0.18));
+            border-color: var(--color-gold);
+            color: #fff;
+            box-shadow: 0 0 14px rgba(234, 179, 8, 0.2);
         }
 
         .tab-count {
             font-family: 'Space Mono', monospace;
-            font-size: 0.72rem;
-            padding: 2px 7px;
+            font-size: 0.7rem;
+            padding: 2px 6px;
             border-radius: 999px;
-            background: rgba(255, 255, 255, 0.08);
+            background: rgba(0, 0, 0, 0.35);
             color: var(--color-tear);
+            white-space: nowrap;
+        }
+
+        .tab-group-spend .tab-count {
+            color: #fde047;
+        }
+
+        @media (max-width: 980px) {
+            .mobile-tab-bar .tab-group {
+                padding: 4px;
+                border-radius: 9px;
+                gap: 3px;
+            }
+
+            .mobile-tab-bar .tab-group-label {
+                font-size: 0.56rem;
+                padding: 0 2px;
+            }
+
+            .mobile-tab-bar .tab-group-buttons {
+                gap: 4px;
+            }
+
+            .mobile-tab-bar .tab-btn {
+                padding: 5px 6px;
+                font-size: 0.72rem;
+                gap: 4px;
+                flex-direction: column;
+                line-height: 1.15;
+            }
+
+            .mobile-tab-bar .tab-count {
+                font-size: 0.62rem;
+                padding: 1px 5px;
+            }
         }
 
         .filter-bar {
@@ -817,12 +977,44 @@
                 <span id="mob-surplus-label" class="mob-stat-label">Surplus</span>
                 <span id="mob-surplus" class="mob-stat-val mono-num val-green">+0</span>
             </div>
+            <button type="button" id="btn-mobile-drawer" class="mob-drawer-btn" aria-expanded="false" aria-controls="left-panel">
+                <span class="mob-stat-label" style="color:#d8b4fe;">DDD &amp; Plan</span>
+                <span id="mob-drawer-label" class="mob-stat-val mono-num">x1 ▾</span>
+            </button>
         </div>
+        <nav class="mobile-tab-bar" role="tablist" aria-label="Shop sections">
+            <div class="tab-group tab-group-earn">
+                <span class="tab-group-label">Earn</span>
+                <div class="tab-group-buttons">
+                    <button class="tab-btn active" data-tab="trades" role="tab">
+                        <span>Tear Trades</span>
+                        <span data-badge="trades" class="tab-count">+0</span>
+                    </button>
+                </div>
+            </div>
+            <div class="tab-group tab-group-spend">
+                <span class="tab-group-label">Spend</span>
+                <div class="tab-group-buttons">
+                    <button class="tab-btn" data-tab="pies" role="tab">
+                        <span>Pies</span>
+                        <span data-badge="pies" class="tab-count">0 (0)</span>
+                    </button>
+                    <button class="tab-btn" data-tab="skins" role="tab">
+                        <span>Shiny Skins</span>
+                        <span data-badge="skins" class="tab-count">0 (0)</span>
+                    </button>
+                </div>
+            </div>
+        </nav>
     </header>
 
     <main class="main-container">
-        <!-- Left Panel: DDD, Multiplier, Tears Budget -->
-        <aside class="left-panel">
+        <!-- Left Panel: DDD, Tears Budget -->
+        <aside id="left-panel" class="left-panel">
+            <div class="mobile-drawer-close">
+                <span class="font-fantasy" style="font-size:0.9rem;color:#e9d5ff;font-weight:800;">DDD &amp; Budget Settings</span>
+                <button type="button" class="btn btn-sm" id="btn-mobile-drawer-close">Done ✕</button>
+            </div>
             <section class="panel-card">
                 <div class="panel-title">
                     <span>Doomsday Device (DDD)</span>
@@ -832,23 +1024,6 @@
                 <div class="input-row">
                     <label for="ddd-count">Current DDD Count</label>
                     <input type="number" id="ddd-count" class="num-input-sm" min="1" step="1" value="1">
-                </div>
-
-                <div class="input-row">
-                    <label for="multiplier-override">Multiplier Mode</label>
-                    <select id="multiplier-override">
-                        <option value="auto">Auto</option>
-                        <option value="1">Manual: x1</option>
-                        <option value="2">Manual: x2</option>
-                        <option value="3">Manual: x3</option>
-                        <option value="4">Manual: x4</option>
-                        <option value="5">Manual: x5</option>
-                        <option value="6">Manual: x6</option>
-                        <option value="7">Manual: x7</option>
-                        <option value="8">Manual: x8</option>
-                        <option value="9">Manual: x9</option>
-                        <option value="10">Manual: x10</option>
-                    </select>
                 </div>
 
                 <div class="action-stack">
@@ -918,16 +1093,26 @@
 
         <!-- Right Panel: Trades, Pies, Shiny Skins -->
         <section>
-            <nav class="section-tabs" role="tablist">
-                <button class="tab-btn active" data-tab="trades" role="tab">
-                    Tear Trades <span id="badge-trades" class="tab-count">0</span>
-                </button>
-                <button class="tab-btn" data-tab="pies" role="tab">
-                    Pies &amp; Casseroles <span id="badge-pies" class="tab-count">0</span>
-                </button>
-                <button class="tab-btn" data-tab="skins" role="tab">
-                    Shiny Skins <span id="badge-skins" class="tab-count">0</span>
-                </button>
+            <nav class="section-tabs" role="tablist" aria-label="Shop sections">
+                <div class="tab-group tab-group-earn">
+                    <span class="tab-group-label">Earn Tears</span>
+                    <div class="tab-group-buttons">
+                        <button class="tab-btn active" data-tab="trades" role="tab">
+                            Tear Trades <span data-badge="trades" class="tab-count">+0</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="tab-group tab-group-spend">
+                    <span class="tab-group-label">Spend Tears</span>
+                    <div class="tab-group-buttons">
+                        <button class="tab-btn" data-tab="pies" role="tab">
+                            Pies &amp; Casseroles <span data-badge="pies" class="tab-count">0 (0)</span>
+                        </button>
+                        <button class="tab-btn" data-tab="skins" role="tab">
+                            Shiny Skins <span data-badge="skins" class="tab-count">0 (0)</span>
+                        </button>
+                    </div>
+                </div>
             </nav>
 
             <!-- Trades Tab -->
@@ -968,7 +1153,7 @@
     <div id="toast-container" class="toast-container" aria-live="polite"></div>
 
     <script>
-        const APP_VERSION = "v0.1.0-beta.1";
+        const APP_VERSION = "v0.1.0-beta.2";
         const STORAGE_KEY = "idle_apoc_lesleys_place_state_v1";
 
         // ==========================================
@@ -1361,7 +1546,6 @@
         function getDefaultState() {
             return {
                 dddCount: 1,
-                multiplierOverride: "auto",
                 tearsOnHand: 0,
                 autoDeductOnPurchase: true,
                 // tradeState[chainId] = { planned: number (0..N), completed: number (0..N) }
@@ -1388,9 +1572,6 @@
 
             const s = {
                 dddCount: Math.max(1, parseInt(src.dddCount, 10) || 1),
-                multiplierOverride: src.multiplierOverride === "auto" || (Number(src.multiplierOverride) >= 1 && Number(src.multiplierOverride) <= 10)
-                    ? String(src.multiplierOverride)
-                    : "auto",
                 tearsOnHand: Math.max(0, parseInt(src.tearsOnHand, 10) || 0),
                 autoDeductOnPurchase: typeof src.autoDeductOnPurchase === "boolean" ? src.autoDeductOnPurchase : true,
                 trades: {},
@@ -1448,9 +1629,6 @@
         // CALCULATIONS
         // ==========================================
         function getMultiplier() {
-            if (state.multiplierOverride !== "auto") {
-                return Math.min(10, Math.max(1, parseInt(state.multiplierOverride, 10) || 1));
-            }
             return Math.min(10, Math.max(1, state.dddCount));
         }
 
@@ -1658,7 +1836,6 @@
 
         function renderLeftPanel(summary) {
             document.getElementById("ddd-count").value = state.dddCount;
-            document.getElementById("multiplier-override").value = state.multiplierOverride;
             document.getElementById("multiplier-badge").textContent = `x${summary.mult}`;
             document.getElementById("tears-on-hand").value = state.tearsOnHand;
             document.getElementById("auto-deduct-toggle").checked = state.autoDeductOnPurchase;
@@ -1707,6 +1884,9 @@
                 mobVal.className = "mob-stat-val mono-num val-red";
                 mobVal.textContent = summary.projectedBalance.toLocaleString();
             }
+
+            const isOpen = document.getElementById("left-panel").classList.contains("mobile-open");
+            document.getElementById("mob-drawer-label").textContent = `x${summary.mult} ${isOpen ? "▴" : "▾"}`;
         }
 
         function renderTabs(summary) {
@@ -1717,9 +1897,15 @@
             document.getElementById("tab-pies").classList.toggle("hidden", state.ui.activeTab !== "pies");
             document.getElementById("tab-skins").classList.toggle("hidden", state.ui.activeTab !== "skins");
 
-            document.getElementById("badge-trades").textContent = `+${summary.expectedFromPlannedTrades}`;
-            document.getElementById("badge-pies").textContent = `${summary.plannedPiesCount} (${summary.plannedPiesCost})`;
-            document.getElementById("badge-skins").textContent = `${summary.plannedSkinsCount} (${summary.plannedSkinsCost})`;
+            document.querySelectorAll('[data-badge="trades"]').forEach(el => {
+                el.textContent = `+${summary.expectedFromPlannedTrades}`;
+            });
+            document.querySelectorAll('[data-badge="pies"]').forEach(el => {
+                el.textContent = `${summary.plannedPiesCount} (${summary.plannedPiesCost})`;
+            });
+            document.querySelectorAll('[data-badge="skins"]').forEach(el => {
+                el.textContent = `${summary.plannedSkinsCount} (${summary.plannedSkinsCost})`;
+            });
         }
 
         function renderTrades(summary) {
@@ -1920,10 +2106,36 @@
                 renderAll();
             });
 
-            document.getElementById("multiplier-override").addEventListener("change", (e) => {
-                state.multiplierOverride = e.target.value;
-                saveState();
-                renderAll();
+            // Mobile collapsible DDD & Budget drawer
+            function setMobileDrawer(open) {
+                const panel = document.getElementById("left-panel");
+                const btn = document.getElementById("btn-mobile-drawer");
+                const header = document.querySelector(".header");
+                if (header) {
+                    document.documentElement.style.setProperty("--mobile-header-h", `${header.offsetHeight}px`);
+                }
+                panel.classList.toggle("mobile-open", open);
+                btn.classList.toggle("open", open);
+                btn.setAttribute("aria-expanded", String(open));
+                document.getElementById("mob-drawer-label").textContent = `x${getMultiplier()} ${open ? "▴" : "▾"}`;
+            }
+
+            document.getElementById("btn-mobile-drawer").addEventListener("click", () => {
+                const isOpen = document.getElementById("left-panel").classList.contains("mobile-open");
+                setMobileDrawer(!isOpen);
+            });
+
+            document.getElementById("btn-mobile-drawer-close").addEventListener("click", () => {
+                setMobileDrawer(false);
+            });
+
+            window.addEventListener("resize", () => {
+                if (window.innerWidth > 980) {
+                    setMobileDrawer(false);
+                } else if (document.getElementById("left-panel").classList.contains("mobile-open")) {
+                    const header = document.querySelector(".header");
+                    if (header) document.documentElement.style.setProperty("--mobile-header-h", `${header.offsetHeight}px`);
+                }
             });
 
             document.getElementById("tears-on-hand").addEventListener("input", (e) => {
@@ -1958,14 +2170,17 @@
                 showToast("All trades reset.");
             });
 
-            // Tabs
-            document.querySelector(".section-tabs").addEventListener("click", (e) => {
+            // Tabs (desktop & mobile pinned bar)
+            function handleTabClick(e) {
                 const btn = e.target.closest(".tab-btn");
                 if (!btn) return;
                 state.ui.activeTab = btn.dataset.tab;
+                setMobileDrawer(false);
                 saveState();
                 renderAll();
-            });
+            }
+            document.querySelector(".section-tabs").addEventListener("click", handleTabClick);
+            document.querySelector(".mobile-tab-bar").addEventListener("click", handleTabClick);
 
             // Filter delegation
             document.getElementById("trade-category-pills").addEventListener("click", (e) => {
