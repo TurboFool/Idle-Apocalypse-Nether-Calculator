@@ -1,4 +1,4 @@
-const CACHE_NAME = 'endgame-planner-cache-v2.0.0-beta.1';
+const CACHE_NAME = 'endgame-planner-cache-v2.0.0-beta.2';
 const ASSETS_TO_CACHE = [
   './endgame_planner.html',
   './endgame',

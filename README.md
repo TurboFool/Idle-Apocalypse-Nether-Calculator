@@ -96,4 +96,4 @@ For security-conscious users, the repository includes verification scripts in th
 
 ## 🗺️ Roadmap & Integration Status
 
-- **Unified Endgame Planner (`endgame_planner.html`, `v2.0.0-beta.1` on `dev`)**: Combines the **Nether Costs Calculator** and **Lesley's Place Planner** into a single self-contained offline file with a header mode switcher, a spoiler-gate confirmation for Lesley's Place, bidirectional sync (Nether Trades, Nether Pie, and Nether Shiny Skins), unified JSON backups (backward-compatible with legacy `nether_costs` v2 backups), and CloudFlare `_redirects` + PWA transition support.
+- **Unified Endgame Planner (`endgame_planner.html`, `v2.0.0-beta.2` on `dev`)**: Combines the **Nether Costs Calculator** and **Lesley's Place Planner** into a single self-contained offline file with a header mode switcher, a spoiler-gate confirmation for Lesley's Place, bidirectional sync (Nether Trades, Nether Pie, and Nether Shiny Skins), unified JSON backups (backward-compatible with legacy `nether_costs` v2 backups), and CloudFlare `_redirects` + PWA transition support.
