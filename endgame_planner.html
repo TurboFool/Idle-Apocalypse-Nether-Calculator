@@ -5684,9 +5684,6 @@
                 goal.progress[creatureKey] = Math.max(0, (goal.progress[creatureKey] || 0) - 1);
             }
 
-            if (typeof id === 'string' && id.startsWith('lesley_')) {
-                syncNetherToLesley('trade', { id, achieved: isNowCompleted });
-            }
             saveStateToLocalStorage();
             renderGoalsList();
             renderCalculatorSummary();
@@ -5738,27 +5735,18 @@
                 }
             });
 
-            if (typeof id === 'string' && id.startsWith('lesley_')) {
-                syncNetherToLesley('trade', { id, achieved: isNowCompleted });
-            }
             saveStateToLocalStorage();
             renderGoalsList();
         }
 
         function handleSearch(val) {
             state.searchQuery = val.trim();
-            if (typeof id === 'string' && id.startsWith('lesley_')) {
-                syncNetherToLesley('trade', { id, achieved: isNowCompleted });
-            }
             saveStateToLocalStorage();
             renderGoalsList();
         }
 
         function toggleHideCompleted(checked) {
             state.hideCompleted = checked;
-            if (typeof id === 'string' && id.startsWith('lesley_')) {
-                syncNetherToLesley('trade', { id, achieved: isNowCompleted });
-            }
             saveStateToLocalStorage();
             renderGoalsList();
         }
@@ -5775,9 +5763,6 @@
                 showToast(`Re-targeted "${name}"!`);
             } else {
                 state.selectedGoals[id] = !state.selectedGoals[id];
-            }
-            if (typeof id === 'string' && id.startsWith('lesley_')) {
-                syncNetherToLesley('trade', { id, achieved: isNowCompleted });
             }
             saveStateToLocalStorage();
             renderGoalsList();
@@ -5960,7 +5945,7 @@
             }
 
             if (typeof id === 'string' && id.startsWith('lesley_')) {
-                syncNetherToLesley('trade', { id, achieved: isNowCompleted });
+                syncNetherToLesley('trade', { id, achieved: willBeCompleted });
             }
             saveStateToLocalStorage();
             renderGoalsList();
@@ -6220,10 +6205,12 @@
                         }
                         // Keep Nether goals consistent with sequential chain
                         for (let i = 0; i < SHARED_NETHER_TRADE_IDS.length; i++) {
+                            const gid = SHARED_NETHER_TRADE_IDS[i];
                             if (i < lpState.trades.nether.completed) {
-                                state.completedGoals[SHARED_NETHER_TRADE_IDS[i]] = true;
+                                state.completedGoals[gid] = true;
+                                state.selectedGoals[gid] = false;
                             } else {
-                                delete state.completedGoals[SHARED_NETHER_TRADE_IDS[i]];
+                                delete state.completedGoals[gid];
                             }
                         }
                     }
